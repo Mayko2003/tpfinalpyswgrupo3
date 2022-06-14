@@ -1,7 +1,5 @@
 // import modulos
 const mongoose = require('mongoose');
-const Area = require('../models/area');
-const Rol = require('../models/rol');
 const { Schema } = mongoose; // para poder usar el schema de mongoose
 
 // definir el esquema de la persona
