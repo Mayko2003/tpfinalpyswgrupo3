@@ -12,7 +12,7 @@ app.use(express.json()) // para que el servidor entienda los datos en formato js
 app.use(express.urlencoded({ extended: true })) // para que el servidor entienda los datos en formato urlencoded
 
 // routes
-
+app.use('/api/personas', require('./routes/persona.routes'))
 
 // configs
 app.set('port', process.env.PORT || 3000)
