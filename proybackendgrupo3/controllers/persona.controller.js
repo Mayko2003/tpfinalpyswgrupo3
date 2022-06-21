@@ -59,6 +59,25 @@ personaController.updatePersona = async (req, res) => {
     }
 }
 
+personaController.loginPersona = async (req, res) => {
+    try{
+        const username = req.body.username, password = req.body.password
+        const persona = await Persona.findOne({
+            $and: [
+                {nombreUsuario: username},
+                {contrasenia: password}
+            ]
+        })
+
+        res.status(200).json(persona)
+    }catch(error){
+        console.log(error)
+
+        res.status(500).json({
+            msj: "Error al obtener la persona"
+        })
+    }
+}
 
 // export controller
 module.exports = personaController
