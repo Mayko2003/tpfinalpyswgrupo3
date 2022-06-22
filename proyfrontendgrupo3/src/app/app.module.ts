@@ -12,6 +12,7 @@ import { FooterComponent } from './components/layouds/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 
 import { LoginService } from './services/login.service';
+import { AreaComponent } from './components/area/area.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { LoginService } from './services/login.service';
     PersonaComponent,
     HeaderComponent,
     FooterComponent,
-    LoginComponent
+    LoginComponent,
+    AreaComponent
   ],
   imports: [
     BrowserModule,
