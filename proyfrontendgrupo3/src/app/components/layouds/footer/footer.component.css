@@ -1,0 +1,9 @@
+.follow-us {
+    background-color: #212020;
+}
+
+.redes .red-social-icon {
+    height: 50px;
+    pointer-events: none;
+    user-select: none;
+}
