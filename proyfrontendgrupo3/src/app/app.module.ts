@@ -13,6 +13,7 @@ import { LoginComponent } from './components/login/login.component';
 
 import { LoginService } from './services/login.service';
 import { AreaComponent } from './components/area/area.component';
+import { RolComponent } from './components/rol/rol.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AreaComponent } from './components/area/area.component';
     HeaderComponent,
     FooterComponent,
     LoginComponent,
-    AreaComponent
+    AreaComponent,
+    RolComponent
   ],
   imports: [
     BrowserModule,
