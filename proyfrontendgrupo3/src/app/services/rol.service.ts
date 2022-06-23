@@ -43,7 +43,7 @@ export class RolService {
   }
 
   //servicio para recuperar todas las roles
-  public getroles(): Observable<any>{
+  public getRoles(): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
