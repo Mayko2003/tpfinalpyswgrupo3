@@ -1,0 +1,10 @@
+.nav-fondo {
+    background-color: #212020;
+}
+
+.imagen-user {
+    height: 50px;
+    width: 50px;
+    pointer-events: none;
+    user-select: none;
+}
