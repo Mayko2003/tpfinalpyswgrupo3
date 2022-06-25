@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Persona } from '../models/persona';
 
@@ -64,4 +64,7 @@ export class PersonaService {
     }
     return this._http.get(this.urlBase+"/"+_id, httpOptions)
   }
+
+  
+
 }
