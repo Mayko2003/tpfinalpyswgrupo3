@@ -29,6 +29,7 @@ export class LoginService {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('roles');
     sessionStorage.removeItem('userid');
+    sessionStorage.removeItem('area');
   }
 
   public userLoggedIn() {
@@ -45,7 +46,9 @@ export class LoginService {
   }
   public rolLogged() {
     var roles = sessionStorage.getItem('roles');
-    return roles; 
+    if (roles)
+      roles = JSON.parse(roles)
+    return roles;
   }
   public areaLogged() {
     var area = sessionStorage.getItem('area');

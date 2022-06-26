@@ -3,8 +3,15 @@
 }
 
 .imagen-user {
-    height: 50px;
-    width: 50px;
+    height: 60px;
+    width: 60px;
+    pointer-events: none;
+    user-select: none;
+}
+
+.imagen-admin {
+    height: 40px;
+    width: 40px;
     pointer-events: none;
     user-select: none;
 }
