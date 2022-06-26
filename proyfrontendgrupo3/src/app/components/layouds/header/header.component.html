@@ -1,31 +1,57 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+<nav class="navbar navbar-dark nav-fondo fw-bold text-capitalize navegacion">
     <div class="container-fluid">
-      <a class="navbar-brand text-white" href="#">Menu</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <!------------------------------------para administrador----------------------------->
-          <li class="nav-item">
-            <a class="nav-link text-white" routerLink='/Area'>Administrar Areas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" routerLink='/Rol'>Administrar Roles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" routerLink='/Persona'>Administar Personas</a>
-          </li>
-          <!------------------------------------para roles----------------------------->
-          <li class="nav-item">
-            <a class="nav-link text-white" routerLink='/FormAnuncio'>Administrar Mis Anuncio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" routerLink='/Persona'>Menu Anuncios</a>
-          </li>
-          <!-----------------------------------para Encargado----------------------
-          IMPLEMENTAR-->
-        </ul>
-      </div>
+        <button *ngIf="loginService.userLoggedIn()" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuNav" aria-controls="menuNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">Navbar</a>
+        <div *ngIf="loginService.userLoggedIn()" class="offcanvas offcanvas-start nav-fondo" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="menuNav" aria-labelledby="menuNavLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title text-light" id="menuNavLabel">Menu</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body h-100 d-flex flex-column">
+                <ul *ngIf="roles[0]=='administrador'" class="navbar-nav flex-grow-1 pe-3">
+                    <!------------------------------------para administrador----------------------------->
+                    <li class="nav-item">
+                        <a class="nav-link text-white" routerLink='/Area'>Administrar Areas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" routerLink='/Rol'>Administrar Roles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" routerLink='/Persona'>Administar Personas</a>
+                    </li>
+                </ul>
+                <ul *ngIf="roles[0]!='administrador' && roles[0]!='encargado'" class="navbar-nav flex-grow-1 pe-3">
+                    <!------------------------------------para roles----------------------------->
+                    <li class="nav-item">
+                        <a class="nav-link text-white" routerLink='/FormAnuncio'>Administrar Mis Anuncio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" routerLink='/Persona'>Menu Anuncios</a>
+                    </li>
+                </ul>
+                <ul *ngIf="roles[0]=='encargado'" class="navbar-nav flex-grow-1 pe-3">
+                    <!-----------------------------------para Encargado------------------------>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" routerLink='/Persona'>Administrar anuncios</a>
+                    </li>
+                </ul>
+                <div *ngIf="loginService.userLoggedIn()" class="text-light d-flex justify-content-between">
+                    <div class="d-flex">
+                        <a class="rounded-circle" href="#">
+                            <img src="assets/images/default-user.jpg" class="imagen-user" alt="">
+                        </a>
+                        <div class="ms-3 datos">
+                            <h5>{{loginService.userLogged()}}</h5>
+                            <p>#{{loginService.idLogged()}}</p>
+                        </div>
+                    </div>
+                    <a [routerLink]="['Login']" (click)="logout()">
+                        <p class="text-danger fs-2"><i class="bi bi-box-arrow-right"></i></p>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-  </nav>
+</nav>

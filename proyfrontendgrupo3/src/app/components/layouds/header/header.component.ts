@@ -8,7 +8,11 @@ import { LoginService } from 'src/app/services/login.service';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(public loginService: LoginService) { }
+  roles!: any
+
+  constructor(public loginService: LoginService) {
+    this.roles = loginService.rolLogged();
+  }
 
   ngOnInit(): void {
   }

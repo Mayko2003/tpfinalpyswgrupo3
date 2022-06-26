@@ -2,8 +2,13 @@
     background-color: #212020;
 }
 
-.redes .red-social-icon {
+.red-social-icon {
     height: 50px;
+    width: 50px;
     pointer-events: none;
     user-select: none;
+}
+
+a span {
+    font-size: 50px;
 }

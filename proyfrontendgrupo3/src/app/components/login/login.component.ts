@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.loginService.login(this.userform.nombreUsuario, this.userform.contrasenia).subscribe(
         (result : any) => {
-          var user = result;
+        var user = result;
           if (user != null && user.estado) {
             //guardamos el user en cookies en el cliente
             sessionStorage.setItem("username", user.nombreUsuario);
