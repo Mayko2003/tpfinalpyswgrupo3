@@ -10,11 +10,10 @@ const anuncioSchema = new Schema({
     fechaEntradaVigencia: { type: Date, required: true },
     fechaSalidaVigencia: { type: Date, required: true },
     tiempoLectura: { type: String, required: true },
-    estado: { type: String, required: true },
-    destinatarios: [{ type: Schema.Types.ObjectId, ref: 'Rol', required: true}],
-    area: { type: Schema.Types.ObjectId, ref: 'Area', required: true},
+    estados: [{ type: Schema.Types.ObjectId,ref:'Estado', required: true }],
+    destinatarios: [{ type: Schema.Types.ObjectId, ref: 'AreaRol', required: true}],
     recursos: [{ type: Schema.Types.ObjectId, ref: 'Recurso', required: true}],
-    mediosTransmision: [{ type: Schema.Types.ObjectId, ref: 'MedioTransmision', required: true}],
+    mediosTransmision: [{ type: String, required: true}],
     codigoQR: { type: String, required: true},
     redactor: { type: Schema.Types.ObjectId, ref: 'Persona'}
 })

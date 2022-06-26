@@ -21,7 +21,7 @@ export class AreaService {
     return this._http.post(this.urlBase, body, httpOptions)
   }
 
-  //servicio para eliminar una persona
+  //servicio para eliminar una Area
   public deleteArea(area :Area): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
@@ -31,7 +31,7 @@ export class AreaService {
     return this._http.delete(this.urlBase+"/eliminar/"+area._id, httpOptions)
   }
 
-  //servicio para actualizar una persona
+  //servicio para actualizar una Area
   public updateArea(area :Area): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({

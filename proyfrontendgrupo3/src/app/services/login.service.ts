@@ -47,6 +47,10 @@ export class LoginService {
     var roles = sessionStorage.getItem('roles');
     return roles; 
   }
+  public areaLogged() {
+    var area = sessionStorage.getItem('area');
+    return area; 
+  }
   public idLogged() {
     var id = sessionStorage.getItem('userid');
     return id;
