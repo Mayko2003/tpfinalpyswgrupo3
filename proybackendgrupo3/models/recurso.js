@@ -1,6 +1,5 @@
 // import modulos
 const mongoose = require('mongoose');
-const Anuncio = require('./anuncio');
 const { Schema } = mongoose; // para poder usar el schema de mongoose
 
 const recursoSchema = new Schema({
