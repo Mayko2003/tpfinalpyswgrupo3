@@ -6,7 +6,6 @@ const { Schema } = mongoose; // para poder usar el schema de mongoose
 // definir el esquema de la persona
 const areaSchema = new Schema({
     nombre: { type: String, required: true },
-    personas: [{type:Schema.Types.ObjectId,ref:Persona}]
 })
 
 // exportar el esquema
