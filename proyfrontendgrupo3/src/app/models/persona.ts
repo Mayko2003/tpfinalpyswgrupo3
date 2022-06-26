@@ -1,3 +1,6 @@
+import { Area } from "./area";
+import { Rol } from "./rol";
+
 export class Persona {
     _id!: string;
     apellido!: string
@@ -5,8 +8,8 @@ export class Persona {
     legajo!: number
     dni!: number
     email!: string
-    //roles: Rol   ESPERAR IMPLEMENTACION
-    //area: Area    ESPERAR IMPLEMENTACION
+    roles!: Array<Rol>   //una persona puede tener varios roles
+    area!: Area   //una persona solo puede trabajar en un area
     nombreUsuario!: string
     contrasenia!: string
     estado!: boolean
