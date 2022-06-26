@@ -8,3 +8,7 @@
     pointer-events: none;
     user-select: none;
 }
+
+.navegacion {
+    height: 10vh;
+}

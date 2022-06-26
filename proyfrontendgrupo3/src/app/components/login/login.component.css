@@ -1,0 +1,7 @@
+.login {
+    height: 90vh;
+    background-image: url("../../../assets/images/fondo-login.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
