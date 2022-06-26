@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   userform: Persona = new Persona(); //usuario mapeado al formulario
   returnUrl!: string;
   msglogin!: string; // mensaje que indica si no paso el loguin
+  user: Persona = new Persona();
 
   
   constructor(
@@ -29,12 +30,13 @@ export class LoginComponent implements OnInit {
   login() {
     this.loginService.login(this.userform.nombreUsuario, this.userform.contrasenia).subscribe(
         (result : any) => {
-        var user = result;
-          if (user != null && user.estado) {
+        Object.assign(this.user,result)
+          if (this.user != null && this.user.estado) {
             //guardamos el user en cookies en el cliente
-            sessionStorage.setItem("username", user.nombreUsuario);
-            sessionStorage.setItem("userid", user._id);
-            sessionStorage.setItem("roles", user.roles);
+            sessionStorage.setItem("username", this.user.nombreUsuario);
+            sessionStorage.setItem("userid", this.user._id);
+            sessionStorage.setItem("roles", JSON.stringify(this.user.roles));
+            sessionStorage.setItem("area",JSON.stringify(this.user.area));
             //redirigimos a home o a pagina que llamo
             this.router.navigateByUrl(this.returnUrl);
 
