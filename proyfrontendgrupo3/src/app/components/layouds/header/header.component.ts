@@ -9,13 +9,31 @@ import { LoginService } from 'src/app/services/login.service';
 export class HeaderComponent implements OnInit {
   roles!: any;
   userImg!: string;
+  admin: boolean = false;
+  encargado: boolean = false;
+  comun: boolean = false;
 
   constructor(public loginService: LoginService) {
     this.roles = loginService.rolLogged();
-    if (this.roles)
-      if (this.roles[0] == 'administrador')
-        this.userImg = 'assets/images/admin.png';
-      else this.userImg = 'assets/images/default-user.jpg';
+    if (this.roles) {
+      this.roles.forEach((rol:any) => {
+        switch (rol.nombre) {
+          case 'administrador':
+            this.admin = true;
+            break;
+          case 'encargado':
+            this.encargado = true;
+            break;
+          default:
+            this.comun = true;
+            break;
+        }
+      });
+      if (this.admin)
+          this.userImg = 'assets/images/admin.png';
+      else
+          this.userImg = 'assets/images/default-user.jpg';
+    }
   }
 
   ngOnInit(): void {}
