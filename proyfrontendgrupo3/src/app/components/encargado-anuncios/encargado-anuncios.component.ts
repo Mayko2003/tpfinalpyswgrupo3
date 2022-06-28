@@ -13,11 +13,15 @@ export class EncargadoAnunciosComponent implements OnInit {
 
   constructor(private anuncioService: AnuncioService, private loginService: LoginService) { }
 
+  //variables para cargar los anuncios
   anuncios: Array<Anuncio> = [];
   anuncio: Anuncio = new Anuncio();
+
+  //variables para realizar el filtro segun el encargado y segun un estado de su eleccion "confeccionado, autorizado, denegado, cancelado"
   estado: string = "confeccionado" 
   areaLogeada: Area = new Area();
   ngOnInit(): void {
+    //por defecto mostrara en la pagina del encargado los anuncios con el estado confeccionado (listos para publicarse)
     this.cargarAnuncios();
   }
 

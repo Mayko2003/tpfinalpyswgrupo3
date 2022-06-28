@@ -82,5 +82,19 @@ export class AnuncioService {
     }
     return this._http.get(this.urlBase, httpOptions)
   }
+
+  //servicio para traer los anuncios de un usuario en particular
+  public getAnunciosByUser(user_id: string): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      }),
+      params: {
+        'user': user_id
+      }
+    }
+    return this._http.get(this.urlBase, httpOptions)
+  }
+
   
 }
