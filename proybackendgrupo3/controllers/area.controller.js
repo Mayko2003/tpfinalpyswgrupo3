@@ -57,5 +57,18 @@ areaController.updateArea = async(req,res)=>{
     }
 }
 
+// obtener roles de area
+areaController.getRoles = async(req,res)=>{
+    try{
+        const area = await Area.findById(req.params.id);
+        res.status(200).json(area.roles);
+    }catch(error){
+        res.status(500).json({
+            message: error
+        })
+    }
+}
+
+
 // export controller
 module.exports = areaController;
