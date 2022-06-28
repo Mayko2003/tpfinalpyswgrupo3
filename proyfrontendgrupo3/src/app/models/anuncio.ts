@@ -2,6 +2,7 @@ import { AreaRol } from "./area-rol"
 import { Estado } from "./estado"
 import { Persona } from "./persona"
 import { Recurso } from "./recurso"
+import { Rol } from "./rol"
 
 
 export class Anuncio {
@@ -13,7 +14,7 @@ export class Anuncio {
     fechaSalidaVigencia!: Date
     tiempoLectura!: string // corto, medio, largo 
     estados!: Array<Estado>; 
-    destinatarios!: Array<AreaRol>; //permite profundidad entre areas
+    destinatarios!: Array<Rol>; //permite profundidad entre areas
     recursos!: Array<Recurso>; // imagenes, videos, htmls, pdfs
     mediosTransmision!: Array<string>;
     codigoQR!: string
