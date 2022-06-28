@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Anuncio } from '../models/anuncio';
@@ -71,16 +71,17 @@ export class AnuncioService {
   }
 
   //servicio para traer los anuncion segun los roles dentro de una o mas areas
-  public getAnunciosByRol(roles: AreaRol): Observable<any>{
+  public getAnunciosByRoles(roles: AreaRol,fecha: Date): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
-      }),
-      params: {
-        'roles': JSON.stringify(roles)
-      }
+      })
     }
-    return this._http.get(this.urlBase, httpOptions)
+    const body = new HttpParams()
+    .set('fecha', JSON.stringify(fecha))
+    .set('roles', JSON.stringify(roles))
+
+    return this._http.post(this.urlBase, body, httpOptions)
   }
 
   //servicio para traer los anuncios de un usuario en particular
@@ -94,7 +95,5 @@ export class AnuncioService {
       }
     }
     return this._http.get(this.urlBase, httpOptions)
-  }
-
-  
+  } 
 }

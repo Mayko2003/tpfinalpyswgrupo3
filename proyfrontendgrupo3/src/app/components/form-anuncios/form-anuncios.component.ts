@@ -19,7 +19,7 @@ export class FormAnunciosComponent implements OnInit {
   anuncios: Array<Anuncio> = [];
 
   ngOnInit(): void {
-    //implementar validacion LOGIN
+    this.mostrarMisAnuncios();
   }
 
   guardarAnuncio(){
@@ -44,5 +44,17 @@ export class FormAnunciosComponent implements OnInit {
 
   
 
+  /*
+
+  Estadísticas: se podrá visualizar las cantidades de anuncios por mes, año o un periodo determinado por Area, 
+  y por Rol. Tipo de reunión. Realizar grafico en barra y torta. La estadística solo puede ser visualizada 
+  por personas que son autoridad en la institución.
+
+
+  1.Ver anuncios para su rol: podrá ver el detalle de los anuncios que fueron redactados para un determinado rol 
+  y que están vigentes.
+  2. Búsqueda: podrá realizar búsquedas de anuncios históricos destinado a alguno de los roles que tiene.
+  
+  */
 
 }
