@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Anuncio } from '../models/anuncio';
@@ -56,30 +56,44 @@ export class AnuncioService {
     return this._http.get(this.urlBase, httpOptions)
   }
 
-  //servicio para traer los anuncios que necesita inspeccionar un Encargado de Area
-  public getAnunciosByEncargado(area_id: string): Observable<any>{
+  //servicio para traer los anuncios que necesita inspeccionar un Encargado de Area segun un estado que el proporcione
+  public getAnunciosByEncargado(area_id: string,estado: string): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       }),
       params: {
-        'area': area_id
+        'area': area_id,
+        'estado': estado
       }
     }
     return this._http.get(this.urlBase, httpOptions)
   }
 
   //servicio para traer los anuncion segun los roles dentro de una o mas areas
-  public getAnunciosByRol(roles: AreaRol): Observable<any>{
+  public getAnunciosByRoles(roles: AreaRol,fecha: Date): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    }
+    const body = new HttpParams()
+    .set('fecha', JSON.stringify(fecha))
+    .set('roles', JSON.stringify(roles))
+
+    return this._http.post(this.urlBase, body, httpOptions)
+  }
+
+  //servicio para traer los anuncios de un usuario en particular
+  public getAnunciosByUser(user_id: string): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       }),
       params: {
-        'roles': JSON.stringify(roles)
+        'user': user_id
       }
     }
     return this._http.get(this.urlBase, httpOptions)
-  }
-  
+  } 
 }
