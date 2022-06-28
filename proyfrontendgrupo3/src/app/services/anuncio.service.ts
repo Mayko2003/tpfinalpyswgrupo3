@@ -56,14 +56,15 @@ export class AnuncioService {
     return this._http.get(this.urlBase, httpOptions)
   }
 
-  //servicio para traer los anuncios que necesita inspeccionar un Encargado de Area
-  public getAnunciosByEncargado(area_id: string): Observable<any>{
+  //servicio para traer los anuncios que necesita inspeccionar un Encargado de Area segun un estado que el proporcione
+  public getAnunciosByEncargado(area_id: string,estado: string): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       }),
       params: {
-        'area': area_id
+        'area': area_id,
+        'estado': estado
       }
     }
     return this._http.get(this.urlBase, httpOptions)

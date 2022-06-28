@@ -29,6 +29,7 @@ export class LoginService {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('roles');
     sessionStorage.removeItem('userid');
+    sessionStorage.removeItem('area');
   }
 
   public userLoggedIn() {
