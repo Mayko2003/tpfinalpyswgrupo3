@@ -52,7 +52,7 @@ export class PersonaService {
         "Content-Type": "application/json"
       })
     }
-    return this._http.get(this.urlBase, httpOptions)
+    return this._http.get(this.urlBase + "/personas", httpOptions)
   }
 
   //servicio enviar una persona segun su id

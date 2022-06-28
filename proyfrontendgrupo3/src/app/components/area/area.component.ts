@@ -1,3 +1,4 @@
+import { Rol } from 'src/app/models/rol';
 import { Component, OnInit } from '@angular/core';
 import { Area } from 'src/app/models/area';
 import { AreaService } from 'src/app/services/area.service';
@@ -10,7 +11,8 @@ import { AreaService } from 'src/app/services/area.service';
 export class AreaComponent implements OnInit {
  
   areas:Array<Area>= []
-  area:Area =new Area()
+  area: Area = new Area()
+  rol: Rol = new Rol()
   constructor(private areaService: AreaService) { }
   
   guardarArea(){
@@ -32,11 +34,13 @@ export class AreaComponent implements OnInit {
      respuesta.forEach((element: any) => {
       this.area = new Area();
       Object.assign(this.area,element)
-      this.areas.push(this.area);
+       this.areas.push(this.area);
+       this.area = new Area();
      })
     })
   }
   ngOnInit(): void {
+    this.getAreas();
   }
 
 }

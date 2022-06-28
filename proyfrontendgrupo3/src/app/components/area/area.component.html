@@ -1,1 +1,32 @@
-<p>area works!</p>
+<!-- <div *ngFor="let area of areas" class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{area.nombre}}</h5>
+        <p class="card-text">{{area._id}}</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+</div> -->
+<form name="form">
+    <div class="form-floating my-3">
+        <input [(ngModel)]="area.nombre" type="text" class="form-control" name="nombre" id="nombre" placeholder="nombre rol">
+        <label for="nombre">Nombre de Area:</label>
+    </div>
+    <div class="d-flex my-3">
+        <div *ngIf="area.roles;else elseBlock">
+            <small class="d-flex">
+                <p *ngFor="let rol of area.roles">{{rol.nombre}}</p>
+            </small>
+        </div>
+        <ng-template #elseBlock>
+            <p class="text-primary">No hay Roles asignados</p>
+        </ng-template>
+    </div>
+    <div class="d-flex row my-3 mx-0 p-0">
+        <div class="form-floating px-1 col-9">
+            <input [(ngModel)]="rol.nombre" type="password" class="form-control" name="password" id="password" placeholder="Constraseña">
+            <label for="password">Nuevo Rol:</label>
+        </div>
+        <button type="button" class="btn btn-warning col-3">Agregar Rol</button></div>
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary" (click)="guardarArea()">Guardar Area</button>
+    </div>
+</form>

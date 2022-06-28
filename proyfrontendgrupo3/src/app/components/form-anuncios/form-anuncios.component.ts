@@ -24,11 +24,5 @@ export class FormAnunciosComponent implements OnInit {
   actualizarAnuncio(){
     this.anuncioService.updateAnuncio(this.anuncio).subscribe();
   }
-
-  //borrar anuncio VERIFICAR IMPLEMENTACION
-  /*
-  borrarAnuncio(){
-    this.anuncioService.deleteAnuncio(this.anuncio).subscribe();
-  }
-  */
+  
 }

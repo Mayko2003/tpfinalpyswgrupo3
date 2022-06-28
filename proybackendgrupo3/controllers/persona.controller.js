@@ -7,7 +7,7 @@ const personaController = {};
 // obtener personas
 personaController.getPersonas = async(req, res) => {
     try {
-        const personas = await Persona.find();
+        const personas = await Persona.find().populate("roles").populate("area");
         res.status(200).json(personas);
     } catch (error) {
         res.status(500).json({
