@@ -71,7 +71,7 @@ export class AnuncioService {
   }
 
   //servicio para traer los anuncion segun los roles dentro de una o mas areas
-  public getAnunciosByRoles(roles: AreaRol,fecha: Date): Observable<any>{
+  public getAnunciosByRoles(areaRoles: AreaRol,fecha: Date): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
@@ -79,7 +79,7 @@ export class AnuncioService {
     }
     const body = new HttpParams()
     .set('fecha', JSON.stringify(fecha))
-    .set('roles', JSON.stringify(roles))
+    .set('areaRoles', JSON.stringify(areaRoles))
 
     return this._http.post(this.urlBase, body, httpOptions)
   }
@@ -90,10 +90,7 @@ export class AnuncioService {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       }),
-      params: {
-        'user': user_id
-      }
     }
-    return this._http.get(this.urlBase, httpOptions)
+    return this._http.get(this.urlBase+"/persona/"+user_id, httpOptions)
   } 
 }
