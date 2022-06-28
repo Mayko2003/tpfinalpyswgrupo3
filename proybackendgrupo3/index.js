@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true })) // para que el servidor entienda
 app.use('/api/personas', require('./routes/persona.routes'))
 app.use('/api/roles', require('./routes/rol.routes'))
 app.use('/api/areas', require('./routes/area.routes'))
+app.use('/api/anuncios', require('./routes/anuncio.routes'))
 
 // configs
 app.set('port', process.env.PORT || 3000)
