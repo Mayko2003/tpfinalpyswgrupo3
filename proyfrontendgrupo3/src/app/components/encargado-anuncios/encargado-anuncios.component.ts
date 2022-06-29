@@ -40,6 +40,8 @@ export class EncargadoAnunciosComponent implements OnInit {
     }
   }
 
+  //agregar en la vista el filtro para los anuncios no autorizados
+
   //con este procedimiento se cambia el estado de un anuncio para autorizarlo o no
   actualizarEstadoAnuncio(anuncioModificado: Anuncio){
     this.anuncioService.updateAnuncio(anuncioModificado).subscribe()

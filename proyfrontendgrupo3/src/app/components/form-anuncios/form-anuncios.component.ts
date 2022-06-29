@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Anuncio } from 'src/app/models/anuncio';
+import { Area } from 'src/app/models/area';
+import { Estado } from 'src/app/models/estado';
+import { Rol } from 'src/app/models/rol';
 import { AnuncioService } from 'src/app/services/anuncio.service';
+import { AreaService } from 'src/app/services/area.service';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -10,20 +14,56 @@ import { LoginService } from 'src/app/services/login.service';
 })
 export class FormAnunciosComponent implements OnInit {
 
-  constructor(private anuncioService: AnuncioService, private loginService: LoginService) { }
-
   //variable usada para guardar o editar un anuncio
   anuncio: Anuncio = new Anuncio();
 
   //variable usada para cargar los anuncios del Usuario
   anuncios: Array<Anuncio> = [];
 
-  ngOnInit(): void {
-    this.mostrarMisAnuncios();
+  //variable para cargar recursos de la
+  recurso!: string;
+
+  //variable para agregar las areas y los roles
+  areas: Array<Area> = [];
+  area: Area = new Area();
+  roles: Array<Rol> = [];
+  rol: Rol = new Rol();
+
+  //para guardar estados de
+  estados: Array<Estado> = [];
+  estado: Estado = new Estado();
+
+  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private areaService: AreaService) { 
+    this.anuncio = new Anuncio();
+    this.anuncio.recursos = new Array<string>();
+    this.anuncio.destinatarios = new Array<Rol>();
+    this.anuncios = new Array<Anuncio>();
+    this.areas = new Array<Area>();
+    this.roles = new Array<Rol>();
+    this.estados = new Array<Estado>();
+    this.estado = new Estado();
+    this.estado.area = new Area();
+
   }
 
-  guardarAnuncio(){
-    this.anuncioService.addAnuncio(this.anuncio).subscribe();
+
+  ngOnInit(): void {
+    this.cargarAreas()
+  }
+
+  agreagarRecurso(){
+    this.anuncio.recursos.push(this.recurso);
+  }
+
+  guardarAnuncio(estado: string){
+    
+    this.estados.forEach((element: any) =>{
+      element.estado = estado
+    })
+    this.anuncio.estados = this.estados
+    
+    this.anuncioService.addAnuncio(this.anuncio).subscribe(res => {});
+    console.log(this.anuncio)    
     this.anuncio = new Anuncio();
   }
 
@@ -32,6 +72,7 @@ export class FormAnunciosComponent implements OnInit {
     this.anuncio = new Anuncio();
   }
 
+  
   mostrarMisAnuncios(){
     this.anuncios = new Array<Anuncio>()
     var userid = this.loginService.idLogged()
@@ -40,6 +81,44 @@ export class FormAnunciosComponent implements OnInit {
         Object.assign(this.anuncios,res);
       })
     }
+  }
+
+  //metodos para cargar las listas del formulario
+  cargarAreas(){
+    this.areas = new Array<Area>();
+    this.areaService.getAreas().subscribe(res => {
+      Object.assign(this.areas,res)
+    })
+  }
+  
+  cargarRolesArea(areaid: string){
+    this.roles = new Array<Rol>();
+    this.areaService.getRolesArea(areaid).subscribe(res => {
+      Object.assign(this.roles,res)
+    })
+  }
+
+  //metodo para cargar los roles a un anuncios
+  agregarRol(areaid: string){
+    
+    if(this.estados){
+      var band = false
+      this.estados.forEach( (element: any) => {
+        if(element.area._id == areaid){
+          band = true
+        }
+      })
+      if(!band){
+        this.estado.area._id = areaid
+        this.estados.push(this.estado)
+        this.estado = new Estado()
+        this.estado.area = new Area();
+      }
+    }
+
+    this.anuncio.destinatarios.push(this.rol)
+    this.rol = new Rol();
+    console.log(this.anuncio.destinatarios)
   }
 
   

@@ -9,7 +9,7 @@ import { Persona } from '../models/persona';
 
 export class PersonaService {
   
-  urlBase: string = 'http://localhost:3000/api'
+  urlBase: string = 'http://localhost:3000/api/personas'
   constructor(private _http: HttpClient) { }
 
   //servicio para agregar una persona
@@ -20,7 +20,7 @@ export class PersonaService {
       })
     }
     let body = JSON.stringify(persona)
-    return this._http.post(this.urlBase, body, httpOptions)
+    return this._http.post(this.urlBase + "/crear", body, httpOptions)
   }
 
   //servicio para eliminar una persona
@@ -30,7 +30,7 @@ export class PersonaService {
         "Content-Type": "application/json"
       })
     }
-    return this._http.delete(this.urlBase+"/"+persona._id, httpOptions)
+    return this._http.delete(this.urlBase+"/eliminar/"+persona._id, httpOptions)
   }
 
   //servicio para actualizar una persona
