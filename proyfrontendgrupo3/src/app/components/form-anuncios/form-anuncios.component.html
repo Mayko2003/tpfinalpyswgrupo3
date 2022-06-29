@@ -1,16 +1,60 @@
-<form>
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+<form name="form">
+    <div class="form-floating mb-3">
+        <input [(ngModel)]="anuncio.titulo" type="text" class="form-control" name="titulo" id="titulo" placeholder="titulo">
+        <label for="titulo">Titulo:</label>
     </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1">
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="contenido">Contenido</label>
+        <input [(ngModel)]="anuncio.contenido" name="contenido" type="file" class="form-control" id="contenido" accept="video/,image/,.pdf,.html">
     </div>
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    <div class="input-group mb-3">
+        <label class="input-group" for="fechaSalida">Fecha de Finalizacion:</label>
+        <input [(ngModel)]="anuncio.fechaSalidaVigencia" type="date" class="form-control" id="fechaSalida" name="fechaSalida">
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="input-group mb-3">
+        <select [(ngModel)]="anuncio.tiempoLectura" class="form-select" id="tiempoLectura" name="tiempoLectura">
+            <option value="corto">Corto</option>
+            <option value="medio">Medio</option>
+            <option value="largo">Largo</option>
+        </select>
+        <label class="input-group-text" for="tiempoLectura">Tiempo de Lectura</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input [(ngModel)]="anuncio.tipoContenido" type="text" class="form-control" name="tipoContenido" id="tipoContenido">
+        <label for="password">Tipo de Contenido:</label>
+    </div>
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="recurso">Recursos</label>
+        <input [(ngModel)]="recurso" name="recurso" type="file" class="form-control" id="recurso" accept="video/,image/,.pdf,.html">
+        <button type="submit" class="btn btn-success" (click)="agreagarRecurso()">agregar recurso</button>
+    </div>
+
+    <div class="form-floating mb-3">
+        <select [(ngModel)]="area._id" (change)="cargarRolesArea(area._id)" class="form-control" name="areas" id="areas">
+            <option *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
+        </select>
+    </div>
+
+
+    <div *ngIf="area._id != ''" class="input-group mb-3">
+        <select class="form-select" [(ngModel)]="rol._id" name="rol" id="rol" placeholder="Rol" aria-label="Example select with button addon">
+            <option *ngFor="let role of roles" [value]="role._id">{{role.nombre}}</option>
+        </select>
+        <button type="submit" class="btn btn-success" (click)="agregarRol(area._id)">agregar destinatario</button>
+
+    </div>
+
+    <!--IMPLEMENTAR RECURSOS
+    <div class="form-floating mb-3">
+        <select  class="form-control" name="areas" id="areas">
+            <option *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
+        </select>
+    </div>
+    -->
+
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-success" (click)="guardarAnuncio('editar')">Guardar Anuncio</button>
+        <button type="submit" class="btn btn-success" (click)="guardarAnuncio('confeccionado')">Publicar</button>
+    </div>
 </form>
