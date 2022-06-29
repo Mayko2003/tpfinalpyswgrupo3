@@ -13,20 +13,22 @@
     <div class="d-flex my-3">
         <div *ngIf="area.roles;else elseBlock">
             <small class="d-flex">
-                <p *ngFor="let rol of area.roles">{{rol.nombre}}</p>
+                <p *ngFor="let role of area.roles">{{role.nombre}}</p>
             </small>
         </div>
         <ng-template #elseBlock>
             <p class="text-primary">No hay Roles asignados</p>
         </ng-template>
     </div>
-    <div class="d-flex row my-3 mx-0 p-0">
-        <div class="form-floating px-1 col-9">
-            <input [(ngModel)]="rol.nombre" type="password" class="form-control" name="password" id="password" placeholder="Constraseña">
-            <label for="password">Nuevo Rol:</label>
-        </div>
-        <button type="button" class="btn btn-warning col-3">Agregar Rol</button></div>
     <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-primary" (click)="guardarArea()">Guardar Area</button>
     </div>
+
+
+    <div *ngIf="area" class="d-flex row my-3 mx-0 p-0">
+        <div class="form-floating px-1 col-9">
+            <input [(ngModel)]="rol.nombre" type="text" class="form-control" name="rol" id="rol" placeholder="Rol">
+            <label for="rol">Nuevo Rol:</label>
+        </div>
+        <button type="button" class="btn btn-warning col-3" (click)="guardarRol(rol)">Agregar Rol</button></div>
 </form>

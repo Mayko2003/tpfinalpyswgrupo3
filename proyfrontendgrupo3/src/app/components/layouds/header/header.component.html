@@ -1,6 +1,6 @@
 <nav class="navbar navbar-dark nav-fondo fw-bold text-capitalize navegacion">
     <div class="container-fluid">
-        <button *ngIf="loginService.userLoggedIn() && (comun || encargado || admin)" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuNav" aria-controls="menuNav">
+        <button *ngIf="loginService.userLoggedIn() && (comun || encargado)" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuNav" aria-controls="menuNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="#">Navbar</a>
@@ -20,19 +20,19 @@
             <ul class="dropdown-menu dropdown-menu-end">
                 <!------------------------------------para administrador----------------------------->
                 <li class="dropdown-item">
-                    <a class=" text-decoration-none nav-link" routerLink='/Area' data-bs-dismiss="offcanvas" aria-label="Close">Administrar
+                    <a class=" text-decoration-none text-dark nav-link" routerLink='/Area' data-bs-dismiss="offcanvas" aria-label="Close">Administrar
                     Areas</a>
                 </li>
                 <li class="dropdown-item">
-                    <a class=" text-decoration-none nav-link" routerLink='/Rol' data-bs-dismiss="offcanvas" aria-label="Close">Administrar
+                    <a class=" text-decoration-none text-dark nav-link" routerLink='/Rol' data-bs-dismiss="offcanvas" aria-label="Close">Administrar
                     Roles</a>
                 </li>
                 <li class="dropdown-item">
-                    <a class=" text-decoration-none nav-link" routerLink='/Persona' data-bs-dismiss="offcanvas" aria-label="Close">Administar
+                    <a class=" text-decoration-none text-dark nav-link" routerLink='/Persona' data-bs-dismiss="offcanvas" aria-label="Close">Administar
                     Personas</a>
                 </li>
                 <li class="dropdown-item">
-                    <a class=" text-decoration-none nav-link d-flex justify-content-between" [routerLink]="['Login']" (click)="logout()">
+                    <a class=" text-decoration-none text-dark nav-link d-flex justify-content-between" [routerLink]="['Login']" (click)="logout()">
                         <p class="m-0">Cerrar Sesion</p><i class="bi bi-box-arrow-right text-danger"></i>
                     </a>
                 </li>
@@ -46,18 +46,6 @@
             </div>
             <div class="offcanvas-body h-100 d-flex flex-column">
                 <ul class="navbar-nav flex-grow-1 pe-3">
-                    <div *ngIf="admin">
-                        <!------------------------------------para administrador----------------------------->
-                        <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/Area' data-bs-dismiss="offcanvas" aria-label="Close">Administrar Areas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/Rol' data-bs-dismiss="offcanvas" aria-label="Close">Administrar Roles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/Persona' data-bs-dismiss="offcanvas" aria-label="Close">Administar Personas</a>
-                        </li>
-                    </div>
                     <div *ngIf="comun">
                         <!------------------------------------para roles----------------------------->
                         <li class="nav-item">

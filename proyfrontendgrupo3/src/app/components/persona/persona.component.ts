@@ -13,20 +13,34 @@ import { PersonaService } from 'src/app/services/persona.service';
 })
 export class PersonaComponent implements OnInit {
 
-  personas: Array<Persona> = [];
-  roles: Array<Rol> = [];
-  areas: Array<Area> = [];
-  persona: Persona = new Persona();
+  personas!: Array<Persona>;
+  persona!: Persona;
+  roles!: Array<Rol>;
+  rol!: Rol;
+  area!: Area;
+  areas!: Array<Area>;
 
-  constructor(private personaService: PersonaService, private areaService:AreaService) {}
-
-  guardarPersona(){
-    this.personaService.addPersona(this.persona).subscribe();
+  constructor(private personaService: PersonaService, private areaService: AreaService) {
+    this.personas = new Array<Persona>();
     this.persona = new Persona();
+    this.persona.roles = new Array<Rol>();
+    this.roles = new Array<Rol>();
+    this.rol = new Rol();
+    this.area = new Area();
+    this.areas = new Array<Area>();
+  }
+
+  guardarPersona() {
+    this.persona.area = this.area;
+    this.persona.roles.push(this.rol)
+    console.log(this.persona)
+    this.personaService.addPersona(this.persona).subscribe();
+    this.getPersonas()
   }
   
   borrarPersona(persona: Persona){
     this.personaService.deletePasaje(persona).subscribe()
+    this.getPersonas()
   }
 
   actualizarPersona(persona: Persona){
@@ -36,20 +50,25 @@ export class PersonaComponent implements OnInit {
   getPersonas(){
     this.personas = new Array<Persona>();
     this.personaService.getPersonas().subscribe( res => {
-     res.forEach((element: any) => {
-      this.persona = new Persona();
-      Object.assign(this.persona,element)
-      this.personas.push(this.persona);
-     })
+      Object.assign(this.personas,res)
     })
   }
 
   getAreas() {
-    this.areas = new Array<Area>();
-    this.areaService.getAreas().subscribe();
+    this.areaService.getAreas().subscribe((res) => {
+      Object.assign(this.areas, res)
+    });
+  }
+
+  getRolesArea() {
+    this.areaService.getRolesArea(this.area._id).subscribe((res) => {
+      Object.assign(this.roles, res)
+    });
   }
   
   ngOnInit(): void {
+    this.getAreas()
+    this.getPersonas()
   }
 
 }

@@ -18,7 +18,7 @@ export class AreaService {
       })
     }
     let body = JSON.stringify(area)
-    return this._http.post(this.urlBase, body, httpOptions)
+    return this._http.post(this.urlBase + '/crear', body, httpOptions)
   }
 
   //servicio para eliminar una Area
@@ -51,6 +51,15 @@ export class AreaService {
       })
     }
     return this._http.get(this.urlBase, httpOptions)
+  }
+
+  public getRolesArea(area_id : string): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    }
+    return this._http.get(this.urlBase + '/roles/' + area_id, httpOptions)
   }
 
 }
