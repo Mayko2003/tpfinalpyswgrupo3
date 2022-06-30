@@ -27,8 +27,6 @@
         <input [(ngModel)]="persona.dni" type="text" class="form-control" name="dniPersona" id="dniPersona" placeholder="DNI">
         <label for="dniPersona">DNI:</label>
     </div>
-
-
     <div class="d-flex mb-3" *ngIf="persona.roles.length > 0">
         <div *ngFor="let rol of persona.roles">
             <span class="badge rounded-pill bg-primary p-2">{{rol.nombre | titlecase}}
@@ -36,14 +34,11 @@
             </span>
         </div>
     </div>
-
-
     <div class="input-group mb-3">
         <select [(ngModel)]="area._id" class="form-select" (change)="getRolesArea()" name="areas" id="areas">
             <option *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
         </select>
     </div>
-
     <div *ngIf="area._id" class="input-group mb-3">
         <select [(ngModel)]="rol._id" class="form-select" name="rol" id="rol" placeholder="Rol">
             <option *ngFor="let role of roles" [value]="role._id">{{role.nombre}}</option>
@@ -89,7 +84,8 @@
                 <th scope="row">{{persona.apellido | titlecase}}</th>
                 <th scope="row">{{persona.email}}</th>
                 <th scope="row">{{persona.dni}}</th>
-                <th scope="row">{{persona.area.nombre | titlecase}}</th>
+                <th *ngIf="persona.area" scope="row">{{persona.area.nombre | titlecase}}</th>
+                <th *ngIf="!persona.area" scope="row">No pertenece a ningun area</th>
                 <th scope="row" class="d-flex justify-content-around">
                     <button type="button" class="btn p-0 rounded-pill" (click)="editarPersona(persona)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
                         <img class="iconoTabla m-0" src="assets/iconos/editar.png" alt="">

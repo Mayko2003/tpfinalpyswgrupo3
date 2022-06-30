@@ -1,5 +1,6 @@
 // import modules
 const Area = require('../models/area');
+const Rol = require('../models/rol');
 
 // vars
 const areaController = {};
@@ -20,7 +21,10 @@ areaController.createArea = async(req, res) => {
         try {
             const area = new Area(req.body);
             await area.save();
-            res.status(200).json(area)
+            res.status(200).json({
+                message: 'Area Guardada',
+                area: area
+            })
         } catch (error) {
             res.status(500).json({
                 message: error
@@ -30,6 +34,8 @@ areaController.createArea = async(req, res) => {
     // eliminar area
 areaController.deleteArea = async(req, res) => {
         try {
+            const area = await Area.findById(req.params.id);
+            await Rol.deleteMany({ _id: { $in: area.roles } })
             await Area.findByIdAndDelete(req.params.id);
             res.status(200).json({
                 message: 'Area eliminada'

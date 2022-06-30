@@ -3,13 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PersonaComponent } from './components/persona/persona.component';
 import { AreaComponent } from './components/area/area.component';
-import { RolComponent } from './components/rol/rol.component';
 import { LoginComponent } from './components/login/login.component';
 import { MenuAnunciosComponent } from './components/menu-anuncios/menu-anuncios.component';
 import { FormAnunciosComponent } from './components/form-anuncios/form-anuncios.component';
 
 const routes: Routes = [
-  {path: 'Rol', component:RolComponent},
   {path: 'Area', component:AreaComponent},
   {path: 'Persona', component:PersonaComponent},
   {path: 'Login', component:LoginComponent},
