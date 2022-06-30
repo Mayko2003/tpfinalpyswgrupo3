@@ -5,7 +5,8 @@
     </div>
     <div class="input-group mb-3">
         <label class="input-group-text" for="contenido">Contenido</label>
-        <input [(ngModel)]="anuncio.contenido" name="contenido" type="file" class="form-control" id="contenido" accept="video/,image/,.pdf,.html">
+        <input  name="contenido" type="file" class="form-control"
+         id="contenido" accept="video/,image/,.pdf,.html" (change)="getFile($event,'contenido')" >
     </div>
     <div class="input-group mb-3">
         <label class="input-group" for="fechaSalida">Fecha de Finalizacion:</label>
@@ -21,16 +22,16 @@
     </div>
     <div class="form-floating mb-3">
         <input [(ngModel)]="anuncio.tipoContenido" type="text" class="form-control" name="tipoContenido" id="tipoContenido">
-        <label for="password">Tipo de Contenido:</label>
+        <label for="tipo contenido">Tipo de Contenido:</label>
     </div>
 
     <div class="input-group mb-3">
         <label class="input-group-text" for="recurso">Recursos</label>
-        <input [(ngModel)]="recurso" name="recurso" type="file" class="form-control" id="recurso" accept="video/,image/,.pdf,.html">
-        <button type="submit" class="btn btn-success" (click)="agreagarRecurso()">agregar recurso</button>
+        <input  name="recurso" type="file" class="form-control" id="recurso" accept="video/,image/,.pdf,.html,.jpeg" multiple
+        (change)="getFile($event,'recursos')">
     </div>
 
-    <div class="form-floating mb-3">
+    <div class="input-group mb-3">
         <select [(ngModel)]="area._id" (change)="cargarRolesArea(area._id)" class="form-control" name="areas" id="areas">
             <option *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
         </select>
@@ -42,16 +43,12 @@
             <option *ngFor="let role of roles" [value]="role._id">{{role.nombre}}</option>
         </select>
         <button type="submit" class="btn btn-success" (click)="agregarRol(area._id)">agregar destinatario</button>
-
     </div>
 
-    <!--IMPLEMENTAR RECURSOS
-    <div class="form-floating mb-3">
-        <select  class="form-control" name="areas" id="areas">
-            <option *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
-        </select>
+    <div class="input-group mb-3">
+        <select class="form-control" [(ngModel)]="medio" name="medio" id="medio">
+            <option *ngFor="let med of medios"  [value]="med">{{med}}</option>
     </div>
-    -->
 
     <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-success" (click)="guardarAnuncio('editar')">Guardar Anuncio</button>
