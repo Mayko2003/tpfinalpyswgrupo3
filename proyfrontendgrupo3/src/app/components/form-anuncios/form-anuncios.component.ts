@@ -97,7 +97,7 @@ export class FormAnunciosComponent implements OnInit {
     this.anuncio = new Anuncio();
   }
 
-  mostrarMisAnuncios() {
+  mostrarMisAnuncios(){
     this.anuncios = new Array<Anuncio>()
     var userid = this.loginService.idLogged()
     if (userid != null) {

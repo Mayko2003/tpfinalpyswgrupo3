@@ -48,10 +48,7 @@
     <div class="input-group mb-3">
         <select class="form-control" [(ngModel)]="medio" name="medio" id="medio">
             <option *ngFor="let med of medios"  [value]="med">{{med}}</option>
-        </select>
-        <button type="submit" class="btn btn-success" (click)="agregarMedios()">agregar medios</button>
     </div>
-    
 
     <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-success" (click)="guardarAnuncio('editar')">Guardar Anuncio</button>
