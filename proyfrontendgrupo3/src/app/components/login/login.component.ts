@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
             sessionStorage.setItem("username", this.user.nombreUsuario);
             sessionStorage.setItem("userid", this.user._id);
             sessionStorage.setItem("roles", JSON.stringify(this.user.roles));
-            sessionStorage.setItem("area",JSON.stringify(this.user.area));
+            sessionStorage.setItem("area",JSON.stringify(this.user.area.nombre));
             //redirigimos a home o a pagina que llamo
             this.router.navigateByUrl(this.returnUrl);
 

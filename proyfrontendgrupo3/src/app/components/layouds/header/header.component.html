@@ -1,9 +1,11 @@
 <nav class="navbar navbar-dark nav-fondo fw-bold text-capitalize navegacion">
     <div class="container-fluid">
-        <button *ngIf="loginService.userLoggedIn() && (comun || encargado || admin)" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuNav" aria-controls="menuNav">
+        <button *ngIf="loginService.userLoggedIn() && (comun || encargado)" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuNav" aria-controls="menuNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="#">Navbar</a>
+
+        <!-- Button toggle par aadministrador -->
         <div *ngIf="loginService.userLoggedIn() && admin">
             <button type="button" class="d-flex align-items-center btn text-light dropdown-toggle p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <a class="rounded-circle col-2" href="#">
@@ -14,12 +16,29 @@
                     <small>Administrador</small>
                 </div>
             </button>
+            <!-- Se muestra cuando se preciona el boton -->
             <ul class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item d-flex justify-content-between" [routerLink]="['Login']" (click)="logout()">
-                    <p class="m-0">Cerrar Sesion</p><i class="bi bi-box-arrow-right text-danger"></i>
-                </a>
+                <!------------------------------------para administrador----------------------------->
+                <li class="dropdown-item">
+                    <a class=" text-decoration-none text-dark nav-link" routerLink='/Area' data-bs-dismiss="offcanvas" aria-label="Close">Administrar
+                    Areas</a>
+                </li>
+                <li class="dropdown-item">
+                    <a class=" text-decoration-none text-dark nav-link" routerLink='/Rol' data-bs-dismiss="offcanvas" aria-label="Close">Administrar
+                    Roles</a>
+                </li>
+                <li class="dropdown-item">
+                    <a class=" text-decoration-none text-dark nav-link" routerLink='/Persona' data-bs-dismiss="offcanvas" aria-label="Close">Administar
+                    Personas</a>
+                </li>
+                <li class="dropdown-item">
+                    <a class=" text-decoration-none text-dark nav-link d-flex justify-content-between" [routerLink]="['Login']" (click)="logout()">
+                        <p class="m-0">Cerrar Sesion</p><i class="bi bi-box-arrow-right text-danger"></i>
+                    </a>
+                </li>
             </ul>
         </div>
+
         <div *ngIf="loginService.userLoggedIn()" class="offcanvas offcanvas-start nav-fondo" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="menuNav" aria-labelledby="menuNavLabel">
             <div class="offcanvas-header">
                 <h3 class="offcanvas-title text-light" id="menuNavLabel">Menu</h3>
@@ -27,45 +46,19 @@
             </div>
             <div class="offcanvas-body h-100 d-flex flex-column">
                 <ul class="navbar-nav flex-grow-1 pe-3">
-                    <div *ngIf="admin">
-                        <!------------------------------------para administrador----------------------------->
-                        <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/Area' data-bs-dismiss="offcanvas" aria-label="Close">Administrar Areas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/Rol' data-bs-dismiss="offcanvas" aria-label="Close">Administrar Roles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/Persona' data-bs-dismiss="offcanvas" aria-label="Close">Administar Personas</a>
-                        </li>
-                    </div>
-                    <div *ngIf="comun || encargado">
+                    <div *ngIf="comun">
                         <!------------------------------------para roles----------------------------->
-                        <li *ngIf="comun">
-                            <br>
-                        </li>
-                        <li>
-                            <h5 class="text-white">Actividades</h5>
-                            <hr class="dropdown-divider text-light">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" routerLink='/FormAnuncio' data-bs-dismiss="offcanvas" aria-label="Close">Administrar Mis Anuncio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/FormAnuncio' data-bs-dismiss="offcanvas" aria-label="Close">&nbsp;Administrar Mis Anuncio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/Persona' data-bs-dismiss="offcanvas" aria-label="Close">&nbsp;Menu Anuncios</a>
+                            <a class="nav-link text-white" routerLink='/MenuAnuncio' data-bs-dismiss="offcanvas" aria-label="Close">Menu Anuncios</a>
                         </li>
                     </div>
                     <div *ngIf="encargado">
                         <!-----------------------------------para Encargado------------------------>
-                        <li *ngIf="encargado">
-                            <br>
-                        </li>
-                        <li>
-                            <h5 class="text-white">Encargado</h5>
-                            <hr class="dropdown-divider text-light">
-                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/Persona' data-bs-dismiss="offcanvas" aria-label="Close">&nbsp;Administrar anuncios</a>
+                            <a class="nav-link text-white" routerLink='/Encargado' data-bs-dismiss="offcanvas" aria-label="Close">Administrar anuncios</a>
                         </li>
                     </div>
                 </ul>

@@ -18,7 +18,7 @@ export class AreaService {
       })
     }
     let body = JSON.stringify(area)
-    return this._http.post(this.urlBase, body, httpOptions)
+    return this._http.post(this.urlBase + '/crear', body, httpOptions)
   }
 
   //servicio para eliminar una Area
@@ -59,7 +59,7 @@ export class AreaService {
         "Content-Type": "application/json"
       })
     }
-    return this._http.get(this.urlBase, httpOptions)
+    return this._http.get(this.urlBase + '/roles/' + area_id, httpOptions)
   }
 
 }
