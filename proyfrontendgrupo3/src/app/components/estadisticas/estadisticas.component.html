@@ -14,51 +14,9 @@
         <!-- grafico de barras -->
         <!-- primer grafico torta -->
         <div class="col-6">
-            <h4 class="text-center mb-3">Grafico Tipo de Contenido</h4>
-            <div class="d-flex justify-content-center">
-                <igx-item-legend
-                orientation="Horizontal"
-                name="Legend"
-                #legend>
-                </igx-item-legend>
-            </div>
-            <div class="d-flex justify-content-center">
-                <igx-pie-chart
-                    [dataSource]="datosChart1"
-                    valueMemberPath="value"
-                    labelMemberPath="label"
-                    labelsPosition="BestFit"
-                    radiusFactor="1"
-                    [legend]="legend"
-                    name="chart"
-                    #chart
-                    style="width:10em;height:10em;">
-                ></igx-pie-chart>
-            </div>
         </div>
         <!-- grafico 2 torta -->
         <div class="col-6 ">
-            <h4 class="text-center mb-3">Grafico Tipo Rol</h4>
-            <div class="d-flex justify-content-center">
-                <igx-item-legend
-                orientation="Horizontal"
-                name="Legend2"
-                #legend2>
-                </igx-item-legend>
-            </div>
-            <div class="d-flex justify-content-center">
-                <igx-pie-chart
-                    [dataSource]="datosChart2"
-                    valueMemberPath="value"
-                    labelMemberPath="label"
-                    labelsPosition="BestFit"
-                    radiusFactor="1"
-                    [legend]="legend2"
-                    name="chart2"
-                    #chart
-                    style="width:10em;height:10em;">
-                ></igx-pie-chart>
-            </div>
         </div>
     </div>
     

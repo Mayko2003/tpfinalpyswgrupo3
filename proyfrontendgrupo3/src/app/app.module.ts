@@ -18,11 +18,6 @@ import { FormAnunciosComponent } from './components/form-anuncios/form-anuncios.
 import { EncargadoAnunciosComponent } from './components/encargado-anuncios/encargado-anuncios.component';
 import { EstadisticasComponent } from './components/estadisticas/estadisticas.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  IgxItemLegendModule,
-  IgxPieChartModule,
-  IgxLegendModule
-} from 'igniteui-angular-charts';
 
 
 @NgModule({
@@ -43,11 +38,7 @@ import {
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    BrowserAnimationsModule,
-    IgxItemLegendModule,// for legends of charts
-    IgxLegendModule,// other legend for charts
-    // modules for pie chart
-    IgxPieChartModule, 
+    BrowserAnimationsModule
   ],
   providers: [
     LoginService,
