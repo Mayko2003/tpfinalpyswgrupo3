@@ -42,7 +42,7 @@ export class PersonaService {
     }
     let body = JSON.stringify(persona)
 
-    return this._http.put(this.urlBase+"/"+persona._id, body, httpOptions)
+    return this._http.put(this.urlBase+"/actualizar/"+persona._id, body, httpOptions)
   }
 
   //servicio para enviar todas las personas

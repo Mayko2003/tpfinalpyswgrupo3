@@ -7,7 +7,7 @@ const personaController = {};
 // obtener personas
 personaController.getPersonas = async(req, res) => {
     try {
-        const personas = await Persona.find().populate("roles", 'nombre');
+        const personas = await Persona.find().populate("roles", 'nombre').populate('area', 'nombre');
         res.status(200).json(personas);
     } catch (error) {
         res.status(500).json({
@@ -64,7 +64,7 @@ personaController.loginPersona = async(req, res) => {
             password = req.body.password;
         const persona = await Persona.findOne({
             $and: [{ nombreUsuario: username }, { contrasenia: password }],
-        }).populate('roles', 'nombre').populate('area', 'nombre');
+        }).populate('roles', 'nombre').populate('area', 'nombre roles');
         res.status(200).json(persona);
     } catch (error) {
         console.log(error);
