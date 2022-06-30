@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { IgxItemLegendComponent, IgxPieChartComponent } from 'igniteui-angular-charts';
 import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
 import { AnuncioService } from 'src/app/services/anuncio.service';
@@ -17,13 +16,6 @@ export class EstadisticasComponent implements OnInit {
   datosChart1!: Array<any>
   datosChart2!: Array<any>
   areaSeleccionada: string = "";
-  //componentes para graficos
-  // grafico torta 1
-  private legend1!: IgxItemLegendComponent
-  private chart1!: IgxPieChartComponent
-  // grafico torta 2
-  private legend2!: IgxItemLegendComponent
-  private chart2!: IgxPieChartComponent
 
 
   constructor(private anucioService: AnuncioService, private areaService: AreaService) { 
