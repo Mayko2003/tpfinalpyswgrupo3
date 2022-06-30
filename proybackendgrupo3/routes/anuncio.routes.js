@@ -16,6 +16,7 @@ router.get('/fecha/:tipo/:valor',anuncioController.obtenerAnunciosFecha);
 router.post('/fecha',anuncioController.obtenerAnunciosFechaRango);
 router.post('/roles',anuncioController.getAnuncioByRoles);
 router.get('/contenido/:tipo',anuncioController.busquedaAnuncioTipoContenido);
+router.get('/area/:idArea',anuncioController.getAnunciosArea);
 
 // export router
 module.exports = router;

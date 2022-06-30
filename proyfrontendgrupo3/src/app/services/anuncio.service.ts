@@ -92,5 +92,15 @@ export class AnuncioService {
       }),
     }
     return this._http.get(this.urlBase+"/persona/"+user_id, httpOptions)
-  } 
+  }
+
+  public getAnunciosByArea(area_id: string): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      }),
+    }
+    return this._http.get(this.urlBase+"/area/"+area_id, httpOptions)
+  }
+  
 }
