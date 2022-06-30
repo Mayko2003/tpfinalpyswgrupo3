@@ -167,6 +167,24 @@ anuncioController.busquedaAnuncioTipoContenido = async(req,res)=>{
     }
 }
 
+// obtener anuncios de un area que estan vigentes
+anuncioController.getAnunciosArea = async(req,res)=>{
+    try{
+        const anuncios = await Anuncio.find({
+            $and: [
+                { "estados.estado": "autorizado"},
+                { "estados.area": req.params.idArea }
+            ]
+        }).populate('destinatarios')
+
+        res.status(200).json(anuncios);
+    }catch(error){
+        res.status(500).json({
+            message: error,
+        });
+    }
+}
+
 
 // export controller
 module.exports = anuncioController;
