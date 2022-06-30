@@ -84,7 +84,8 @@
                 <th scope="row">{{persona.apellido | titlecase}}</th>
                 <th scope="row">{{persona.email}}</th>
                 <th scope="row">{{persona.dni}}</th>
-                <th scope="row">{{persona.area.nombre | titlecase}}</th>
+                <th *ngIf="persona.area" scope="row">{{persona.area.nombre | titlecase}}</th>
+                <th *ngIf="!persona.area" scope="row">No pertenece a ningun area</th>
                 <th scope="row" class="d-flex justify-content-around">
                     <button type="button" class="btn p-0 rounded-pill" (click)="editarPersona(persona)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
                         <img class="iconoTabla m-0" src="assets/iconos/editar.png" alt="">

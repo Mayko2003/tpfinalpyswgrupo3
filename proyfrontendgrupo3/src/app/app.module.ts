@@ -13,7 +13,6 @@ import { LoginComponent } from './components/login/login.component';
 
 import { LoginService } from './services/login.service';
 import { AreaComponent } from './components/area/area.component';
-import { RolComponent } from './components/rol/rol.component';
 import { MenuAnunciosComponent } from './components/menu-anuncios/menu-anuncios.component';
 import { FormAnunciosComponent } from './components/form-anuncios/form-anuncios.component';
 import { EncargadoAnunciosComponent } from './components/encargado-anuncios/encargado-anuncios.component';
@@ -26,7 +25,6 @@ import { EncargadoAnunciosComponent } from './components/encargado-anuncios/enca
     FooterComponent,
     LoginComponent,
     AreaComponent,
-    RolComponent,
     MenuAnunciosComponent,
     FormAnunciosComponent,
     EncargadoAnunciosComponent
