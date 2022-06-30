@@ -21,7 +21,7 @@ export class AnuncioService {
       })
     }
     let body = JSON.stringify(anuncio)
-    return this._http.post(this.urlBase, body, httpOptions)
+    return this._http.post(this.urlBase+"/crear", body, httpOptions)
   }
 
   //servicio para eliminar un Anuncio

@@ -4,7 +4,7 @@ const Anuncio = require("../models/anuncio");
 // vars
 const anuncioController = {};
 
-// obtener anuncios
+// obtener anuncios --> para testing
 anuncioController.getAnuncios = async(req,res)=>{
     try{
         const anuncios = await Anuncio.find();
@@ -72,6 +72,7 @@ anuncioController.updateAnuncio = async(req,res)=>{
         });
     }
 }; */
+
 
 // export controller
 module.exports = anuncioController;

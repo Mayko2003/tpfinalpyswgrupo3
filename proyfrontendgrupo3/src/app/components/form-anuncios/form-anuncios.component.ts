@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
 import { Estado } from 'src/app/models/estado';
+import { Persona } from 'src/app/models/persona';
 import { Rol } from 'src/app/models/rol';
 import { AnuncioService } from 'src/app/services/anuncio.service';
 import { AreaService } from 'src/app/services/area.service';
@@ -32,11 +33,16 @@ export class FormAnunciosComponent implements OnInit {
   //para guardar estados de
   estados: Array<Estado> = [];
   estado: Estado = new Estado();
+  p: Persona = new Persona();
+
+  //para guardar los medios de transmicion
+  medios: Array<string> = ["FaceBook","Instagram","Twitter",]; //implementar variables locales!!!!!!!!!!!!!
 
   constructor(private anuncioService: AnuncioService, private loginService: LoginService, private areaService: AreaService) { 
     this.anuncio = new Anuncio();
     this.anuncio.recursos = new Array<string>();
     this.anuncio.destinatarios = new Array<Rol>();
+    this.anuncio.mediosTransmision = new Array<string>();
     this.anuncios = new Array<Anuncio>();
     this.areas = new Array<Area>();
     this.roles = new Array<Rol>();
@@ -61,9 +67,12 @@ export class FormAnunciosComponent implements OnInit {
       element.estado = estado
     })
     this.anuncio.estados = this.estados
-    
+    this.anuncio.codigoQR =  "hola"
+    this.p._id = "62bbc99b1316ab1e3b50e85c"
+    this.anuncio.redactor = this.p
+    this.anuncio.fechaEntradaVigencia = new Date()
     this.anuncioService.addAnuncio(this.anuncio).subscribe(res => {});
-    console.log(this.anuncio)    
+    console.log(JSON.stringify(this.anuncio));    
     this.anuncio = new Anuncio();
   }
 
@@ -83,7 +92,7 @@ export class FormAnunciosComponent implements OnInit {
     }
   }
 
-  //metodos para cargar las listas del formulario
+  //metodos para cargar las listas del formulario 
   cargarAreas(){
     this.areas = new Array<Area>();
     this.areaService.getAreas().subscribe(res => {
@@ -101,6 +110,7 @@ export class FormAnunciosComponent implements OnInit {
   //metodo para cargar los roles a un anuncios
   agregarRol(areaid: string){
     
+  //realizamos una verificacion de las areas para agregarlas a los estados
     if(this.estados){
       var band = false
       this.estados.forEach( (element: any) => {
@@ -108,6 +118,7 @@ export class FormAnunciosComponent implements OnInit {
           band = true
         }
       })
+      //en caso de que ningun estado sea igual se procede a crear un estado y asignarle el area
       if(!band){
         this.estado.area._id = areaid
         this.estados.push(this.estado)
