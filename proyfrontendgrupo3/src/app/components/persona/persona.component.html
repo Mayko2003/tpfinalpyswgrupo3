@@ -53,6 +53,7 @@
     <div class="d-flex justify-content-center">
         <button *ngIf="modoCrear" type="submit" class="btn btn-success" (click)="guardarPersona()">Guardar persona</button>
         <button *ngIf="modoEditar" type="submit" class="btn btn-success" (click)="actualizarPersona(persona)">Actualizar Persona</button>
+        <button type="submit" class="btn btn-danger" (click)="modoEditar = false; modoCrear = false">Cancelar</button>
     </div>
 </form>
 <div class="table-responsive">

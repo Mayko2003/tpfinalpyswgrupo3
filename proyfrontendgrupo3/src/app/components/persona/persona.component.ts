@@ -11,13 +11,28 @@ import { PersonaService } from 'src/app/services/persona.service';
   styleUrls: ['./persona.component.css'],
 })
 export class PersonaComponent implements OnInit {
+  //variable usada para obtener todas las personas
   personas!: Array<Persona>;
+
+  //variable usada para crear o editar una persona
   persona!: Persona;
+
+  //variable usada para obtener todos los roles
   roles!: Array<Rol>;
+
+  //variable usada para agregar un nuevo rol
   rol!: Rol;
+
+  //variable usada para seleccionar un area
   area!: Area;
+
+  //variable usada para obtener todas las areas
   areas!: Array<Area>;
+
+  //variable usada para preparar el formulario para crear una nueva persona
   modoEditar!: boolean;
+
+  //variable usada para preparar el formulario para editar una persona
   modoCrear!: boolean;
 
   constructor(
@@ -40,28 +55,35 @@ export class PersonaComponent implements OnInit {
     this.area = new Area();
   }
 
+  //agrega una persona a la base de datos
   guardarPersona() {
     this.persona.area = this.area;
     this.persona.roles = this.roles;
     this.personaService.addPersona(this.persona).subscribe();
     this.getPersonas();
+    this.modoCrear = false
   }
 
+  //elimina una persona en la base de datos
   borrarPersona(persona: Persona) {
-    this.personaService.deletePasaje(persona).subscribe();
-    this.getPersonas();
+    this.personaService.deletePasaje(persona).subscribe(() => {
+      this.getPersonas();
+    });
   }
 
+  //prepara los datos del formulario para editar una persona
   editarPersona(persona: Persona) {
     this.modoEditar = true;
     this.persona = persona;
   }
 
+  //actualiza los datos de una persona
   actualizarPersona(persona: Persona) {
     this.personaService.updatePasaje(persona).subscribe();
     this.modoEditar = false
   }
 
+  //obtiene todas las personas
   getPersonas() {
     this.personas = new Array<Persona>();
     this.personaService.getPersonas().subscribe((res) => {
@@ -69,6 +91,7 @@ export class PersonaComponent implements OnInit {
     });
   }
 
+  //instancia las variables a utilizar para crear una nueva persona
   activarModoCrear() {
     this.modoCrear = true
     this.persona = new Persona();
@@ -76,12 +99,14 @@ export class PersonaComponent implements OnInit {
     this.persona.area = new Area();
   }
 
+  //obtiene todas las areas
   getAreas() {
     this.areaService.getAreas().subscribe((res) => {
       Object.assign(this.areas, res);
     });
   }
 
+  //obtiene todos los roles de un area
   getRolesArea() {
     this.roles = new Array<Rol>();
     this.areaService.getRolesArea(this.area._id).subscribe((res) => {
@@ -89,6 +114,7 @@ export class PersonaComponent implements OnInit {
     });
   }
 
+  //agrega un rol al Array de roles
   agregarRol(id: string) {
     if (this.persona.roles.findIndex((rol) => rol._id === id) === -1)
       var rol = this.roles.find((rol) => {
@@ -97,10 +123,12 @@ export class PersonaComponent implements OnInit {
     if (rol) this.persona.roles.push(rol);
   }
 
+  //elimina un rol del array de roles
   quitarRol(pos: number) {
     this.persona.roles.splice(pos, 1);
   }
 
+  //cambia el estado de una persona
   cambiarEstadoPersona(persona: Persona) {
     persona.estado = !persona.estado
     this.personaService.updatePasaje(persona).subscribe();
@@ -108,7 +136,6 @@ export class PersonaComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPersonas();
-    console.log(this.personas)
     this.getAreas();
   }
 }
