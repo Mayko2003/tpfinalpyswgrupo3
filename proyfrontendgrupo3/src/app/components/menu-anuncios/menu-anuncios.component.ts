@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Anuncio } from 'src/app/models/anuncio';
 import { AreaRol } from 'src/app/models/area-rol';
+import { Persona } from 'src/app/models/persona';
 import { Rol } from 'src/app/models/rol';
 import { AnuncioService } from 'src/app/services/anuncio.service';
 import { LoginService } from 'src/app/services/login.service';
+import { PersonaService } from 'src/app/services/persona.service';
+import { RolService } from 'src/app/services/rol.service';
 
 @Component({
   selector: 'app-menu-anuncios',
@@ -21,11 +24,18 @@ export class MenuAnunciosComponent implements OnInit {
   medioPublicacion:string='';
   estado:string='';
   tipoContenido:string='';
-  area:string='';
-  constructor(private anuncioService: AnuncioService, private loginService: LoginService) { }
+  redactores!:Array<Persona>;
+  redactor:string='';
+  destinatario:string='';
+  texto:string = '';
+  destinatarios!:Array<Rol>;
+  fechaFiltro:string = '';
+  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService: PersonaService, private rolService:RolService) { }
 
   ngOnInit(): void {
     this.cargarAnuncios();
+    this.cargarPersonas();
+    this.cargarDestinatarios();
   }
 
   cargarAnuncios(){
@@ -55,12 +65,30 @@ export class MenuAnunciosComponent implements OnInit {
 
   //Búsquedas avanzadas, se podrá realizar por destinatario, fechas, medio de publicación, texto, 
   //tipo de contenido, estado, redactor o combinaciones de todas las anteriores.
+  cargarPersonas(){
+    this.redactores = new Array<Persona>();
+    this.personaService.getPersonas().subscribe(res=>{
+      res.forEach((element:any) => {
+        this.redactores.push(element);
+      });
+    })
+  }
+  cargarDestinatarios(){
+    this.destinatarios = new Array<Rol>();
+    this.rolService.getRoles().subscribe(res=>{
+      res.forEach((element:any) => {
+        this.destinatarios.push(element);
+      });
+    })
+  }
   actualizarFiltro(){
     console.log(this.estado);
     console.log(this.tipoContenido);
     console.log(this.medioPublicacion);
-    console.log(this.area);
-    this.anuncioService.getAnunciosFiltro(this.rolesId,'',new Date(),'',this.medioPublicacion,'',this.estado,this.tipoContenido).subscribe(res=>{
+    console.log(this.redactor);
+    console.log(this.destinatario);
+    console.log(this.fechaFiltro);
+    this.anuncioService.getAnunciosFiltro(this.rolesId,this.texto,this.fechaFiltro,this.destinatario,this.medioPublicacion,this.redactor,this.estado,this.tipoContenido).subscribe(res=>{
       console.log(res);
     })
   }
@@ -68,6 +96,9 @@ export class MenuAnunciosComponent implements OnInit {
     this.estado = "";
     this.tipoContenido = "";
     this.medioPublicacion = "";
+    this.redactor = "";
+    this.texto = "";
+    this.fechaFiltro = "";
     this.actualizarFiltro();
   }
 }

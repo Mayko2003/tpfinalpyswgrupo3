@@ -10,7 +10,7 @@
 
   <!--Filtros(botones y selectores)-->
   <div class="filtros">
-    <div class="form-floating">
+      <div class="form-floating">
         <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="tipoContenido" name="tipo" (ngModelChange)="actualizarFiltro()">
           <option value="texto plano">Texto plano</option>
           <option value="img">Imagen</option>
@@ -38,6 +38,25 @@
         </select>
         <label for="floatingSelect">Medio de publicacion</label>
       </div>
-    </div>
-    <button type="button" class="btn btn-warning" (click)="limpiarFiltro()">Limpiar</button>
-  </div>
+      <div class="form-floating">
+        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="redactor" name="redactor" (ngModelChange)="actualizarFiltro()">
+          <option value="{{r._id}}" *ngFor="let r of redactores">{{r.nombre|titlecase}}, {{r.apellido|titlecase}}</option>
+        </select>
+        <label for="floatingSelect">Redactor</label>
+      </div>
+      <div class="form-floating">
+        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="destinatario" name="destinatario" (ngModelChange)="actualizarFiltro()">
+          <option value="{{d._id}}" *ngFor="let d of destinatarios">{{d.nombre|titlecase}}</option>
+        </select>
+        <label for="floatingSelect">Destinatarios</label>
+      </div>
+      <div class="form-floating">
+        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" [(ngModel)]="texto" name="texto" (ngModelChange)="actualizarFiltro()">
+        <label for="floatingInput">Texto</label>
+      </div>
+      <div class="form-floating">
+        <input type="date" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="fechaFiltro" name="fechaFiltro" (ngModelChange)="actualizarFiltro()">
+        <label for="floatingPassword">Fecha</label>
+      </div>
+      <button type="button" class="btn btn-warning" (click)="limpiarFiltro()">Limpiar</button>
+   </div>

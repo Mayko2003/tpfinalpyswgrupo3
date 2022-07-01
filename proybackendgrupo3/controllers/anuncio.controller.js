@@ -196,8 +196,9 @@ anuncioController.getAnuncioFiltro = async(req,res)=>{
         const redactor = req.query.redactor == '' ? null : req.query.redactor;
         const medioTransmision = req.query.medioTransmision == '' ? null : req.query.medioTransmision;
         const destinatarios = req.query.destinatarios == '' ? null : req.query.destinatarios;
-        const fechaSalidaVigencia = req.query.salidaVigencia == '' ? null : req.query.salidaVigencia;
+        const fechaSalidaVigencia = req.query.fechaSalidaVigencia == '' ? null : req.query.fechaSalidaVigencia;
         const titulo = req.query.titulo == '' ? null : req.query.titulo;
+        console.log(fechaSalidaVigencia);
         const criteria = {
             '$and': [
                 {"destinatarios":{$in:roles},"fechaSalidaVigencia":{'$gte':fecha}},
@@ -206,7 +207,7 @@ anuncioController.getAnuncioFiltro = async(req,res)=>{
                 {"redactor":redactor == null ? {'$exists':true}  : redactor},
                 {"mediosTransmision":medioTransmision == null ?{'$in':/[a-zA-Z0-9]/} : medioTransmision},
                 {"destinatarios": destinatarios == null ? {'$exists':true} : destinatarios},
-                {"fechaSalidaVigencia":fechaSalidaVigencia == null ? {'$exists':true} : fechaSalidaVigencia},
+                {"fechaSalidaVigencia":fechaSalidaVigencia == null ? {'$exists':true} : {'$eq':fechaSalidaVigencia}},
                 {"titulo": titulo == null ? /[a-zA-Z0-9]/ : titulo}
             ]
         }
