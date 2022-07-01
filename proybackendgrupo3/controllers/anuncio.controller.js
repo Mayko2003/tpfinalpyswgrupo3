@@ -1,4 +1,5 @@
 // import modules
+const { default: mongoose } = require("mongoose");
 const Anuncio = require("../models/anuncio");
 
 // vars
@@ -185,6 +186,39 @@ anuncioController.getAnunciosArea = async(req,res)=>{
     }
 }
 
-
+// prueba de filtro avanzado
+anuncioController.getAnuncioFiltro = async(req,res)=>{
+    try{
+        var fecha = new Date();
+        const roles = req.query.roles;
+        const tipoContenido = req.query.tipoContenido == '' ? null : req.query.tipoContenido;
+        const estado = req.query.estado == '' ? null : req.query.estado;
+        const redactor = req.query.redactor == '' ? null : req.query.redactor;
+        const medioTransmision = req.query.medioTransmision == '' ? null : req.query.medioTransmision;
+        const destinatarios = req.query.destinatarios == '' ? null : req.query.destinatarios;
+        const fechaSalidaVigencia = req.query.fechaSalidaVigencia == '' ? null : req.query.fechaSalidaVigencia;
+        const titulo = req.query.titulo == '' ? null : req.query.titulo;
+        console.log(fechaSalidaVigencia);
+        const criteria = {
+            '$and': [
+                {"destinatarios":{$in:roles},"fechaSalidaVigencia":{'$gte':fecha}},
+                {"tipoContenido":tipoContenido == null ? /[a-zA-Z0-9]/ : tipoContenido},
+                {"estados.estado":estado == null ? /[a-zA-Z0-9]/ : estado},
+                {"redactor":redactor == null ? {'$exists':true}  : redactor},
+                {"mediosTransmision":medioTransmision == null ?{'$in':/[a-zA-Z0-9]/} : medioTransmision},
+                {"destinatarios": destinatarios == null ? {'$exists':true} : destinatarios},
+                {"fechaSalidaVigencia":fechaSalidaVigencia == null ? {'$exists':true} : {'$eq':fechaSalidaVigencia}},
+                {"titulo": titulo == null ? /[a-zA-Z0-9]/ : titulo}
+            ]
+        }
+        console.log(criteria);
+        const anuncios = await Anuncio.find(criteria);
+        res.status(200).json(anuncios);
+    }catch(error){
+        res.status(500).json({
+            message : error,
+        })
+    }
+}
 // export controller
 module.exports = anuncioController;

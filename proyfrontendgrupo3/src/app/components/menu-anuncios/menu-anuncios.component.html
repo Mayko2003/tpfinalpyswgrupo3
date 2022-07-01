@@ -1,1 +1,62 @@
-<p>menu-anuncios works!</p>
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="col" *ngFor="let a of anuncios">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{a.titulo}}</h5>
+        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+      </div>
+    </div>
+  </div>
+
+  <!--Filtros(botones y selectores)-->
+  <div class="filtros">
+      <div class="form-floating">
+        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="tipoContenido" name="tipo" (ngModelChange)="actualizarFiltro()">
+          <option value="texto plano">Texto plano</option>
+          <option value="img">Imagen</option>
+          <option value="html">HTML</option>
+          <option value="tv">TV</option>
+          <option value="email">Email</option>
+          <option value="pdf">PDF</option>
+        </select>
+        <label for="floatingSelect">Tipo contenido</label>
+      </div>
+      <div class="form-floating">
+        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="estado" name="estado" (ngModelChange)="actualizarFiltro()">
+          <option value="editar">Edicion</option>
+          <option value="confeccionado">Confeccionado</option>
+          <option value="autorizado">Autorizado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+        <label for="floatingSelect">Estado</label>
+      </div>
+      <div class="form-floating">
+        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="medioPublicacion" name="medio" (ngModelChange)="actualizarFiltro()">
+          <option value="facebook">Facebook</option>
+          <option value="instagram">Instagram</option>
+          <option value="twitter">Twitter</option>
+        </select>
+        <label for="floatingSelect">Medio de publicacion</label>
+      </div>
+      <div class="form-floating">
+        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="redactor" name="redactor" (ngModelChange)="actualizarFiltro()">
+          <option value="{{r._id}}" *ngFor="let r of redactores">{{r.nombre|titlecase}}, {{r.apellido|titlecase}}</option>
+        </select>
+        <label for="floatingSelect">Redactor</label>
+      </div>
+      <div class="form-floating">
+        <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="destinatario" name="destinatario" (ngModelChange)="actualizarFiltro()">
+          <option value="{{d._id}}" *ngFor="let d of destinatarios">{{d.nombre|titlecase}}</option>
+        </select>
+        <label for="floatingSelect">Destinatarios</label>
+      </div>
+      <div class="form-floating">
+        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" [(ngModel)]="texto" name="texto" (ngModelChange)="actualizarFiltro()">
+        <label for="floatingInput">Texto</label>
+      </div>
+      <div class="form-floating">
+        <input type="date" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="fechaFiltro" name="fechaFiltro" (ngModelChange)="actualizarFiltro()">
+        <label for="floatingPassword">Fecha</label>
+      </div>
+      <button type="button" class="btn btn-warning" (click)="limpiarFiltro()">Limpiar</button>
+   </div>
