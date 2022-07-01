@@ -16,8 +16,12 @@ export class MenuAnunciosComponent implements OnInit {
   anuncios: Array<Anuncio> = [];
   rolArea: AreaRol = new AreaRol();
   fecha!: Date;
-
-
+  roles: Array<Rol> = [];
+  rolesId : Array<string> = [];
+  medioPublicacion:string='';
+  estado:string='';
+  tipoContenido:string='';
+  area:string='';
   constructor(private anuncioService: AnuncioService, private loginService: LoginService) { }
 
   ngOnInit(): void {
@@ -30,20 +34,40 @@ export class MenuAnunciosComponent implements OnInit {
     var rolesLogin = this.loginService.rolLogged();
     
     if(rolesLogin != null){
-      Object.assign(this.rolArea.roles,rolesLogin);
+      Object.assign(this.roles,rolesLogin);
+      this.roles.forEach((element:any) => {
+        this.rolesId.push(element._id);
+      });
+      console.log(this.rolesId);
     }
     if(areaLogin != null){ 
-      Object.assign(this.rolArea.area, areaLogin)}
+      }
     
     //cargo la fecha de hoy para cargar los anuncios vigentes
     this.fecha = new Date()
 
     // thisfecha <= fechaSalida
-    this.anuncioService.getAnunciosByRoles(this.rolArea,this.fecha).subscribe(res =>{
+    this.anuncioService.getAnunciosByRoles(this.rolesId,this.fecha).subscribe(res =>{
       Object.assign(this.anuncios,res)
+      console.log(this.anuncios);
     })
   }
 
   //Búsquedas avanzadas, se podrá realizar por destinatario, fechas, medio de publicación, texto, 
   //tipo de contenido, estado, redactor o combinaciones de todas las anteriores.
+  actualizarFiltro(){
+    console.log(this.estado);
+    console.log(this.tipoContenido);
+    console.log(this.medioPublicacion);
+    console.log(this.area);
+    this.anuncioService.getAnunciosFiltro(this.rolesId,'',new Date(),'',this.medioPublicacion,'',this.estado,this.tipoContenido).subscribe(res=>{
+      console.log(res);
+    })
+  }
+  limpiarFiltro(){
+    this.estado = "";
+    this.tipoContenido = "";
+    this.medioPublicacion = "";
+    this.actualizarFiltro();
+  }
 }
