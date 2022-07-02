@@ -18,6 +18,9 @@ router.post('/fecha', authController.verifyToken, anuncioController.obtenerAnunc
 router.post('/roles', authController.verifyToken, anuncioController.getAnuncioByRoles);
 router.get('/contenido/:tipo', authController.verifyToken, anuncioController.busquedaAnuncioTipoContenido);
 router.get('/area/:idArea', authController.verifyToken, anuncioController.getAnunciosArea);
+router.get('/busqueda', authController.verifyToken, anuncioController.getAnuncioFiltro);
+
+
 
 // export router
 module.exports = router;
