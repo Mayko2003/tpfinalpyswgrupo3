@@ -13,5 +13,6 @@ router.post('/crear', authController.verifyToken, personaController.createPerson
 router.delete('/eliminar/:id', authController.verifyToken, personaController.deletePersona)
 router.put('/actualizar/:id', authController.verifyToken, personaController.updatePersona)
 router.post('/login', personaController.loginPersona)
+router.get('/logged', authController.verifyToken, personaController.getLoggedPersona)
 // export router
 module.exports = router
