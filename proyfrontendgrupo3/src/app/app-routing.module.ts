@@ -7,6 +7,7 @@ import { LoginComponent } from './components/login/login.component';
 import { MenuAnunciosComponent } from './components/menu-anuncios/menu-anuncios.component';
 import { FormAnunciosComponent } from './components/form-anuncios/form-anuncios.component';
 import { EstadisticasComponent } from './components/estadisticas/estadisticas.component';
+import { RecursosAnuncioComponent } from './components/recursos-anuncio/recursos-anuncio.component';
 
 const routes: Routes = [
   {path: 'Area', component:AreaComponent},
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path: 'FormAnuncio', component:FormAnunciosComponent},
   {path: 'MenuAnuncio', component:MenuAnunciosComponent},
   {path: 'estadisticas', component: EstadisticasComponent},
+  {path: 'recursos', component: RecursosAnuncioComponent},
   {path: '**', pathMatch:'full', redirectTo:'Login'} 
 ];
 
