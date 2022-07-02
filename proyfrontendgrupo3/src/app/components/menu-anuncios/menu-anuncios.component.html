@@ -3,7 +3,11 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Titulo: {{a.titulo}}</h5>
-        <p class="card-text"></p>
+        <p class="card-text">
+          <ng-container *ngFor="let e of a.estados">
+            <li>{{e.estado}}</li>
+          </ng-container>
+        </p>
       </div>
     </div>
   </div>

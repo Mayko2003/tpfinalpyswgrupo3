@@ -20,7 +20,8 @@ export class RecursosAnuncioComponent implements OnInit {
       if (params['id']) {
         var id = params['id'];
         this.anuncioService.getAnuncio(id).subscribe(res => {
-          this.anuncio = res
+          Object.assign(this.anuncio, res)
+          console.log(this.anuncio)
         })
       }
     })

@@ -114,6 +114,7 @@ export class PersonaComponent implements OnInit {
 
   //instancia las variables a utilizar para crear una nueva persona
   activarModoCrear() {
+    this.modoEditar = false;
     this.modoCrear = true;
     this.persona = new Persona();
     this.persona.roles = new Array<Rol>();
