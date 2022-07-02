@@ -68,13 +68,11 @@ anuncioController.getAnuncio = async(req,res)=>{
     res.status(200).json(anuncio);
 }
 
-// obtener un anuncio segun area encargado
+// obtener un anuncio segun area encargado de acuerdo al estado
 anuncioController.getAnunciosAreaEncargado = async(req,res)=>{
     try {
-        Anuncio.find({"estados.estado":req.params.estado}).populate({path:'redactor',match:{area:req.params.idArea}}).exec(function(err, anuncios) {
-            anuncios = anuncios.filter(anuncio=>anuncio.redactor!=null);
-            res.status(200).json(anuncios);
-        });
+        const anuncios = await Anuncio.find({"estados":{'$elemMatch':{'estado':req.params.estado,'area':req.params.idArea}}});
+        res.status(200).json(anuncios);
     } catch (error) {
         res.status(500).json({
             message: error,
@@ -82,7 +80,7 @@ anuncioController.getAnunciosAreaEncargado = async(req,res)=>{
     }
 };
 
-// obtener un anuncio segun persona(probado)
+// obtener un anuncio segun persona
 anuncioController.getMisAnuncios = async(req,res)=>{
     try {
         var criteria = {"redactor":req.params.idPersona};
@@ -95,12 +93,13 @@ anuncioController.getMisAnuncios = async(req,res)=>{
     }
 }
 
-// obtener anuncios vigentes por roles(probado)
+// obtener anuncios vigentes por roles
 anuncioController.getAnuncioByRoles = async(req,res)=>{
     try{
         const roles = req.body.roles;
         const fecha = req.body.fecha;
-        var criteria = {"destinatarios":{$in:roles},"fechaSalidaVigencia":{'$gte':fecha}};
+        const area = req.body.area;
+        var criteria = {"destinatarios":{$in:roles},"fechaSalidaVigencia":{'$gte':fecha},"estados":{'$elemMatch':{'estado':'autorizado','area':area}}};
         const anuncios = await Anuncio.find(criteria);
         res.status(200).json(anuncios);
     }catch (error) {
@@ -110,7 +109,7 @@ anuncioController.getAnuncioByRoles = async(req,res)=>{
     }
 }
 
-// obtener anuncio por mes o año(probado maso)
+// obtener anuncio por mes o año
 anuncioController.obtenerAnunciosFecha = async(req,res)=>{
     try{
         const tipo = req.params.tipo;
@@ -139,7 +138,7 @@ anuncioController.obtenerAnunciosFecha = async(req,res)=>{
     }
 }
 
-// obtener anuncio por rango de fechas(2022-10-02 ese formato)(probado maso)
+// obtener anuncio por rango de fechas
 anuncioController.obtenerAnunciosFechaRango = async(req,res)=>{
     try{
         const fechaInicio = req.body.fechaI;

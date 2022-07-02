@@ -65,4 +65,13 @@ export class PersonaService {
     return this._http.get(this.urlBase + "/" + _id, httpOptions)
   }
 
+  //servicio para obtener personas segun su area
+  public getPersonasbyArea(_idArea: string): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    }
+    return this._http.get(this.urlBase + "/area/" + _idArea, httpOptions)
+  }
 }
