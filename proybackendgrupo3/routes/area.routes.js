@@ -1,5 +1,6 @@
 // import modules
 const areaController = require('../controllers/area.controller');
+const authController = require('../controllers/auth.controller');
 const express = require('express');
 
 // router
@@ -7,11 +8,11 @@ const router = express.Router();
 
 
 // routes
-router.get('/', areaController.getAreas);
-router.get('/roles/:id', areaController.getRoles);
-router.post('/crear', areaController.createArea);
-router.delete('/eliminar/:id', areaController.deleteArea);
-router.put('/actualizar/:id', areaController.updateArea);
+router.get('/',authController.verifyToken, areaController.getAreas);
+router.get('/roles/:id', authController.verifyToken, areaController.getRoles);
+router.post('/crear', authController.verifyToken, areaController.createArea);
+router.delete('/eliminar/:id', authController.verifyToken, areaController.deleteArea);
+router.put('/actualizar/:id', authController.verifyToken, areaController.updateArea);
 
 // export router
 module.exports = router;
