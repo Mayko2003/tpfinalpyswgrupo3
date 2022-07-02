@@ -28,6 +28,7 @@ export class LoginService {
   public logout() {
     //borro el token
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('username');
     sessionStorage.removeItem('roles');
     sessionStorage.removeItem('area');
     sessionStorage.removeItem('userid');

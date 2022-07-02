@@ -9,10 +9,9 @@ authController.verifyToken = async (req, res, next) => {
         })
     }
     else{
-        console.log("paso")
         const header = req.headers.authorization.split(' ')
         var token = null
-        (header.length === 2) ? token = header[1] : null
+        if(header.length === 2) token = header[1]
         //check si el token existe
         if(!token){
             res.status(401).json({
