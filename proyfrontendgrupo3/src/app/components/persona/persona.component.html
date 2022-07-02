@@ -1,98 +1,148 @@
-<form *ngIf="modoEditar || modoCrear" name="form">
-    <div class="form-floating mb-3">
-        <input [(ngModel)]="persona.nombre" type="text" class="form-control" name="nombrePersona" id="nombrepersona" placeholder="Nombre">
-        <label for="nombrePersona">Nombre de persona:</label>
-    </div>
-    <div class="form-floating mb-3">
-        <input [(ngModel)]="persona.apellido" type="text" class="form-control" name="apellidoPersona" id="apellidoPersona" placeholder="Apellido">
-        <label for="apellidoPersona">Apellido de persona:</label>
-    </div>
-    <div class="form-floating mb-3">
-        <input [(ngModel)]="persona.nombreUsuario" type="text" class="form-control" name="usuarioPersona" id="usuarioPersona" placeholder="Username">
-        <label for="usuarioPersona">Nombre de Usuario:</label>
-    </div>
-    <div class="form-floating mb-3">
-        <input [(ngModel)]="persona.contrasenia" type="password" class="form-control" name="contraseniaPersona" id="contraseniaPersona" placeholder="Password">
-        <label for="contraseniaPersona">Contraseña:</label>
-    </div>
-    <div class="form-floating mb-3">
-        <input [(ngModel)]="persona.email" type="text" class="form-control" name="emailPersona" id="emailPersona" placeholder="Email">
-        <label for="emailPersona">Email:</label>
-    </div>
-    <div class="form-floating mb-3">
-        <input [(ngModel)]="persona.legajo" type="number" class="form-control" name="legajoPersona" id="legajoPersona" placeholder="Legajo">
-        <label for="legajoPersona">Legajo:</label>
-    </div>
-    <div class="form-floating mb-3">
-        <input [(ngModel)]="persona.dni" type="text" class="form-control" name="dniPersona" id="dniPersona" placeholder="DNI">
-        <label for="dniPersona">DNI:</label>
-    </div>
-    <div class="d-flex mb-3" *ngIf="persona.roles.length > 0">
-        <div *ngFor="let rol of persona.roles">
-            <span class="badge rounded-pill bg-primary p-2">{{rol.nombre | titlecase}}
-                <button class="btn-close" type="button" (click)="quitarRol(persona.roles.indexOf(rol))"></button>
-            </span>
+<div class="d-flex justify-content-center py-4" *ngIf="modoEditar || modoCrear">
+    <form class="col-12 col-sm-9 col-md-7 col-xxl-6" name="form">
+        <div class="form-floating mb-3">
+            <input [(ngModel)]="persona.nombre" type="text" class="form-control" name="nombrePersona" id="nombrepersona" placeholder="Nombre">
+            <label for="nombrePersona">Nombre:</label>
         </div>
-    </div>
-    <div class="input-group mb-3">
-        <select [(ngModel)]="area._id" class="form-select" (change)="getRolesArea()" name="areas" id="areas">
-            <option *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
-        </select>
-    </div>
-    <div *ngIf="area._id" class="input-group mb-3">
-        <select [(ngModel)]="rol._id" class="form-select" name="rol" id="rol" placeholder="Rol">
-            <option *ngFor="let role of roles" [value]="role._id">{{role.nombre}}</option>
-        </select>
-        <button class="btn btn-primary" type="button" (click)="agregarRol(rol._id)">Agregar Rol</button>
-    </div>
-    <div class="d-flex justify-content-center">
-        <button *ngIf="modoCrear" type="submit" class="btn btn-success" (click)="guardarPersona()">Guardar persona</button>
-        <button *ngIf="modoEditar" type="submit" class="btn btn-success" (click)="actualizarPersona(persona)">Actualizar Persona</button>
-        <button type="submit" class="btn btn-danger" (click)="modoEditar = false; modoCrear = false">Cancelar</button>
-    </div>
-</form>
-<div class="table-responsive">
-    <div class="row m-0">
-        <button type="button" class=" col-12 btn btn-success d-flex justify-content-center" (click)="activarModoCrear()">
+        <div class="form-floating mb-3">
+            <input [(ngModel)]="persona.apellido" type="text" class="form-control" name="apellidoPersona" id="apellidoPersona" placeholder="Apellido">
+            <label for="apellidoPersona">Apellido:</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input [(ngModel)]="persona.nombreUsuario" type="text" class="form-control" name="usuarioPersona" id="usuarioPersona" placeholder="Username">
+            <label for="usuarioPersona">Nombre de Usuario:</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input [(ngModel)]="persona.contrasenia" [type]="viewPassword?'text':'password'" class="form-control" name="contraseniaPersona" id="contraseniaPersona" placeholder="Password">
+            <label for="contraseniaPersona">Contraseña:</label>
+            <i class="icono-input bi" (click)="viewPassword = !viewPassword" [ngClass]="{'bi-eye-fill':viewPassword,'bi-eye-slash-fill':!viewPassword}"></i>
+        </div>
+        <div class="form-floating mb-3">
+            <input [(ngModel)]="persona.email" type="text" class="form-control" name="emailPersona" id="emailPersona" placeholder="Email">
+            <label for="emailPersona">Email:</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input [(ngModel)]="persona.legajo" type="number" class="form-control" name="legajoPersona" id="legajoPersona" placeholder="Legajo">
+            <label for="legajoPersona">Legajo:</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input [(ngModel)]="persona.dni" type="text" class="form-control" name="dniPersona" id="dniPersona" placeholder="DNI">
+            <label for="dniPersona">DNI:</label>
+        </div>
+        <div class="d-flex mb-3" *ngIf="persona.roles.length > 0">
+            <div *ngFor="let rol of persona.roles">
+                <span class="badge rounded-pill bg-primary p-2">{{rol.nombre | titlecase}}
+                    <button class="btn-close" type="button" (click)="quitarRol(persona.roles.indexOf(rol))"></button>
+                </span>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="areas">Areas</label>
+            <select [(ngModel)]="persona.area._id" class="form-select" (change)="getRolesArea()" name="areas" id="areas">
+                <option *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
+            </select>
+        </div>
+        <div *ngIf="persona.area._id" class="input-group mb-3">
+            <select [(ngModel)]="rol._id" class="form-select" name="rol" id="rol" placeholder="Seleccione el Rol a asignar:">
+                <option *ngFor="let role of area.roles" [value]="role._id">{{role.nombre}}</option>
+            </select>
+            <button class="btn btn-primary" type="button" (click)="agregarRol(rol._id)">Agregar Rol</button>
+        </div>
+        <div class="d-flex justify-content-center">
+            <button *ngIf="modoCrear" type="submit" class="btn btn-success" (click)="guardarPersona()">Guardar
+                persona</button>
+            <button *ngIf="modoEditar" type="submit" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#actualizar">Actualizar
+                Persona
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="actualizar" tabindex="-1" aria-labelledby="eliminarPersona" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eliminarPersona">Confirmacion</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="px-1 col-12">
+                                <h5>Confirma la Actualizacion de los datos de esta persona?</h5>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal" (click)="modoEditar = false; modoCrear = false">Cancelar</button>
+                            <button type="button" class="btn btn-info col-3" data-bs-dismiss="modal" (click)="actualizarPersona(persona)">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-danger" (click)="modoEditar = false; modoCrear = false">Cancelar</button>
+        </div>
+    </form>
+</div>
+<button type="button" class="col-12 btn btn-success d-flex justify-content-center" (click)="activarModoCrear()">
             <h5 class="bi bi-plus">Agregar Persona</h5>
         </button>
-    </div>
-
+<div class="table-responsive col-12">
     <table class="table table-dark table-borderless m-0 p-0">
         <thead>
             <tr>
-                <th scope="col-9">Estado</th>
-                <th scope="col-9">Nombre</th>
-                <th scope="col-9">Apellido</th>
-                <th scope="col-9">Correo</th>
-                <th scope="col-9">DNI</th>
-                <th scope="col-9">Area</th>
-                <th scope="col-3">Acciones</th>
+                <th scope="col">Acciones</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Correo</th>
+                <th scope="col">DNI</th>
+                <th scope="col">Area</th>
+                <th scope="col">Roles</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let persona of personas">
-                <td class="d-flex">
-                    <button *ngIf="persona.estado" type="button" class="btn p-0 rounded-pill" (click)="cambiarEstadoPersona(persona)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cambiar Estado">
-                        <img class="iconoTabla m-0" src="assets/iconos/activo.png" alt="">
-                    </button>
-                    <button *ngIf="!persona.estado" type="button" class="btn p-0 rounded-pill" (click)="cambiarEstadoPersona(persona)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cambiar Estado">
-                        <img class="iconoTabla m-0" src="assets/iconos/inactivo.png" alt="">
-                    </button>
-                </td>
-                <th scope="row">{{persona.nombre | titlecase}}</th>
-                <th scope="row">{{persona.apellido | titlecase}}</th>
-                <th scope="row">{{persona.email}}</th>
-                <th scope="row">{{persona.dni}}</th>
-                <th *ngIf="persona.area" scope="row">{{persona.area.nombre | titlecase}}</th>
-                <th *ngIf="!persona.area" scope="row">No pertenece a ningun area</th>
-                <th scope="row" class="d-flex justify-content-around">
-                    <button type="button" class="btn p-0 rounded-pill" (click)="editarPersona(persona)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
+            <tr *ngFor="let person of personas">
+                <td scope="row" class="grid">
+                    <button type="button" class="p-1 btn p-0 rounded-pill" (click)="editarPersona(person)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
                         <img class="iconoTabla m-0" src="assets/iconos/editar.png" alt="">
                     </button>
-                    <button type="button" class="btn p-0 rounded-pill" (click)="borrarPersona(persona)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar">
+                    <button type="button" class="p-1 btn p-0 rounded-pill" (click)="persona = person" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-toggle="modal" data-bs-target="#eliminar" title="Eliminar">
                         <img class="iconoTabla m-0" src="assets/iconos/eliminar.png" alt="">
                     </button>
+                    <!-- Modal -->
+                    <div class="modal fade text-dark" id="eliminar" tabindex="-1" aria-labelledby="eliminarPersona" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="eliminarPersona">Confirmacion</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="px-1 col-12">
+                                        <h5>Esta seguro que desea eliminar a {{person.nombre | titlecase}} {{person.apellido | titlecase}}?</h5>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-warning col-3" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal" (click)="borrarPersona()">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <th>
+                    <button *ngIf="person.estado" type="button" class="btn p-0 rounded-pill" (click)="cambiarEstadoPersona(person)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cambiar Estado">
+                        <img class="iconoTabla m-0" src="assets/iconos/activo.png" alt="">
+                    </button>
+                    <button *ngIf="!person.estado" type="button" class="btn p-0 rounded-pill" (click)="cambiarEstadoPersona(person)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cambiar Estado">
+                        <img class="iconoTabla m-0" src="assets/iconos/inactivo.png" alt="">
+                    </button>
+                </th>
+                <th scope="row">{{person.nombre | titlecase}}</th>
+                <th scope="row">{{person.apellido | titlecase}}</th>
+                <th scope="row">{{person.email}}</th>
+                <th scope="row">{{person.dni}}</th>
+                <th *ngIf="person.area" scope="row">{{person.area.nombre | titlecase}}</th>
+                <th *ngIf="!person.area" scope="row">No pertenece a ningun area</th>
+                <th scope="row">
+                    <div *ngFor="let rol of person.roles" class="px-1 col-12">
+                        <h5>{{rol.nombre | titlecase}}</h5>
+                    </div>
                 </th>
             </tr>
         </tbody>
