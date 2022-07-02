@@ -8,6 +8,7 @@ import { MenuAnunciosComponent } from './components/menu-anuncios/menu-anuncios.
 import { FormAnunciosComponent } from './components/form-anuncios/form-anuncios.component';
 import { EstadisticasComponent } from './components/estadisticas/estadisticas.component';
 import { RecursosAnuncioComponent } from './components/recursos-anuncio/recursos-anuncio.component';
+import { EncargadoAnunciosComponent } from './components/encargado-anuncios/encargado-anuncios.component';
 
 const routes: Routes = [
   {path: 'Area', component:AreaComponent},
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'MenuAnuncio', component:MenuAnunciosComponent},
   {path: 'estadisticas', component: EstadisticasComponent},
   {path: 'recursos', component: RecursosAnuncioComponent},
+  {path: 'Encargado',component:EncargadoAnunciosComponent},
   {path: '**', pathMatch:'full', redirectTo:'Login'} 
 ];
 

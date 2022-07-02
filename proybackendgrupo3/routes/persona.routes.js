@@ -10,6 +10,7 @@ const router = express.Router()
 // routes
 router.get('/', authController.verifyToken, personaController.getPersonas)
 router.get('/:id', authController.verifyToken, personaController.getPersonaById)
+router.get('/area/:idArea',authController.verifyToken, personaController.getPersonasByArea);
 router.post('/crear', authController.verifyToken, personaController.createPersona)
 router.delete('/eliminar/:id', authController.verifyToken, personaController.deletePersona)
 router.put('/actualizar/:id', authController.verifyToken, personaController.updatePersona)
