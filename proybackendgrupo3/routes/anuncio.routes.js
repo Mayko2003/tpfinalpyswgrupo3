@@ -8,6 +8,7 @@ const router = express.Router();
 
 // routes
 router.get('/', authController.verifyToken, anuncioController.getAnuncios);
+router.get('/:idAnuncio', authController.verifyToken, anuncioController.getAnuncio);
 router.post('/crear', authController.verifyToken, anuncioController.createAnuncio);
 router.delete('/eliminar/:id', authController.verifyToken, anuncioController.deleteAnuncio);
 router.put('/actualizar/:id', authController.verifyToken, anuncioController.updateAnuncio);
