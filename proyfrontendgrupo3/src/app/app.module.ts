@@ -19,6 +19,7 @@ import { EncargadoAnunciosComponent } from './components/encargado-anuncios/enca
 import { EstadisticasComponent } from './components/estadisticas/estadisticas.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TokenInterceptorService } from './services/token-interceptor.service';
+import { RecursosAnuncioComponent } from './components/recursos-anuncio/recursos-anuncio.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
     MenuAnunciosComponent,
     FormAnunciosComponent,
     EncargadoAnunciosComponent,
-    EstadisticasComponent
+    EstadisticasComponent,
+    RecursosAnuncioComponent
   ],
   imports: [
     BrowserModule,

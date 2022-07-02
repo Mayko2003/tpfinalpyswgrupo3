@@ -23,6 +23,7 @@ anuncioController.createAnuncio = async(req,res)=>{
         const anuncio = new Anuncio(req.body);
         await anuncio.save();
         res.status(200).json({
+            id: anuncio._id,
             message: "Anuncio guardado",
         });
     }catch(error){
