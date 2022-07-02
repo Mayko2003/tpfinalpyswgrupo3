@@ -6,7 +6,7 @@
     <div class="input-group mb-3">
         <label class="input-group-text" for="contenido">Contenido</label>
         <input  name="contenido" type="file" class="form-control"
-         id="contenido" accept="video/,image/,.pdf,.html" (change)="getFile($event,'contenido')" >
+         id="contenido" accept="video/,image/,.pdf,.html,.jpeg,.png,.gif" (change)="getFile($event,'contenido')" >
     </div>
     <div class="input-group mb-3">
         <label class="input-group" for="fechaSalida">Fecha de Finalizacion:</label>
@@ -23,7 +23,7 @@
 
     <div class="input-group mb-3">
         <label class="input-group-text" for="recurso">Recursos</label>
-        <input  name="recurso" type="file" class="form-control" id="recurso" accept="video/,image/,.pdf,.html,.jpeg" multiple
+        <input  name="recurso" type="file" class="form-control" id="recurso" accept="video/,image/,.pdf,.html,.jpeg,.png,.gif" multiple
         (change)="getFile($event,'recursos')">
     </div>
 
@@ -56,7 +56,7 @@
 
 <div class="card-deck row">
     <div *ngFor="let an of anuncios" class="card col-4">
-      <img class="card-img-top" src="..." alt="Card image cap">
+      <img class="card-img-top" [src]=an.codigoQR alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">{{an.titulo}}</h5>
         <p class="card-text">{{an.redactor}}</p>

@@ -8,12 +8,15 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class RecursosAnuncioComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(params => {
-     console.log(params)
-      })
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        var a = params['id'];
+        console.log(a);
+      }
+    })
   }
 
 }

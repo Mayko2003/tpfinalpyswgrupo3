@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
 import { Estado } from 'src/app/models/estado';
@@ -45,9 +45,9 @@ export class FormAnunciosComponent implements OnInit {
   medio: string = ""
 
 
-  
+
   constructor(private anuncioService: AnuncioService, private loginService: LoginService,
-     private areaService: AreaService,private qrService: QrService,private router: Router) {
+    private areaService: AreaService, private qrService: QrService, private router: Router, private activatedRoute: ActivatedRoute) {
     this.anuncio = new Anuncio();
     this.anuncio.recursos = new Array<Recurso>();
     this.anuncio.destinatarios = new Array<Rol>();
@@ -59,7 +59,7 @@ export class FormAnunciosComponent implements OnInit {
     this.estados = new Array<Estado>();
     this.estado = new Estado();
     this.estado.area = new Area();
-  
+
 
   }
 
@@ -74,7 +74,7 @@ export class FormAnunciosComponent implements OnInit {
 
   //metodo para cargar contenido y los recursos en el anuncio
   getFile(e: any, accion: string) {
-    var Extensions = ["png", "jpeg", "pdf", "gif"] //agragar videos (en lo posible)!!!!!!!!!
+    var Extensions = ["png", "jpeg", "pdf", "gif","html"] //agragar videos (en lo posible)!!!!!!!!!
 
     for (var i = 0; i < e.target.files.length; i++) {
       //controlamos el tamaño
@@ -174,8 +174,9 @@ export class FormAnunciosComponent implements OnInit {
 
   //metodo para cargar medios
   agregarMedios() {
-    this.anuncio.mediosTransmision.push(this.medio)
+    if (this.medio != "") this.anuncio.mediosTransmision.push(this.medio)
     console.log(this.anuncio.mediosTransmision)
+
   }
 
 
@@ -189,35 +190,12 @@ export class FormAnunciosComponent implements OnInit {
     var id = this.loginService.idLogged()
     if (id != null) this.anuncio.redactor._id = id
 
-    //agregamos la fecha de entrada en Vigencia --> una fecha demasiado lejana que luego sera cambiada por un encargado
-    this.anuncio.fechaEntradaVigencia = new Date("2099-04-04")
-
-    //guardamos el anuncio
-
-    this.anuncio.codigoQR = "hola" // asignamos un valor cualquiera para que permita guardar
-    
-    
-    this.anuncioService.addAnuncio(this.anuncio).subscribe(res => {
-      this.anuncio._id = res.id //recuperamos el id para generar el qr
-
-      var text = "http://localhost:4200"+"/recursos/"+this.anuncio._id
-      console.log(text)
-      this.qrService.generarQr2(text).subscribe(res=>{ //generamos el qr
-        this.anuncio.codigoQR = res.result
-        this.actualizarAnuncio();
-        this.anuncio = new Anuncio();
-      })
-
-     });
-    
-    //creamos el qr
-    
-
+    //guardamos el anuncio 
+    this.anuncioService.addAnuncio(this.anuncio).subscribe(res => {})
   }
 
-
   actualizarAnuncio() {
-    this.anuncioService.updateAnuncio(this.anuncio).subscribe(res => {});
+    this.anuncioService.updateAnuncio(this.anuncio).subscribe(res => { });
     this.anuncio = new Anuncio();
   }
 
@@ -229,15 +207,31 @@ export class FormAnunciosComponent implements OnInit {
     if (userid != null) {
       this.anuncioService.getAnunciosByUser(userid).subscribe(res => {
         Object.assign(this.anuncios, res);
+
+        //----------------------COMENTADO PARA PODER TRABAJAR--------------------
+          /*
+
+        //en este momento generamos los qr para que se acoplen a cada host en caso de que se cambie de host
+        this.anuncios.forEach((anun:Anuncio)=>{ 
+          //generamos el url para el qr con el host actual, la direccion del componente y el parametro del id del anuncio
+          
+          var text = window.location.host + "/recursos/" + anun._id
+          console.log(text)
+          this.qrService.generarQr(text,"url").subscribe(res => {
+            anun.codigoQR = res.url
+          })
+         
+        })
+         */
       })
     }
   }
 
-  cambiarEstado(anuncio: Anuncio,estado: string) {
-    if(estado == "editar"){
+  cambiarEstado(anuncio: Anuncio, estado: string) {
+    if (estado == "editar") {
       this.anuncio = anuncio
-    }else{
-      anuncio.estados.forEach( (element:any) =>{
+    } else {
+      anuncio.estados.forEach((element: any) => {
         element.estado = estado
       })
     }
