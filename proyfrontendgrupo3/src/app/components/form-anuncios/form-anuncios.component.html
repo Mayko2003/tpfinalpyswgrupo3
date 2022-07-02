@@ -1,4 +1,4 @@
-<form name="form">
+<form name="form" class="container pt-5 pb-5">
     <div class="form-floating mb-3">
         <input [(ngModel)]="anuncio.titulo" type="text" class="form-control" name="titulo" id="titulo" placeholder="titulo">
         <label for="titulo">Titulo:</label>
@@ -19,10 +19,6 @@
             <option value="largo">Largo</option>
         </select>
         <label class="input-group-text" for="tiempoLectura">Tiempo de Lectura</label>
-    </div>
-    <div class="form-floating mb-3">
-        <input [(ngModel)]="anuncio.tipoContenido" type="text" class="form-control" name="tipoContenido" id="tipoContenido">
-        <label for="tipo contenido">Tipo de Contenido:</label>
     </div>
 
     <div class="input-group mb-3">
@@ -49,6 +45,7 @@
         <select class="form-control" [(ngModel)]="medio" name="medio" id="medio">
             <option *ngFor="let med of medios"  [value]="med">{{med}}</option>
         </select>
+        <button type="submit" class="btn btn-success" (click)="agregarMedios()">agregar medio </button>
     </div>
 
     <div class="d-flex justify-content-center">
@@ -56,3 +53,16 @@
         <button type="submit" class="btn btn-success" (click)="guardarAnuncio('confeccionado')">Publicar</button>
     </div>
 </form>
+
+<div class="card-deck row">
+    <div *ngFor="let an of anuncios" class="card col-4">
+      <img class="card-img-top" src="..." alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{an.titulo}}</h5>
+        <p class="card-text">{{an.redactor}}</p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        <button type="submit" class="btn btn-success" (click)="cambiarEstado(an,'editar')">Editar</button>
+        <button type="submit" class="btn btn-success" (click)="cambiarEstado(an,'confeccionado')">publicar</button>
+      </div>
+    </div>
+  </div>
