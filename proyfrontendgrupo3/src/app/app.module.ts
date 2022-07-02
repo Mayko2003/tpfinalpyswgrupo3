@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -18,11 +18,7 @@ import { FormAnunciosComponent } from './components/form-anuncios/form-anuncios.
 import { EncargadoAnunciosComponent } from './components/encargado-anuncios/encargado-anuncios.component';
 import { EstadisticasComponent } from './components/estadisticas/estadisticas.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  IgxItemLegendModule,
-  IgxPieChartModule,
-  IgxLegendModule
-} from 'igniteui-angular-charts';
+import { TokenInterceptorService } from './services/token-interceptor.service';
 
 
 @NgModule({
@@ -43,14 +39,15 @@ import {
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    BrowserAnimationsModule,
-    IgxItemLegendModule,// for legends of charts
-    IgxLegendModule,// other legend for charts
-    // modules for pie chart
-    IgxPieChartModule, 
+    BrowserAnimationsModule
   ],
   providers: [
     LoginService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

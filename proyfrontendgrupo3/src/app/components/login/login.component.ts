@@ -30,9 +30,10 @@ export class LoginComponent implements OnInit {
   login() {
     this.loginService.login(this.userform.nombreUsuario, this.userform.contrasenia).subscribe(
         (result : any) => {
-        Object.assign(this.user,result)
+        Object.assign(this.user,result.persona)
           if (this.user != null && this.user.estado) {
             //guardamos el user en cookies en el cliente
+            sessionStorage.setItem("token", result.token);
             sessionStorage.setItem("username", this.user.nombreUsuario);
             sessionStorage.setItem("userid", this.user._id);
             sessionStorage.setItem("roles", JSON.stringify(this.user.roles));
