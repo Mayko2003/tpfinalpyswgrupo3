@@ -107,5 +107,16 @@ personaController.getPersonaById = async(req,res)=>{
         });
     }
 }
+
+personaController.getPersonasByArea = async(req,res)=>{
+    try{
+        const personas = await Persona.find({'area':req.params.idArea});
+        res.status(200).json(personas);
+    }catch(error){
+        res.status(500).json({
+            message: error,
+        });
+    }
+}
 // export controller
 module.exports = personaController;
