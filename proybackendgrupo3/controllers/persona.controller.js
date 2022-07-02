@@ -97,5 +97,15 @@ personaController.getLoggedPersona = async(req, res) => {
     }
 }
 
+personaController.getPersonaById = async(req,res)=>{
+    try{
+        const persona = await Persona.findById(req.params.id);
+        res.status(200).json(persona);
+    }catch(error){
+        res.status(500).json({
+            message: error,
+        });
+    }
+}
 // export controller
 module.exports = personaController;
