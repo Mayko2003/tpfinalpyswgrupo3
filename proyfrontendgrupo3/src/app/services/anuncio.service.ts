@@ -119,4 +119,15 @@ export class AnuncioService {
     }
     return this._http.get(this.urlBase+"/busqueda", httpOptions);
   }
+
+
+  //servicio para enviar un anuncio --> usado en el componente recursos
+  public getAnuncio(id:string): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    }
+    return this._http.get(this.urlBase+"/"+id, httpOptions)
+  }
 }
