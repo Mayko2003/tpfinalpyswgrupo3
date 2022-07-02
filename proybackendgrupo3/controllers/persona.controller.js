@@ -1,6 +1,6 @@
 // import modules
 const Persona = require("../models/persona");
-
+const jwt = require("jsonwebtoken");
 // vars
 const personaController = {};
 
@@ -65,10 +65,21 @@ personaController.loginPersona = async(req, res) => {
         const persona = await Persona.findOne({
             $and: [{ nombreUsuario: username }, { contrasenia: password }],
         }).populate('roles', 'nombre').populate('area', 'nombre roles');
-        res.status(200).json(persona);
+
+        if (!persona) {
+            res.status(400).json({
+                message: "Usuario o contraseña incorrectos",
+            });
+        }
+        else{
+            token = jwt.sign({ id: persona._id }, "jwtsecret");
+            res.status(200).json({
+                persona: persona,
+                token: token
+            });
+        }
     } catch (error) {
         console.log(error);
-
         res.status(500).json({
             msj: "Error al obtener la persona",
         });
