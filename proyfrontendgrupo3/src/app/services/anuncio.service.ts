@@ -21,7 +21,7 @@ export class AnuncioService {
       })
     }
     let body = JSON.stringify(anuncio)
-    return this._http.post(this.urlBase, body, httpOptions)
+    return this._http.post(this.urlBase+"/crear", body, httpOptions)
   }
 
   //servicio para eliminar un Anuncio
@@ -71,17 +71,17 @@ export class AnuncioService {
   }
 
   //servicio para traer los anuncion segun los roles dentro de una o mas areas
-  public getAnunciosByRoles(areaRoles: AreaRol,fecha: Date): Observable<any>{
+  public getAnunciosByRoles(roles: Array<string>,fecha: Date): Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })
     }
-    const body = new HttpParams()
-    .set('fecha', JSON.stringify(fecha))
-    .set('areaRoles', JSON.stringify(areaRoles))
-
-    return this._http.post(this.urlBase, body, httpOptions)
+    const body ={
+      "roles": roles,
+      "fecha": fecha.toISOString()
+    }
+    return this._http.post(this.urlBase+"/roles", body, httpOptions)
   }
 
   //servicio para traer los anuncios de un usuario en particular
@@ -92,5 +92,33 @@ export class AnuncioService {
       }),
     }
     return this._http.get(this.urlBase+"/persona/"+user_id, httpOptions)
-  } 
+  }
+
+  public getAnunciosByArea(area_id: string): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      }),
+    }
+    return this._http.get(this.urlBase+"/area/"+area_id, httpOptions)
+  }
+  
+  public getAnunciosFiltro(roles:Array<string>,titulo:string,fecha:string,destinatarios:string,medio:string,redactor:string,estado:string,tipoContenido:string):Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      }),
+      params: {
+        'roles': roles,
+        'titulo': titulo,
+        'fechaSalidaVigencia':fecha,
+        'destinatarios':destinatarios,
+        'medioTransmision':medio,
+        'redactor':redactor,
+        'estado':estado,
+        'tipoContenido': tipoContenido
+      }
+    }
+    return this._http.get(this.urlBase+"/busqueda", httpOptions);
+  }
 }

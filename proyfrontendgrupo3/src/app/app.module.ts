@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +16,10 @@ import { AreaComponent } from './components/area/area.component';
 import { MenuAnunciosComponent } from './components/menu-anuncios/menu-anuncios.component';
 import { FormAnunciosComponent } from './components/form-anuncios/form-anuncios.component';
 import { EncargadoAnunciosComponent } from './components/encargado-anuncios/encargado-anuncios.component';
+import { EstadisticasComponent } from './components/estadisticas/estadisticas.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TokenInterceptorService } from './services/token-interceptor.service';
+
 
 @NgModule({
   declarations: [
@@ -27,17 +31,25 @@ import { EncargadoAnunciosComponent } from './components/encargado-anuncios/enca
     AreaComponent,
     MenuAnunciosComponent,
     FormAnunciosComponent,
-    EncargadoAnunciosComponent
+    EncargadoAnunciosComponent,
+    EstadisticasComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     LoginService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

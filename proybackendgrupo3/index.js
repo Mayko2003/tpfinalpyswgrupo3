@@ -8,8 +8,8 @@ const app = express()
 
 // middlewares
 app.use(cors({ origin: 'http://localhost:4200' })) // para que angular pueda acceder a la api
-app.use(express.json()) // para que el servidor entienda los datos en formato json
-app.use(express.urlencoded({ extended: true })) // para que el servidor entienda los datos en formato urlencoded
+app.use(express.json({limit:'50mb'})) // para que el servidor entienda los datos en formato json
+app.use(express.urlencoded({ extended: true})) // para que el servidor entienda los datos en formato urlencoded
 
 // routes
 app.use('/api/personas', require('./routes/persona.routes'))

@@ -8,7 +8,7 @@ import { Persona } from '../models/persona';
 })
 
 export class PersonaService {
-  
+
   urlBase: string = 'http://localhost:3000/api/personas'
   constructor(private _http: HttpClient) { }
 
@@ -24,17 +24,17 @@ export class PersonaService {
   }
 
   //servicio para eliminar una persona
-  public deletePasaje(persona: Persona): Observable<any>{
+  public deletePasaje(persona: Persona): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })
     }
-    return this._http.delete(this.urlBase+"/eliminar/"+persona._id, httpOptions)
+    return this._http.delete(this.urlBase + "/eliminar/" + persona._id, httpOptions)
   }
 
   //servicio para actualizar una persona
-  public updatePasaje(persona: Persona): Observable<any>{
+  public updatePasaje(persona: Persona): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
@@ -42,11 +42,11 @@ export class PersonaService {
     }
     let body = JSON.stringify(persona)
 
-    return this._http.put(this.urlBase+"/actualizar/"+persona._id, body, httpOptions)
+    return this._http.put(this.urlBase + "/actualizar/" + persona._id, body, httpOptions)
   }
 
   //servicio para enviar todas las personas
-  public getPersonas(): Observable<any>{
+  public getPersonas(): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
@@ -56,15 +56,13 @@ export class PersonaService {
   }
 
   //servicio enviar una persona segun su id
-  public getPersonabyID(_id:string): Observable<any>{
+  public getPersonabyID(_id: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })
     }
-    return this._http.get(this.urlBase+"/"+_id, httpOptions)
+    return this._http.get(this.urlBase + "/" + _id, httpOptions)
   }
-
-  
 
 }

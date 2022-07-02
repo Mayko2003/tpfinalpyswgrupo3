@@ -1,0 +1,25 @@
+<div>
+    <h1 class="text-center">Estadísticas</h1>
+    <div class="filter-seccion d-flex justify-content-center">
+        <form action="">
+            <div class="mb-3">
+                <label class="form-label" for="area">Area</label>
+                <select class="form-select" name="area" id="area" [(ngModel)]="areaSeleccionada" (ngModelChange)="seleccionarArea()">
+                    <option *ngFor="let area of areas" value="{{area._id}}" selected>{{area.nombre}}</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="estadistica-seccion d-flex mb-3">
+        <!-- grafico de barras -->
+        <!-- primer grafico torta -->
+        <div class="col-6">
+            <canvas id="chart1" style="width: 10em;height:10em;"></canvas>
+        </div>
+        <!-- grafico 2 torta -->
+        <div class="col-6 ">
+            <canvas id="chart2" style="width: 10em;height:10em;"></canvas>
+        </div>
+    </div>
+    
+</div>
