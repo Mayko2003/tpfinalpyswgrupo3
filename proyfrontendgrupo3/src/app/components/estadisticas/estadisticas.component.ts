@@ -3,7 +3,7 @@ import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
 import { AnuncioService } from 'src/app/services/anuncio.service';
 import { AreaService } from 'src/app/services/area.service';
-import * as ChartJS from 'chart.js/auto';
+import Chart from 'chart.js/auto';
 @Component({
   selector: 'app-estadisticas',
   templateUrl: './estadisticas.component.html',
@@ -76,12 +76,31 @@ export class EstadisticasComponent implements OnInit {
       this.setDatos2(anuncio)
     })
   }
+  crearGrafico(ctx:any){
+    var myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: this.datosChart1.map(dato => dato.label),
+        datasets: [{
+          label: '# of Votes',
+          data: this.datosChart1.map(dato => dato.value),
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)'
+        }]
+      },
+      options: {}
+    });
+  }
 
   seleccionarArea() {
+    const ctx1 = document.getElementById('myChart1')
+    const ctx2 = document.getElementById('myChart2')
     this.anucioService.getAnunciosByArea(this.areaSeleccionada).subscribe(
       anuncios => {
         Object.assign(this.anuncios, anuncios)
         this.generarDatos()
+        this.crearGrafico(ctx1)
+        this.crearGrafico(ctx2)
       }
     )
   }
