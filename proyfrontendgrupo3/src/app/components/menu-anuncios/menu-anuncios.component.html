@@ -2,8 +2,8 @@
   <div class="col" *ngFor="let a of anuncios">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">{{a.titulo}}</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <h5 class="card-title">Titulo: {{a.titulo}}</h5>
+        <p class="card-text"></p>
       </div>
     </div>
   </div>
@@ -55,8 +55,12 @@
         <label for="floatingInput">Texto</label>
       </div>
       <div class="form-floating">
-        <input type="date" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="fechaFiltro" name="fechaFiltro" (ngModelChange)="actualizarFiltro()">
-        <label for="floatingPassword">Fecha</label>
+        <input type="date" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="fechaEntrada" name="fechaEntrada" (ngModelChange)="actualizarFiltro()">
+        <label for="floatingPassword">Fecha de Entrada</label>
+      </div>
+      <div class="form-floating">
+        <input type="date" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="fechaSalida" name="fechaSalida" (ngModelChange)="actualizarFiltro()">
+        <label for="floatingPassword">Fecha de Vigencia</label>
       </div>
       <button type="button" class="btn btn-warning" (click)="limpiarFiltro()">Limpiar</button>
    </div>

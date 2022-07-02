@@ -49,9 +49,8 @@ export class LoginService {
   }
 
   public userLogged() {
-    var userid = this.idLogged()
-    if (userid) return this.personaService.getPersonabyID(userid);
-    return null;
+    var username = sessionStorage.getItem('username');
+    return username;
   }
 
 

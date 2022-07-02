@@ -29,7 +29,8 @@ export class MenuAnunciosComponent implements OnInit {
   destinatario:string='';
   texto:string = '';
   destinatarios!:Array<Rol>;
-  fechaFiltro:string = '';
+  fechaSalida:string = '';
+  fechaEntrada:string = '';
   constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService: PersonaService, private rolService:RolService) { }
 
   ngOnInit(): void {
@@ -87,8 +88,9 @@ export class MenuAnunciosComponent implements OnInit {
     console.log(this.medioPublicacion);
     console.log(this.redactor);
     console.log(this.destinatario);
-    console.log(this.fechaFiltro);
-    this.anuncioService.getAnunciosFiltro(this.rolesId,this.texto,this.fechaFiltro,this.destinatario,this.medioPublicacion,this.redactor,this.estado,this.tipoContenido).subscribe(res=>{
+    console.log(this.fechaSalida);
+    console.log(this.fechaEntrada);
+    this.anuncioService.getAnunciosFiltro(this.rolesId,this.texto,this.fechaSalida,this.fechaEntrada,this.destinatario,this.medioPublicacion,this.redactor,this.estado,this.tipoContenido).subscribe(res=>{
       console.log(res);
     })
   }
@@ -98,7 +100,8 @@ export class MenuAnunciosComponent implements OnInit {
     this.medioPublicacion = "";
     this.redactor = "";
     this.texto = "";
-    this.fechaFiltro = "";
+    this.fechaSalida = "";
+    this.fechaEntrada = "";
     this.actualizarFiltro();
   }
 }
