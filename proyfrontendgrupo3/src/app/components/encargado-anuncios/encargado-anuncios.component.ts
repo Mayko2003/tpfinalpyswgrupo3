@@ -58,18 +58,12 @@ export class EncargadoAnunciosComponent implements OnInit {
       console.log(this.rolesId);
     } */
     this.anuncios = new Array<Anuncio>();
-    if(id!=null){
+    if (id) {
       this.personaService.getPersonabyID(id).subscribe(res=>{
+        this.area = res.area;
         this.areaId = res.area;
-        this.anuncioService.getAnunciosByEncargado(this.areaId,this.estado).subscribe(res => {
-          res.forEach((element: any) => {
-            this.anuncio = new Anuncio();
-            Object.assign(this.anuncio, element);
-            this.anuncios.push(this.anuncio);
-          })
-          this.rolesId.push(this.areaId);
-          console.log(this.anuncios);
-          console.log(this.rolesId);
+        this.anuncioService.getAnunciosByEncargado(this.area,this.estado).subscribe(res => {
+          Object.assign(this.anuncios, res)
         })
       })
     }
