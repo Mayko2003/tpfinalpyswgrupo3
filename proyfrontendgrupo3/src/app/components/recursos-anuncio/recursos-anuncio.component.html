@@ -2,7 +2,7 @@
     <div class="col-12 d-flex justify-content-center">
         <h5 class="card-title">Recursos de {{anuncio.titulo}}</h5>
     </div>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 g-4">
         <div *ngFor="let recurso of anuncio.recursos" class="col">
             <div [ngSwitch]="recurso.tipo" class="card">
                 <div *ngSwitchCase="'pdf' || 'html'">
@@ -11,8 +11,9 @@
                 <div *ngSwitchCase="'png' || 'jpg' || 'jpeg' || 'gif'">
                     <img [src]="recurso.recurso" class="img-fluid">
                 </div>
-                <div *ngSwitchCase="'avi'||'mp4'||'webm'" class="col-4 ratio ratio-16x9">
-                    <video allowfullscreen [src]="recurso.recurso"></video>
+                <div *ngSwitchCase="'avi'||'mp4'||'webm'" class=" ratio ratio-16x9">
+                    <iframe allowfullscreen controls frameborder="0" scrolling="no" [src]="recurso.recurso"></iframe>
+                    <video allowfullscreen controls frameborder="0" scrolling="no" [src]="recurso.recurso"></video>
                 </div>
             </div>
         </div>
