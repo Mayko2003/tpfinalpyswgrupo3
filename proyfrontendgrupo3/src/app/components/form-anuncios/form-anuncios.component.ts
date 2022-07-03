@@ -8,6 +8,7 @@ import { Recurso } from 'src/app/models/recurso';
 import { Rol } from 'src/app/models/rol';
 import { AnuncioService } from 'src/app/services/anuncio.service';
 import { AreaService } from 'src/app/services/area.service';
+import { EmailService } from 'src/app/services/email.service';
 import { LoginService } from 'src/app/services/login.service';
 import { QrService } from 'src/app/services/qr.service';
 
@@ -50,7 +51,7 @@ export class FormAnunciosComponent implements OnInit {
 
 
   constructor(private anuncioService: AnuncioService, private loginService: LoginService,
-    private areaService: AreaService, private qrService: QrService, private router: Router, private activatedRoute: ActivatedRoute) {
+    private areaService: AreaService, private qrService: QrService, private router: Router, private activatedRoute: ActivatedRoute, private emailService: EmailService) {
     this.anuncio = new Anuncio();
     this.anuncio.recursos = new Array<Recurso>();
     this.anuncio.destinatarios = new Array<Rol>();
@@ -222,6 +223,9 @@ export class FormAnunciosComponent implements OnInit {
           this.actualizarAnuncio();
           this.anuncio = new Anuncio();
         });
+
+        //enviar correo
+
     })
   }
 
@@ -255,5 +259,18 @@ export class FormAnunciosComponent implements OnInit {
     //valido -> lo ven todos
     //denegado -> denegado para editar
     //cancelado -> nadie mas que el encargado lo ve
+
+    //enviar correo
+    if(estado == 'confeccionado'){
+      this.anuncio.estados.forEach((element:Estado)=>{
+        this.areaService.getEncargado(element.area._id).subscribe(res=>{
+          var email = res.email
+          var text = 'El anuncio ' + anuncio.titulo + ' ha sido confeccionado por ' + anuncio.redactor.nombre + ' ' + anuncio.redactor.apellido + ' y esta pendiente de ser validado por usted'
+          this.emailService.send(email,text).subscribe(res=>{
+            console.log(res)
+          })
+        })
+      })
+    }
   }
 }

@@ -27,6 +27,6 @@ emailController.sendEmail = async(req, res) => {
         } else {
             console.log('Email sent: ' + info.response);
         }
-    }
-    );
+    });
+    
 }
