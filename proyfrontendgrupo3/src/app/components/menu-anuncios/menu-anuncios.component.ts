@@ -41,7 +41,7 @@ export class MenuAnunciosComponent implements OnInit {
     this.cargarMisRoles();
     this.cargarMiArea();
 
-    if (this.roles[0].nombre == "encargado" || this.roles[0].nombre == "administrado" || this.roles[0].nombre == "autoridad") {
+    if (this.roles[0].nombre == "encargado" || this.roles[0].nombre == "administrador" || this.roles[0].nombre == "autoridad") {
       this.router.navigate(['/Login'])
     }
 
@@ -90,7 +90,6 @@ export class MenuAnunciosComponent implements OnInit {
       res.forEach((resAnuncio: Anuncio) => {
         //guardo la fecha para filtrar solo los que ya no tienen vigencia
         this.fecha2 = new Date(resAnuncio.fechaSalidaVigencia)
-        console.log(this.fecha2 +"aaaaaaaaaaaa"+ this.fechaFiltro)
         if (this.fecha2 < this.fechaFiltro) {
           this.anunciosFiltrados.push(resAnuncio);
         }

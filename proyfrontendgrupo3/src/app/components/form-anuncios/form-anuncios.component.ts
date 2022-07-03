@@ -70,8 +70,21 @@ export class FormAnunciosComponent implements OnInit {
 
 
   ngOnInit(): void {
+    //validacion de peticion
+    this.cargarMisRoles();
+    if (this.roles[0].nombre == "encargado" || this.roles[0].nombre == "administrador" || this.roles[0].nombre == "autoridad") {
+      this.router.navigate(['/Login'])
+    }
+
+
     this.cargarAreas()
     this.mostrarMisAnuncios()
+  }
+
+  //metodo para cargar mis roles
+  cargarMisRoles() {
+    var rolesLogin = this.loginService.rolLogged();
+    Object.assign(this.roles, rolesLogin);
   }
 
   //-----------------------METODOS PARA GUARDAR/EDITAR MIS ANUNCIOS---------------------

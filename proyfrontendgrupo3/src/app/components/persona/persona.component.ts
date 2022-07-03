@@ -4,6 +4,8 @@ import { AreaService } from './../../services/area.service';
 import { Component, OnInit } from '@angular/core';
 import { Persona } from 'src/app/models/persona';
 import { PersonaService } from 'src/app/services/persona.service';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-persona',
@@ -34,9 +36,11 @@ export class PersonaComponent implements OnInit {
 
   viewPassword!: boolean;
 
+  roles!: Array<Rol>;
+
   constructor(
     private personaService: PersonaService,
-    private areaService: AreaService
+    private areaService: AreaService, private router: Router, private loginService: LoginService
   ) {
     this.modoEditar = false;
     this.modoCrear = false;
@@ -54,6 +58,8 @@ export class PersonaComponent implements OnInit {
     this.areas = new Array<Area>();
 
     this.viewPassword = false;
+
+    this.roles = new Array<Rol>()
   }
 
   //agrega una persona a la base de datos
@@ -140,7 +146,18 @@ export class PersonaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //validacion de peticion
+    this.cargarMisRoles();
+    if(this.roles[0].nombre != "administrador"){
+      this.router.navigate(['/Login'])
+    }
     this.getPersonas();
     this.getAreas();
+  }
+
+  //metodo para cargar mis roles
+  cargarMisRoles() {
+    var rolesLogin = this.loginService.rolLogged();
+    Object.assign(this.roles, rolesLogin);
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
 import { Persona } from 'src/app/models/persona';
@@ -15,7 +16,7 @@ import { PersonaService } from 'src/app/services/persona.service';
 })
 export class EncargadoAnunciosComponent implements OnInit {
 
-  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService:PersonaService, private areaService:AreaService) { }
+  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService:PersonaService, private areaService:AreaService,private router: Router) { }
 
   //variables para cargar los anuncios
   anuncios: Array<Anuncio> = [];
@@ -25,7 +26,7 @@ export class EncargadoAnunciosComponent implements OnInit {
   //variables para realizar el filtro segun el encargado y segun un estado de su eleccion "confeccionado, autorizado, cancelado"
   estado: string = "confeccionado";
   estado2: string = ''; 
-  area!: string;
+  area!: Area;
   roles: Array<Rol> = [];
   rolesId : Array<string> = [];
   medioPublicacion:string='';
@@ -38,11 +39,33 @@ export class EncargadoAnunciosComponent implements OnInit {
   fechaSalida:string = '';
   fechaEntrada:string = '';
   ngOnInit(): void {
+
+    //validacion de peticion
+    this.cargarMisRoles();
+    if(this.roles[0].nombre != "encargado"){
+        this.router.navigate(['/Login'])
+    }
+    
     //por defecto mostrara en la pagina del encargado los anuncios con el estado confeccionado (listos para publicarse)
     this.cargarAnuncios();
     this.cargarDestinatarios();
     this.cargarPersonas();
+    this.cargarMiArea()
   }
+
+  cargarMiArea() {
+    this.area = new Area();
+    var areaLogin = this.loginService.areaLogged()
+    Object.assign(this.area, areaLogin)
+    console.log(this.area)
+  }
+
+  //metodo para cargar mis roles
+  cargarMisRoles() {
+    var rolesLogin = this.loginService.rolLogged();
+    Object.assign(this.roles, rolesLogin);
+  }
+
 
   //este procesimiento cargara los anuncios que pertenezcan al area del encargado y tengan el estado "confeccionado"
   cargarAnuncios() {
@@ -62,18 +85,21 @@ export class EncargadoAnunciosComponent implements OnInit {
       this.personaService.getPersonabyID(id).subscribe(res=>{
         this.area = res.area;
         this.areaId = res.area;
-        this.anuncioService.getAnunciosByEncargado(this.area,this.estado).subscribe(res => {
+        this.anuncioService.getAnunciosByEncargado(this.areaId,this.estado).subscribe(res => {
           Object.assign(this.anuncios, res)
         })
       })
     }
   }
 
+ 
+
   //con este procedimiento se cambia el estado de un anuncio para autorizarlo, cancelarlo o volverlo a su estado original
   actualizarEstadoAnuncio(anuncioModificado: Anuncio,accion:string){
     anuncioModificado.estados.forEach((element:any)=>{
       if(element.area==this.areaId){
         element.estado = accion;
+        if(accion == "autorizado") anuncioModificado.fechaEntradaVigencia = new Date();
       }
     })
     this.anuncioService.updateAnuncio(anuncioModificado).subscribe();
@@ -114,10 +140,13 @@ export class EncargadoAnunciosComponent implements OnInit {
     console.log(this.destinatario);
     console.log(this.fechaSalida);
     console.log(this.fechaEntrada);
-    console.log(this.rolesId);
+    this.cargarMiArea()
+    console.log(this.area._id+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    
     this.anuncios2 = new Array<Anuncio>();
-    this.anuncioService.getAnunciosFiltro(this.rolesId,this.texto,this.fechaSalida,this.fechaEntrada,this.destinatario,this.medioPublicacion,this.redactor,this.estado2,this.tipoContenido).subscribe(res=>{
-      console.log(res);
+
+    this.anuncioService.getAnunciosFiltro(this.area._id,this.texto,this.fechaSalida,this.fechaEntrada,this.destinatario,this.medioPublicacion,this.redactor,this.estado2,this.tipoContenido).subscribe(res=>{
+      console.log(res+"abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
       Object.assign(this.anuncios2,res);
     })
   }
