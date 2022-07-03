@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Anuncio } from 'src/app/models/anuncio';
 import { AnuncioService } from 'src/app/services/anuncio.service';
 
@@ -21,7 +21,6 @@ export class RecursosAnuncioComponent implements OnInit {
         var id = params['id'];
         this.anuncioService.getAnuncio(id).subscribe(res => {
           Object.assign(this.anuncio, res)
-          console.log(this.anuncio)
         })
       }
     })

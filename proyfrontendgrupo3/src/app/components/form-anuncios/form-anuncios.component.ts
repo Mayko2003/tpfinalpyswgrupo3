@@ -79,7 +79,7 @@ export class FormAnunciosComponent implements OnInit {
   //metodo para cargar contenido y los recursos en el anuncio
   getFile(e: any, accion: string) {
     //agregar tipo de archivos
-    var Extensions = ["png", "jpeg", "pdf", "gif","html"] //agragar videos (en lo posible)!!!!!!!!!
+    var Extensions = ["png", "jpg", "jpeg", "pdf", "gif", "html", "mp4", "avi", "webm"]
 
     for (var i = 0; i < e.target.files.length; i++) {
       //controlamos el tamaño
