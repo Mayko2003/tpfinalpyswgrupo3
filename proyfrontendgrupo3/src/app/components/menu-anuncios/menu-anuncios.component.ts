@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
 import { Estado } from 'src/app/models/estado';
@@ -26,7 +27,7 @@ export class MenuAnunciosComponent implements OnInit {
   fechaFiltro!: Date
   fecha2: Date = new Date()
 
-  constructor(private anuncioService: AnuncioService, private loginService: LoginService) {
+  constructor(private anuncioService: AnuncioService, private loginService: LoginService,private router: Router) {
     this.anuncios = new Array<Anuncio>()
     this.fecha = new Date()
     this.roles = new Array<Rol>()
@@ -38,6 +39,13 @@ export class MenuAnunciosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarMisRoles();
+    this.cargarMiArea();
+
+    if(this.roles[0].nombre == "encargado" || this.roles[0].nombre == "administrado" || this.roles[0].nombre == "autoridad"){
+      this.router.navigate(['/Login']) 
+    }
+
+
     this.cargarAnunciosVigentes();
   }
 
