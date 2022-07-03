@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
     this.roles = loginService.rolLogged();
     if (this.roles) {
       this.roles.forEach((rol:any) => {
-        switch (rol.nombre) {
+        switch (rol.nombre.toLowerCase()) {
           case 'administrador':
             this.admin = true;
             break;

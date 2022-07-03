@@ -1,81 +1,99 @@
-<form *ngIf="modoEditar || modoCrear" name="form">
-    <div class="d-flex align-items-center mb-3">
-        <p>Roles:</p>
-        <div *ngIf="roles.length>0" class="d-flex mb-3">
-            <div *ngFor="let rol of roles">
-                <span class="badge rounded-pill text-dark bg-info p-2 mx-2">{{rol.nombre | titlecase}}
-                    <button class="btn-close" type="button" (click)="quitarRol(roles.indexOf(rol),rol)"></button>
-                </span>
+<div *ngIf="modoEditar || modoCrear" class="d-flex justify-content-center aling-items-center p-4 m-1">
+    <form name="form" class="p-3 col-12 col-sm-11 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
+        <div class="d-flex align-md-items-center">
+            <p class="my-3 ms-3">Roles:</p>
+            <div *ngIf="area.roles" class="d-md-flex my-3">
+                <div *ngFor="let rol of area.roles">
+                    <span class="badge rounded-pill bg-primary p-2 mx-2">{{rol.nombre | titlecase}}
+                        <button class="btn-close" type="button" (click)="quitarRol(area.roles.indexOf(rol),rol)"></button>
+                    </span>
+                </div>
             </div>
-        </div>
-        <button type="button" class="barge btn bg-info mx-2 text-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#agregarRol">Agregar <i class="bi bi-plus"></i></button>
-    </div>
-    <div class="form-floating my-3">
-        <input [(ngModel)]="area.nombre" type="text" class="form-control" name="nombre" id="nombre" placeholder="nombre rol">
-        <label for="nombre">Nombre de Area:</label>
-    </div>
-    <div class="d-flex justify-content-center">
-        <button *ngIf="modoCrear" type="submit" class="btn btn-primary" (click)="guardarArea()">Guardar Area</button>
-        <button *ngIf="modoEditar" type="submit" class="btn btn-primary" (click)="actualizarArea()">Actualizar Area</button>
-        <button type="submit" class="btn btn-danger" (click)="modoEditar = false;  modoCrear = false">Cancelar</button>
-    </div>
-
-
-    <div *ngIf="area" class="d-flex row my-3 mx-0 p-0">
-        <!-- Modal -->
-        <div class="modal fade" id="agregarRol" tabindex="-1" aria-labelledby="agregarAreaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="agregarAreaLabel">Agregar Rol</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating px-1 col-12">
-                            <input [(ngModel)]="rol.nombre" type="text" class="form-control" name="rol" id="rol" placeholder="Rol">
-                            <label for="rol">Nuevo Rol:</label>
+            <button type="button" class="barge btn bg-info mx-2 text-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#agregarRol">Agregar <i class="bi bi-plus"></i></button>
+            <!-- Modal -->
+            <div class="modal fade" id="agregarRol" tabindex="-1" aria-labelledby="agregarRol" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="agregarRol">Agregar Rol</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-warning col-3" data-bs-dismiss="modal" (click)="agregarRol(rol.nombre)">Agregar Rol</button>
+                        <div class="modal-body">
+                            <div class="form-floating px-1 col-12">
+                                <input [(ngModel)]="rol.nombre" type="text" class="form-control" name="rol" id="rol" placeholder="Rol">
+                                <label for="rol">Nuevo Rol:</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-warning col-3" data-bs-dismiss="modal" (click)="agregarRol()">Agregar Rol</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
-
-<div class="table-responsive">
-    <div class="row m-0">
-        <button type="button" class=" col-12 btn btn-success d-flex justify-content-center" (click)="modoCrear = true">
+        <div class="form-floating mb-3">
+            <input [(ngModel)]="area.nombre" type="text" class="form-control" name="nombre" id="nombre" placeholder="nombre rol">
+            <label for="nombre">Nombre de Area:</label>
+        </div>
+        <div class="d-flex justify-content-center">
+            <button *ngIf="modoCrear" type="submit" class="btn btn-primary" (click)="guardarArea()">Guardar Area</button>
+            <button *ngIf="modoEditar" type="submit" class="btn btn-primary" (click)="actualizarArea()">Actualizar Area</button>
+            <button type="submit" class="btn btn-danger" (click)="modoEditar = false;  modoCrear = false">Cancelar</button>
+        </div>
+    </form>
+</div>
+<div class="d-flex justify-content-center m-0">
+    <button type="button" class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7 col-xxl-6 btn btn-success d-flex justify-content-center" (click)="prepararCreacion()">
             <h5 class="bi bi-plus">Agregar Area</h5>
         </button>
+</div>
+<div class="d-flex justify-content-center">
+    <div class="table-responsive col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7 col-xxl-6">
+        <table class="table table-dark table-borderless m-0 p-0">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Roles</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let selectArea of areas">
+                    <th scope="row">{{selectArea.nombre | titlecase}}</th>
+                    <th scope="row" class="text-nowrap">
+                        <div *ngFor="let rol of selectArea.roles">{{rol.nombre| titlecase}}</div>
+                    </th>
+                    <th scope="row" class="grid">
+                        <button type="button" class="btn p-0 rounded-pill" (click)="area = selectArea; modoEditar=true; modoCrear = false" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
+                            <img class="iconoTabla m-0" src="assets/iconos/editar.png" alt="">
+                        </button>
+                        <button type="button" class="btn p-0 rounded-pill" (click)="area = selectArea" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-toggle="modal" data-bs-target="#eliminar" title="Eliminar">
+                            <img class="iconoTabla m-0" src="assets/iconos/eliminar.png" alt="">
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade text-dark" id="eliminar" tabindex="-1" aria-labelledby="eliminarArea" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="eliminarArea">Confirmacion</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="px-1 col-12">
+                                            <h5>Esta seguro que desea eliminar el area de {{area.nombre | titlecase}}?</h5>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning col-3" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal" (click)="borrarArea()">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
-    <table class="table table-dark table-borderless m-0 p-0">
-        <thead>
-            <tr>
-                <th scope="col-9">Nombre</th>
-                <th scope="col-9">Roles</th>
-                <th scope="col-3">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let area of areas">
-                <th scope="row">{{area.nombre | titlecase}}</th>
-                <th scope="row">
-                    <div *ngFor="let rol of area.roles">{{rol.nombre| titlecase}}</div>
-                </th>
-                <th scope="row">
-                    <button type="button" class="btn p-0 rounded-pill" (click)="editarArea(area)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
-                        <img class="iconoTabla m-0" src="assets/iconos/editar.png" alt="">
-                    </button>
-                    <button type="button" class="btn p-0 rounded-pill" (click)="borrarArea(area)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar">
-                        <img class="iconoTabla m-0" src="assets/iconos/eliminar.png" alt="">
-                    </button>
-                </th>
-            </tr>
-        </tbody>
-    </table>
 </div>

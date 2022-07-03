@@ -44,6 +44,9 @@ export class FormAnunciosComponent implements OnInit {
   medios: Array<string> = ["FaceBook", "Instagram", "Twitter",]; //implementar variables locales!!!!!!!!!!!!!
   medio: string = ""
 
+  modoCrear!: boolean;
+  modoEditar!: boolean;
+
 
 
   constructor(private anuncioService: AnuncioService, private loginService: LoginService,
@@ -60,7 +63,8 @@ export class FormAnunciosComponent implements OnInit {
     this.estado = new Estado();
     this.estado.area = new Area();
 
-
+    this.modoEditar = false;
+    this.modoCrear = false;
   }
 
 
@@ -74,7 +78,8 @@ export class FormAnunciosComponent implements OnInit {
 
   //metodo para cargar contenido y los recursos en el anuncio
   getFile(e: any, accion: string) {
-    var Extensions = ["png", "jpeg", "pdf", "gif","html"] //agragar videos (en lo posible)!!!!!!!!!
+    //agregar tipo de archivos
+    var Extensions = ["png", "jpg", "jpeg", "pdf", "gif", "html", "mp4", "avi", "webm"]
 
     for (var i = 0; i < e.target.files.length; i++) {
       //controlamos el tamaño
@@ -191,7 +196,18 @@ export class FormAnunciosComponent implements OnInit {
     if (id != null) this.anuncio.redactor._id = id
 
     //guardamos el anuncio 
-    this.anuncioService.addAnuncio(this.anuncio).subscribe(res => {})
+    this.anuncioService.addAnuncio(this.anuncio).subscribe(res => {
+      //en este momento generamos los qr para que se acoplen a cada host en caso de que se cambie de host
+      this.anuncio._id = res.id;
+        //generamos el url para el qr con el host actual, la direccion del componente y el parametro del id del anuncio
+        var text = window.location.host + '/recursos/' + this.anuncio._id;
+        console.log(text);
+        this.qrService.generarQr(text, 'url').subscribe((res) => {
+          this.anuncio.codigoQR = res.url;
+          this.actualizarAnuncio();
+          this.anuncio = new Anuncio();
+        });
+    })
   }
 
   actualizarAnuncio() {
@@ -204,37 +220,30 @@ export class FormAnunciosComponent implements OnInit {
   mostrarMisAnuncios() {
     this.anuncios = new Array<Anuncio>()
     var userid = this.loginService.idLogged()
-    if (userid != null) {
+    if (userid) {
       this.anuncioService.getAnunciosByUser(userid).subscribe(res => {
         Object.assign(this.anuncios, res);
-
-        //----------------------COMENTADO PARA PODER TRABAJAR--------------------
-          /*
-
-        //en este momento generamos los qr para que se acoplen a cada host en caso de que se cambie de host
-        this.anuncios.forEach((anun:Anuncio)=>{ 
-          //generamos el url para el qr con el host actual, la direccion del componente y el parametro del id del anuncio
-          
-          var text = window.location.host + "/recursos/" + anun._id
-          console.log(text)
-          this.qrService.generarQr(text,"url").subscribe(res => {
-            anun.codigoQR = res.url
-          })
-         
+        this.anuncios.forEach(anuncio => {
+          var fecha = new Date(anuncio.fechaSalidaVigencia).toISOString()
+          anuncio.fechaSalidaVigencia = new Date(fecha.substring(0, 10));
         })
-         */
       })
     }
   }
 
   cambiarEstado(anuncio: Anuncio, estado: string) {
     if (estado == "editar") {
-      this.anuncio = anuncio
+      Object.assign(this.anuncio, anuncio)
+      console.log(this.anuncio)
     } else {
       anuncio.estados.forEach((element: any) => {
         element.estado = estado
       })
     }
-
+    //editar -> solo  lo ve el usuario creador
+    //confeccionado -> se lo envia al encargado
+    //valido -> lo ven todos
+    //denegado -> denegado para editar
+    //cancelado -> nadie mas que el encargado lo ve
   }
 }

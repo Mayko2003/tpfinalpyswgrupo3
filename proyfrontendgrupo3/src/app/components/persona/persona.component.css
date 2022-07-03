@@ -1,3 +1,9 @@
 .iconoTabla {
     width: 45px;
 }
+
+.icono-input {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}

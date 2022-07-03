@@ -5,6 +5,7 @@ import { Area } from 'src/app/models/area';
 import { Estado } from 'src/app/models/estado';
 import { Rol } from 'src/app/models/rol';
 import { AnuncioService } from 'src/app/services/anuncio.service';
+import { AreaService } from 'src/app/services/area.service';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -19,7 +20,6 @@ export class MenuAnunciosComponent implements OnInit {
   fecha!: Date;
   roles: Array<Rol> = [];
   rolesId: Array<string> = [];
-
   anunciosFiltrados: Array<Anuncio> = [];
   rolElegido: string = ""
   area!: Area
