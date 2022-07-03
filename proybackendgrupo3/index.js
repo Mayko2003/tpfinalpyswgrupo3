@@ -16,7 +16,7 @@ app.use('/api/personas', require('./routes/persona.routes'))
 app.use('/api/roles', require('./routes/rol.routes'))
 app.use('/api/areas', require('./routes/area.routes'))
 app.use('/api/anuncios', require('./routes/anuncio.routes'))
-
+app.use('/api/emails', require('./routes/email.routes'))
 // configs
 app.set('port', process.env.PORT || 3000)
 

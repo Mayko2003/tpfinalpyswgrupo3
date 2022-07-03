@@ -1,7 +1,7 @@
 // import modules
 const Area = require('../models/area');
 const Rol = require('../models/rol');
-
+const Persona = require('../models/persona');
 // vars
 const areaController = {};
 
@@ -73,6 +73,19 @@ areaController.getRoles = async(req, res) => {
     }
 }
 
+areaController.getEncargado = async(req, res) => {
+    try {
+        const area = req.params.id
+        const rol = await Rol.findOne({ nombre: 'Encargado' });
+        //find an person with the area and the roles include the rol
+        const encargado = await Persona.find({ area: area, roles: rol._id });
+        res.status(200).json(encargado);
+    } catch (error) {
+        res.status(500).json({
+            message: error
+        })
+    }
+}
 
 // export controller
 module.exports = areaController;

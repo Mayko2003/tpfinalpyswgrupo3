@@ -62,4 +62,12 @@ export class AreaService {
     return this._http.get(this.urlBase + '/roles/' + area_id, httpOptions)
   }
 
+  public getEncargado(area_id : string): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    }
+    return this._http.get(this.urlBase + '/encargado/' + area_id, httpOptions)
+  }
 }
