@@ -100,13 +100,13 @@ export class AnuncioService {
     return this._http.get(this.urlBase+"/area/"+area_id, httpOptions)
   }
   
-  public getAnunciosFiltro(roles:Array<string>,titulo:string,fecha1:string,fecha2:string,destinatarios:string,medio:string,redactor:string,estado:string,tipoContenido:string):Observable<any>{
+  public getAnunciosFiltro(area: string,titulo:string,fecha1:string,fecha2:string,destinatarios:string,medio:string,redactor:string,estado:string,tipoContenido:string):Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       }),
       params: {
-        'area': roles,
+        'area': area,
         'titulo': titulo,
         'fechaSalidaVigencia':fecha1,
         'fechaEntradaVigencia': fecha2,

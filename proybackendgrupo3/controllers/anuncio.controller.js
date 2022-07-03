@@ -199,7 +199,7 @@ anuncioController.getAnuncioFiltro = async(req,res)=>{
         const fechaSalidaVigencia = req.query.fechaSalidaVigencia == '' ? null : req.query.fechaSalidaVigencia;
         const fechaEntradaVigencia = req.query.fechaEntradaVigencia == '' ? null : req.query.fechaEntradaVigencia;
         const titulo = req.query.titulo == '' ? null : new RegExp(`${req.query.titulo}`);
-        console.log(fechaEntradaVigencia+fechaSalidaVigencia+"aaaaaaaaa"+medioTransmision+area);
+        //console.log(fechaEntradaVigencia+fechaSalidaVigencia+"aaaaaaaasheuuuua"+medioTransmision+area);
         const criteria = {
             '$and': [
                 {"fechaSalidaVigencia":{'$gte':fecha}, "estados":{'$elemMatch':{'estado':{'$ne':'editar'},'area':area}}},
@@ -214,8 +214,9 @@ anuncioController.getAnuncioFiltro = async(req,res)=>{
                 {"titulo": titulo == null ? /[a-zA-Z0-9]/ : titulo}
             ]
         }
-        console.log(criteria);
+        console.log(req.query.estado);
         const anuncios = await Anuncio.find(criteria);
+        console.log(anuncios.length)
         res.status(200).json(anuncios);
     }catch(error){
         res.status(500).json({

@@ -5,6 +5,8 @@ import { AnuncioService } from 'src/app/services/anuncio.service';
 import { AreaService } from 'src/app/services/area.service';
 import Chart from 'chart.js/auto';
 import { LoginService } from 'src/app/services/login.service';
+import { Rol } from 'src/app/models/rol';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-estadisticas',
   templateUrl: './estadisticas.component.html',
@@ -26,19 +28,33 @@ export class EstadisticasComponent implements OnInit {
   tipo: string = ""
   tipoChart: string = ""
   private meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+  roles: Array<Rol> = []
 
-  constructor(private anucioService: AnuncioService, private areaService: AreaService, private loginService: LoginService) {
+  constructor(private anucioService: AnuncioService, private areaService: AreaService, private loginService: LoginService,private router: Router) {
     this.anuncios = new Array<Anuncio>()
     this.areas = new Array<Area>()
     this.datosPieChart1 = []
     this.datosPieChart2 = []
     this.datosBarChart = []
+    this.roles = new Array<Rol>()
   }
 
   ngOnInit(): void {
+    //validacion de peticion
+    this.cargarMisRoles();
+    if(this.roles[0].nombre != "autoridad"){
+        this.router.navigate(['/Login'])
+    }
+
     this.areaService.getAreas().subscribe(
       areas => Object.assign(this.areas, areas)
     )
+  }
+
+  //metodo para cargar mis roles
+  cargarMisRoles() {
+    var rolesLogin = this.loginService.rolLogged();
+    Object.assign(this.roles, rolesLogin);
   }
 
   initBarChartDatos(tipo:string) {
