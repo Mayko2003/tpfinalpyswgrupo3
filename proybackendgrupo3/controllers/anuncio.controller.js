@@ -74,7 +74,6 @@ anuncioController.getAnuncio = async(req, res) => {
 anuncioController.getAnunciosAreaEncargado = async(req, res) => {
     try {
         const anuncios = await Anuncio.find({ "estados": { '$elemMatch': { 'estado': req.params.estado, 'area': req.params.idArea } } });
-
         res.status(200).json(anuncios);
     } catch (error) {
         res.status(500).json({
@@ -85,7 +84,6 @@ anuncioController.getAnunciosAreaEncargado = async(req, res) => {
 
 // obtener un anuncio segun persona
 anuncioController.getMisAnuncios = async(req, res) => {
-
     try {
         var criteria = { "redactor": req.params.idPersona };
         const anuncios = await Anuncio.find(criteria);
@@ -116,7 +114,6 @@ anuncioController.getAnuncioByRoles = async(req, res) => {
 // obtener anuncio por mes o año
 anuncioController.obtenerAnunciosFecha = async(req, res) => {
     try {
-
         const tipo = req.params.tipo;
         const valor = req.params.valor - 1;
         var fromDate, toDate, criteria;
@@ -146,7 +143,6 @@ anuncioController.obtenerAnunciosFecha = async(req, res) => {
 // obtener anuncio por rango de fechas
 anuncioController.obtenerAnunciosFechaRango = async(req, res) => {
     try {
-
         const fechaInicio = req.body.fechaI;
         const fechaFinal = req.body.fechaF;
         var criteria = { fechaEntradaVigencia: { '$gte': fechaInicio }, fechaSalidaVigencia: { '$lte': fechaFinal } };
@@ -191,6 +187,7 @@ anuncioController.getAnunciosArea = async(req, res) => {
         });
     }
 }
+
 
 // prueba de filtro avanzado
 anuncioController.getAnuncioFiltro = async(req, res) => {
