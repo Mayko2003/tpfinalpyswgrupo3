@@ -1,25 +1,62 @@
-<div>
-    <h1 class="text-center">Estadísticas</h1>
-    <div class="filter-seccion d-flex justify-content-center">
-        <form action="">
+<h1 class="text-center my-3">Estadísticas</h1>
+<div class="my-3 d-flex">
+    <div class="filter-seccion mb-3 col-4">
+        <form action="" class=" ms-3" #form="ngForm">
             <div class="mb-3">
                 <label class="form-label" for="area">Area</label>
-                <select class="form-select" name="area" id="area" [(ngModel)]="areaSeleccionada" (ngModelChange)="seleccionarArea()">
+                <select class="form-select" name="area" id="area" [(ngModel)]="areaSeleccionada" required>
                     <option *ngFor="let area of areas" value="{{area._id}}" selected>{{area.nombre}}</option>
                 </select>
             </div>
+            <div class="">
+                <div class="mb-3">
+                    <label class="form-label" for="fechaInicio">Fecha Inicio</label>
+                    <input type="date" class="form-control" name="fechaInicio" id="fechaInicio" [(ngModel)]="fechaInicio" #inicio="ngModel" required >
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="fechaFin">Fecha Fin</label>
+                    <input type="date" class="form-control" name="fechaFin" id="fechaFin" [(ngModel)]="fechaFin" #fin="ngModel" required >
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="tipo">Tipo Grafico Barras</label>
+                    <select class="form-select" name="tipo" id="tipo" [(ngModel)]="tipo" required>
+                        <option value="meses" selected>Meses</option>
+                        <option value="años">Años</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-primary" [disabled]="form.form.invalid" (click)="filtrar()">Filtrar</button>
+                </div>
+            </div>
         </form>
     </div>
-    <div class="estadistica-seccion d-flex mb-3">
+    <div class="estadistica-seccion my-3 col-6">
+        <div class="col-6 mx-auto">
+            <form action="">
+                <div class="mb-3">
+                    <label for="tipoChart" class="form-label">Eliga grafico a mostrar</label>
+                    <select class="form-select" name="tipoChart" id="tipoChart" [(ngModel)]="tipoChart">
+                        <option value="fechas" selected>Cantidad Anuncios</option>
+                        <option value="tipo">Tipo Contenido</option>
+                        <option value="destinatarios">Destinatarios</option>
+                    </select>
+                </div>
+            </form>
+        </div>
         <!-- grafico de barras -->
+        <div class="h-50 w-50 mx-auto" [ngClass]="tipoChart == 'fechas'? 'd-block':'d-none'">
+            <h3 class="fst-italic text-center">Anuncios por mes</h3>
+            <canvas id="barChart"></canvas>
+        </div>
         <!-- primer grafico torta -->
-        <div class="col-6">
-            <canvas id="chart1" style="width: 10em;height:10em;"></canvas>
+        <div class="h-25 w-25 mx-auto" [ngClass]="tipoChart == 'tipo'? 'd-block':'d-none'">
+            <h3 class="fst-italic text-center">Anuncios por Contenido</h3>
+            <canvas id="pieChart1"></canvas>
         </div>
         <!-- grafico 2 torta -->
-        <div class="col-6 ">
-            <canvas id="chart2" style="width: 10em;height:10em;"></canvas>
+        <div class="h-25 w-25 mx-auto" [ngClass]="tipoChart == 'destinatarios'? 'd-block':'d-none'">
+            <h3 class="fst-italic text-center">Anuncios por Destinatarios</h3>
+            <canvas id="pieChart2"></canvas>
         </div>
     </div>
-    
 </div>

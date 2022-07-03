@@ -70,6 +70,7 @@ anuncioController.getAnuncio = async(req, res) => {
 }
 
 // obtener un anuncio segun area encargado de acuerdo al estado
+
 anuncioController.getAnunciosAreaEncargado = async(req, res) => {
     try {
         const anuncios = await Anuncio.find({ "estados": { '$elemMatch': { 'estado': req.params.estado, 'area': req.params.idArea } } });
@@ -186,6 +187,7 @@ anuncioController.getAnunciosArea = async(req, res) => {
         });
     }
 }
+
 
 // prueba de filtro avanzado
 anuncioController.getAnuncioFiltro = async(req, res) => {

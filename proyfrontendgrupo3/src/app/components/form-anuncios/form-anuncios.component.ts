@@ -62,6 +62,7 @@ export class FormAnunciosComponent implements OnInit {
     this.estados = new Array<Estado>();
     this.estado = new Estado();
     this.estado.area = new Area();
+  
 
     this.modoEditar = false;
     this.modoCrear = false;

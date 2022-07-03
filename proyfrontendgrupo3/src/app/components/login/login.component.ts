@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Persona } from 'src/app/models/persona';
+import { Rol } from 'src/app/models/rol';
 import { LoginService } from 'src/app/services/login.service';
 import { PersonaService } from 'src/app/services/persona.service';
 
@@ -24,7 +25,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.returnUrl = '/home';
+  
   }
 
   login() {
@@ -39,7 +40,23 @@ export class LoginComponent implements OnInit {
             sessionStorage.setItem("roles", JSON.stringify(this.user.roles));
             sessionStorage.setItem("area",JSON.stringify(this.user.area.nombre));
             //redirigimos a home o a pagina que llamo
-            this.router.navigateByUrl(this.returnUrl);
+            
+            
+              if(this.user.roles[0].nombre == "administrador"){
+                this.router.navigate(['/Persona'])   
+              }
+              else if(this.user.roles[0].nombre  == "encargado"){
+                this.router.navigate(['/Encargado'])  
+              }
+              else if(this.user.roles[0].nombre  == "autoridad"){
+                this.router.navigate(['/estadisticas'])  
+              }
+              else{
+                this.router.navigate(['/MenuAnuncio']) 
+              }
+              
+           
+            
 
           } else {
             //usuario no encontrado muestro mensaje en la vista
