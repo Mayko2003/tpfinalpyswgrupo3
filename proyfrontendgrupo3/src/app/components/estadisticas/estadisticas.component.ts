@@ -21,8 +21,8 @@ export class EstadisticasComponent implements OnInit {
   barChart!: any
   pieChart1!: any
   pieChart2!: any
-  fechaInicio!: Date
-  fechaFin!: Date
+  fechaInicio!: string
+  fechaFin!: string
   tipo: string = ""
   tipoChart: string = ""
   private meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
@@ -41,65 +41,82 @@ export class EstadisticasComponent implements OnInit {
     )
   }
 
-  initDatos(tipo:string) {
+  initBarChartDatos(tipo:string) {
     this.datosBarChart = new Array<any>()
-    var yearInicio = new Date(this.anuncios[0].fechaEntradaVigencia).getFullYear()
-    var yearFin = new Date(this.anuncios[this.anuncios.length - 1].fechaEntradaVigencia).getFullYear()
+    var yearInicio = new Date(this.fechaInicio).getFullYear()
+    var yearFin = new Date(this.fechaFin).getFullYear()
+    
     for (let i = yearInicio; i <= yearFin; i++) {
       if(tipo == 'meses'){
         this.meses.forEach(mes => {
-          var item = { label: mes, value: 0 }
+          var item = { label: mes + " " + i, value: 0 }
           this.datosBarChart.push(item)
         })
       }
       else{
         var item = { label: i, value: 0 }
         this.datosBarChart.push(item)
-      } 
+      }
     }
   }
 
   setDatosBarChart(anuncio: Anuncio, index: number = 0) {
-    var mes = anuncio.fechaEntradaVigencia.toLocaleString('es-ES', { month: 'long' })
-    var item = { label: mes, value: 0 }
-    if(this.tipo == 'meses')
-      this.datosBarChart[index * 12 + anuncio.fechaEntradaVigencia.getMonth()].value += 1
+    
+    if(this.tipo == 'meses'){
+      
+      var mes = anuncio.fechaEntradaVigencia.toLocaleString('es-ES', { month: 'long' })
+      //capitalize the mes
+      mes = mes.charAt(0).toUpperCase() + mes.slice(1)
+
+
+      //items para aumentar las barass de acuerdo a la fecha de entrada y salida
+      //ya que un anuncio puede estar en 2 anios distintos
+      var label1 = mes + " " + anuncio.fechaEntradaVigencia.getFullYear()
+      var label2 = mes + " " + anuncio.fechaSalidaVigencia.getFullYear()
+      if(label1 == label2){
+        label2 = label2 + " sin efecto"
+      }
+      for (let i = 0; i < this.datosBarChart.length; i++) {
+        if (this.datosBarChart[i].label == label1) {
+          this.datosBarChart[i].value = this.datosBarChart[i].value + 1
+        }
+        if (this.datosBarChart[i].label == label2) {
+          this.datosBarChart[i].value = this.datosBarChart[i].value + 1
+        }
+      }
+    }
     else
       this.datosBarChart[index].value += 1
   }
 
   setDatosPieChart1(anuncio: Anuncio) {
     // generar datos para el grafico 1, segun tipo de anuncio
-    var item = { label: '', value: 0 }
-    if (anuncio.tipoContenido == "text") item = { label: 'Text', value: 1 }
-    if (anuncio.tipoContenido == "img") item = { label: 'Imagen', value: 1 }
-    if (anuncio.tipoContenido == "mp4") item = { label: 'Video', value: 1 }
-    if (anuncio.tipoContenido == "pdf") item = { label: 'PDF', value: 1 }
+    var label = anuncio.tipoContenido
 
     for (let i = 0; i < this.datosPieChart1.length; i++) {
-      if (this.datosPieChart1[i].label == item.label) {
+      if (this.datosPieChart1[i].label == label) {
         this.datosPieChart1[i].value += 1
         break
       }
     }
-    if (!this.datosPieChart1.some(dato => dato.label == item.label)) {
-      this.datosPieChart1.push(item)
+    if (!this.datosPieChart1.some(dato => dato.label == label)) {
+      this.datosPieChart1.push({ label: label, value: 1 })
     }
   }
 
   setDatosPieChart2(anuncio: Anuncio) {
     // generar datos para el grafico 2, segun tipo de rol
     anuncio.destinatarios.forEach(destinatario => {
-      var item = { label: destinatario.nombre, value: 1 }
+     var label = destinatario.nombre
 
       for (let i = 0; i < this.datosPieChart2.length; i++) {
-        if (this.datosPieChart2[i].label == item.label) {
+        if (this.datosPieChart2[i].label == label) {
           this.datosPieChart2[i].value += 1
           break
         }
       }
-      if (!this.datosPieChart2.some(dato => dato.label == item.label)) {
-        this.datosPieChart2.push(item)
+      if (!this.datosPieChart2.some(dato => dato.label == label)) {
+        this.datosPieChart2.push({ label: label, value: 1 })
       }
     })
   }
@@ -107,9 +124,10 @@ export class EstadisticasComponent implements OnInit {
   generarDatos() {
     this.datosPieChart1 = new Array<any>()
     this.datosPieChart2 = new Array<any>()
-    var yearInicio = new Date(this.anuncios[0].fechaEntradaVigencia).getFullYear()
+    var yearInicio = new Date(this.fechaInicio).getFullYear()
     this.anuncios.forEach(anuncio => {
       anuncio.fechaEntradaVigencia = new Date(anuncio.fechaEntradaVigencia)
+      anuncio.fechaSalidaVigencia = new Date(anuncio.fechaSalidaVigencia)
       this.setDatosBarChart(anuncio, anuncio.fechaEntradaVigencia.getFullYear() - yearInicio)
       this.setDatosPieChart1(anuncio)
       this.setDatosPieChart2(anuncio)
@@ -140,28 +158,18 @@ export class EstadisticasComponent implements OnInit {
     return barChart
   }
 
-  ordernarAnunciosFecha() {
-    //sort by year and month of fechaEntradaVigencia
-    this.anuncios.sort((a, b) => {
-      //cast to Date each
-      var aDate = new Date(a.fechaEntradaVigencia)
-      var bDate = new Date(b.fechaEntradaVigencia)
-      if (aDate.getFullYear() > bDate.getFullYear()) return 1
-      if (aDate.getFullYear() < bDate.getFullYear()) return -1
-      if (aDate.getMonth() > bDate.getMonth()) return 1
-      if (aDate.getMonth() < bDate.getMonth()) return -1
-      return 0
-    })
-  }
-
   filtrar() {
-    this.anucioService.getAnunciosByArea(this.areaSeleccionada).subscribe(
+    this.anucioService.getAnunciosFechaRango(this.fechaInicio, this.fechaFin,this.areaSeleccionada).subscribe(
       result => {
         this.anuncios = result
-        if (this.anuncios.length == 0) return;
-        this.ordernarAnunciosFecha()
+        if(this.anuncios.length == 0){
+          if(this.barChart) this.barChart.destroy()
+          if(this.pieChart1) this.pieChart1.destroy()
+          if(this.pieChart2) this.pieChart2.destroy()
+          return;
+        }
         //generar datos
-        this.initDatos(this.tipo)
+        this.initBarChartDatos(this.tipo) //tipo: meses o años
         this.generarDatos()
 
         //barchart

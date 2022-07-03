@@ -130,4 +130,18 @@ export class AnuncioService {
     }
     return this._http.get(this.urlBase+"/"+id, httpOptions)
   }
+
+  public getAnunciosFechaRango(fechaI:string,fechaF:string,area:string): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      }),
+    }
+    const body = {
+      "fechaI": fechaI,
+      "fechaF": fechaF,
+      "area": area
+    }
+    return this._http.post(this.urlBase+"/fecha",body, httpOptions)
+  }
 }

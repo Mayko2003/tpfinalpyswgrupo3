@@ -142,9 +142,10 @@ anuncioController.obtenerAnunciosFechaRango = async(req,res)=>{
     try{
         const fechaInicio = req.body.fechaI;
         const fechaFinal = req.body.fechaF;
-        var criteria = {fechaEntradaVigencia:{'$gte':fechaInicio},fechaSalidaVigencia:{'$lte':fechaFinal}};
+        const area = req.body.area;
+        var criteria = {fechaEntradaVigencia:{'$gte':fechaInicio},fechaSalidaVigencia:{'$lte':fechaFinal}, "estados.area":area};
         console.log(criteria);
-        const anuncios = await Anuncio.find(criteria);
+        const anuncios = await Anuncio.find(criteria).populate('destinatarios');
         res.status(200).json(anuncios);
     }catch (error) {
         res.status(500).json({
