@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Anuncio } from 'src/app/models/anuncio';
-import { AreaRol } from 'src/app/models/area-rol';
-import { Persona } from 'src/app/models/persona';
+import { Area } from 'src/app/models/area';
+import { Estado } from 'src/app/models/estado';
 import { Rol } from 'src/app/models/rol';
 import { AnuncioService } from 'src/app/services/anuncio.service';
 import { AreaService } from 'src/app/services/area.service';
 import { LoginService } from 'src/app/services/login.service';
-import { PersonaService } from 'src/app/services/persona.service';
-import { RolService } from 'src/app/services/rol.service';
 
 @Component({
   selector: 'app-menu-anuncios',
@@ -20,97 +19,102 @@ export class MenuAnunciosComponent implements OnInit {
   anuncios: Array<Anuncio> = [];
   fecha!: Date;
   roles: Array<Rol> = [];
-  rolesId : Array<string> = [];
-  medioPublicacion:string='';
-  estado:string='';
-  tipoContenido:string='';
-  redactores!:Array<Persona>;
-  redactor:string='';
-  destinatario:string='';
-  texto:string = '';
-  destinatarios!:Array<Rol>;
-  fechaSalida:string = '';
-  fechaEntrada:string = '';
-  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService: PersonaService, private areaService:AreaService) { }
+  rolesId: Array<string> = [];
+  anunciosFiltrados: Array<Anuncio> = [];
+  rolElegido: string = ""
+  area!: Area
+  rolesFiltrados: Array<string> = [];
+  fechaFiltro!: Date
+  fecha2: Date = new Date()
+
+  constructor(private anuncioService: AnuncioService, private loginService: LoginService,private router: Router) {
+    this.anuncios = new Array<Anuncio>()
+    this.fecha = new Date()
+    this.roles = new Array<Rol>()
+    this.rolesId = new Array<string>()
+    this.anunciosFiltrados = new Array<Anuncio>()
+    this.area = new Area();
+    this.rolesFiltrados = new Array<string>()
+  }
 
   ngOnInit(): void {
-    this.cargarAnuncios();
-    this.cargarPersonas();
-    this.cargarDestinatarios();
-  }
-  //carga los anuncios vigentes, con el estado autorizado, teniendo en cuenta el rol o roles de la persona logueada
-  cargarAnuncios(){
-    //cargo el id y roles logeados
-    var id = this.loginService.idLogged();
-    var rolesLogin = this.loginService.rolLogged();
-    
-    if(rolesLogin != null){
-      Object.assign(this.roles,rolesLogin);
-      this.roles.forEach((element:any) => {
-        this.rolesId.push(element._id);
-      });
-      console.log(this.rolesId);
+    this.cargarMisRoles();
+    this.cargarMiArea();
+
+    if(this.roles[0].nombre == "encargado" || this.roles[0].nombre == "administrado" || this.roles[0].nombre == "autoridad"){
+      this.router.navigate(['/Login']) 
     }
-    if(id != null){ 
-      this.personaService.getPersonabyID(id).subscribe(res=>{
-        //cargo la fecha de hoy para cargar los anuncios vigentes
-        this.fecha = new Date()
-        // thisfecha <= fechaSalida
-        this.anuncioService.getAnunciosByRoles(this.rolesId,this.fecha,res.area).subscribe(res =>{
-          Object.assign(this.anuncios,res)
-          console.log(this.anuncios);
-        })
-      })
-    }
+
+
+    this.cargarAnunciosVigentes();
   }
 
-  //Búsquedas avanzadas, se podrá realizar por destinatario, fechas, medio de publicación, texto, 
-  //tipo de contenido, estado, redactor o combinaciones de todas las anteriores.
-  cargarPersonas(){
-    var id = this.loginService.idLogged();
-    this.redactores = new Array<Persona>();
-    if(id!=null)
-    this.personaService.getPersonabyID(id).subscribe(res=>{
-      this.personaService.getPersonasbyArea(res.area).subscribe(res=>{
-        res.forEach((element:any) => {
-          this.redactores.push(element);
-        });
+  cargarMisRoles() {
+    var rolesLogin = this.loginService.rolLogged();
+    Object.assign(this.roles, rolesLogin);
+    console.log(this.roles)
+  }
+
+  cargarMiArea() {
+    var areaLogin = this.loginService.areaLogged()
+    Object.assign(this.area, areaLogin)
+    console.log(this.area)
+  }
+
+  cargarAnunciosVigentes() {
+    this.anuncios = new Array<Anuncio>()
+    
+    //cargo la fecha de hoy para cargar los anuncios vigentes
+    this.fecha = new Date()
+
+    //cargo los id para realizar la busqueda
+    this.roles.forEach((element: any) => { this.rolesId.push(element._id) })
+
+    //thisfecha <= fechaSalida
+    this.anuncioService.getAnunciosByRoles(this.rolesId, this.fecha).subscribe(res => {
+      res.forEach((resAnuncio: Anuncio) => {
+        resAnuncio.estados.forEach((resEstado: Estado) => {
+          if (resEstado.estado == "autorizado" && resEstado.area.nombre == this.area.nombre) {
+            this.anuncios.push(resAnuncio);
+            console.log(resAnuncio)
+          }
+        })
+      })
+      console.log(this.anuncios);
+    })
+  }
+
+  //metodo para cargar los anuncios historicos de el rol de una persona
+  cargarAnunciosbyRol() {
+    this.anunciosFiltrados = new Array<Anuncio>();
+    
+    //cargo una fecha de un pasado distante para reutilizar el codigo 
+    this.fecha = new Date('Jan 1 2000')
+
+
+    //uso una fecha para sacar los anuncios vigentes
+    this.fechaFiltro = new Date()
+
+    this.anuncioService.getAnunciosByRoles(this.rolesFiltrados, this.fecha).subscribe(res => {
+      res.forEach((resAnuncio: Anuncio) => {
+        //guardo la fecha para filtrar solo los que ya no tienen vigencia
+        this.fecha2 = new Date(resAnuncio.fechaSalidaVigencia)
+
+        resAnuncio.estados.forEach((resEstado: Estado) => {
+          if (resEstado.estado == "autorizado" && resEstado.area.nombre == this.area.nombre &&
+          this.fecha2 < this.fechaFiltro) {
+            this.anunciosFiltrados.push(resAnuncio);
+          }
+        })
       })
     })
   }
-  cargarDestinatarios(){
-    var id = this.loginService.idLogged();
-    this.destinatarios = new Array<Rol>();
-    if(id!=null)
-    this.personaService.getPersonabyID(id).subscribe(res=>{
-      this.areaService.getRolesArea(res.area).subscribe(res=>{
-        res.forEach((element:any) => {
-          this.destinatarios.push(element);
-        });
-      })
-    })
+
+  filtrarAnuncios(){
+    this.rolesFiltrados = new Array<string>()
+    this.rolesFiltrados.push(this.rolElegido);
+    this.cargarAnunciosbyRol()
+
   }
-  actualizarFiltro(){
-    /* console.log(this.estado);
-    console.log(this.tipoContenido);
-    console.log(this.medioPublicacion);
-    console.log(this.redactor);
-    console.log(this.destinatario);
-    console.log(this.fechaSalida);
-    console.log(this.fechaEntrada); */
-    this.anuncios = new Array<Anuncio>();
-    this.anuncioService.getAnunciosFiltro(this.rolesId,this.texto,this.fechaSalida,this.fechaEntrada,this.destinatario,this.medioPublicacion,this.redactor,this.estado,this.tipoContenido).subscribe(res=>{
-      Object.assign(this.anuncios,res);
-    })
-  }
-  limpiarFiltro(){
-    this.estado = "";
-    this.tipoContenido = "";
-    this.medioPublicacion = "";
-    this.redactor = "";
-    this.texto = "";
-    this.fechaSalida = "";
-    this.fechaEntrada = "";
-    this.actualizarFiltro();
-  }
+
 }
