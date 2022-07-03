@@ -234,14 +234,9 @@ export class FormAnunciosComponent implements OnInit {
   }
 
   cambiarEstado(anuncio: Anuncio, estado: string) {
-    if (estado == "editar") {
-      Object.assign(this.anuncio, anuncio)
-      console.log(this.anuncio)
-    } else {
-      anuncio.estados.forEach((element: any) => {
-        element.estado = estado
-      })
-    }
+    anuncio.estados.forEach((element:Estado)=>{ element.estado = estado})
+    Object.assign(this.anuncio,anuncio)
+    this.actualizarAnuncio();
     //editar -> solo  lo ve el usuario creador
     //confeccionado -> se lo envia al encargado
     //valido -> lo ven todos
