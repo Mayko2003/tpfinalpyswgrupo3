@@ -64,7 +64,10 @@ export class LoginService {
   }
   public areaLogged() {
     var area = sessionStorage.getItem('area');
-    if (area) return area;
+    if (area) {
+      area = JSON.parse(area)
+      return area;
+    }
     return null;
   }
   public idLogged() {

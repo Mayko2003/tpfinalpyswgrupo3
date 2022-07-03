@@ -67,7 +67,7 @@
         <div class="card-body">
             <h5 class="card-title">{{anuncioSelected.titulo}}</h5>
             <p class="card-text">{{anuncioSelected.redactor}}</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            <p *ngFor="let e of anuncioSelected.estados" class="card-text"><small class="text-muted">{{e.estado}}</small></p>
             <button type="submit" class="btn btn-success" (click)="cambiarEstado(anuncioSelected,'editar');modoEditar=true" data-bs-toggle="collapse" data-bs-target="#formulario">Editar</button>
             <button type="submit" class="btn btn-success" (click)="cambiarEstado(anuncioSelected,'confeccionado')">publicar</button>
         </div>
