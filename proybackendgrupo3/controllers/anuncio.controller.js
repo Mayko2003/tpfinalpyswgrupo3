@@ -141,10 +141,11 @@ anuncioController.obtenerAnunciosFecha = async(req,res)=>{
 // obtener anuncio por rango de fechas
 anuncioController.obtenerAnunciosFechaRango = async(req,res)=>{
     try{
+        const area = req.body.area
         const fechaInicio = req.body.fechaI;
         const fechaFinal = req.body.fechaF;
-        var criteria = {fechaEntradaVigencia:{'$gte':fechaInicio},fechaSalidaVigencia:{'$lte':fechaFinal}};
-        console.log(criteria);
+        console.log(area, fechaInicio, fechaFinal);
+        var criteria = {fechaEntradaVigencia:{'$gte':fechaInicio},fechaSalidaVigencia:{'$lte':fechaFinal},estados:{'$elemMatch':{'area':area, 'estado':'autorizado'}}};
         const anuncios = await Anuncio.find(criteria);
         res.status(200).json(anuncios);
     }catch (error) {
@@ -173,7 +174,7 @@ anuncioController.getAnunciosArea = async(req,res)=>{
     try{
         const anuncios = await Anuncio.find({
             $and: [
-                { "estados.estado": "autorizado"},
+                //{ "estados.estado": req.query.estado},
                 { "estados.area": req.params.idArea }
             ]
         }).populate('destinatarios')
@@ -185,6 +186,7 @@ anuncioController.getAnunciosArea = async(req,res)=>{
         });
     }
 }
+
 
 // prueba de filtro avanzado
 anuncioController.getAnuncioFiltro = async(req,res)=>{

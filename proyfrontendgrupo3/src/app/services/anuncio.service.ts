@@ -119,4 +119,19 @@ export class AnuncioService {
     }
     return this._http.get(this.urlBase+"/busqueda", httpOptions);
   }
+
+  public getAnunciosFechaRango(area:string,fechaInicio:Date,fechaFin:Date):Observable<any>{
+    const httpOptions = {
+      method: 'POST',
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    }
+    const body = {
+      "area": area,
+      "fechaI": fechaInicio.toString(),
+      "fechaF": fechaFin.toString()
+    }
+    return this._http.post(this.urlBase+"/fecha", body,httpOptions);
+  }
 }
