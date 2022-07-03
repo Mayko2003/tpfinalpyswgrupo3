@@ -106,7 +106,7 @@ export class AnuncioService {
         "Content-Type": "application/json"
       }),
       params: {
-        'roles': roles,
+        'area': roles,
         'titulo': titulo,
         'fechaSalidaVigencia':fecha1,
         'fechaEntradaVigencia': fecha2,
@@ -117,23 +117,9 @@ export class AnuncioService {
         'tipoContenido': tipoContenido
       }
     }
-    return this._http.get(this.urlBase+"/busqueda", httpOptions);
+    return this._http.post(this.urlBase+"/busqueda",null, httpOptions);
   }
 
-  public getAnunciosFechaRango(area:string,fechaInicio:Date,fechaFin:Date):Observable<any>{
-    const httpOptions = {
-      method: 'POST',
-      headers: new HttpHeaders({
-        "Content-Type": "application/json"
-      })
-    }
-    const body = {
-      "area": area,
-      "fechaI": fechaInicio.toString(),
-      "fechaF": fechaFin.toString()
-    }
-    return this._http.post(this.urlBase+"/fecha", body,httpOptions);
-  }
 
   //servicio para enviar un anuncio --> usado en el componente recursos
   public getAnuncio(id:string): Observable<any>{

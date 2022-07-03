@@ -172,7 +172,8 @@ export class FormAnunciosComponent implements OnInit {
     })
 
     if (!band && JSON.stringify(this.rol) != "{}") {
-      this.anuncio.destinatarios.push(this.rol)
+      var rolC = this.roles.find((r) => r._id == this.rol._id);
+      if (rolC) this.anuncio.destinatarios.push(rolC)
       this.rol = new Rol();
       console.log(this.anuncio.destinatarios)
     }
