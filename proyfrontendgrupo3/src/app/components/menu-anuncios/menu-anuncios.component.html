@@ -5,9 +5,15 @@
     <div class="col-4" *ngFor="let a of anuncios" style="width: 18rem;">
       <img class="card-img-top" [src]=a.contenido  alt="Card image cap">
       <div class="card-body">
+
         <h5 class="card-title">{{a.titulo}}</h5>
         <p class="card-text">{{a.redactor}}</p>
         <a href="#" class="btn btn-primary">Tiempo de lectura {{a.tiempoLectura}}</a>
+        <p class="card-text">
+          <ng-container *ngFor="let e of a.estados">
+            <li>{{e.estado}}</li>
+          </ng-container>
+        </p>
       </div>
     </div>
 </div>

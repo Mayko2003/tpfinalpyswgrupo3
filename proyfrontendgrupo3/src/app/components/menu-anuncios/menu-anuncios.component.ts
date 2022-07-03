@@ -114,6 +114,7 @@ export class MenuAnunciosComponent implements OnInit {
     this.rolesFiltrados = new Array<string>()
     this.rolesFiltrados.push(this.rolElegido);
     this.cargarAnunciosbyRol()
+
   }
 
 }
