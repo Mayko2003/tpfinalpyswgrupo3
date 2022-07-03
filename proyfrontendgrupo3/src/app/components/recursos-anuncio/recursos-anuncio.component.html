@@ -1,1 +1,20 @@
-<p>recursos-anuncio works!</p>
+<div class="m-3">
+    <div class="col-12 d-flex justify-content-center">
+        <h5 class="card-title">Recursos de {{anuncio.titulo}}</h5>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div *ngFor="let recurso of anuncio.recursos" class="col">
+            <div [ngSwitch]="recurso.tipo" class="card">
+                <div *ngSwitchCase="'pdf' || 'html'">
+                    <iframe [src]="recurso.recurso" frameborder="0"></iframe>
+                </div>
+                <div *ngSwitchCase="'png' || 'jpg' || 'jpeg' || 'gif'">
+                    <img [src]="recurso.recurso" class="img-fluid">
+                </div>
+                <div *ngSwitchCase="'avi'||'mp4'||'webm'" class="col-4 ratio ratio-16x9">
+                    <video allowfullscreen [src]="recurso.recurso"></video>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
