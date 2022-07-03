@@ -187,6 +187,7 @@ anuncioController.getAnunciosArea = async(req, res) => {
     }
 }
 
+
 // prueba de filtro avanzado
 anuncioController.getAnuncioFiltro = async(req, res) => {
         try {
