@@ -6,68 +6,95 @@
                 <h5 class="modal-title" id="formularioAnuncio">Crear un Anuncio</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div *ngIf="modoCrear || modoEditar">
-                    <form name="form" class="container pt-5 pb-5">
+            <div class="modal-body pb-0 m-0">
+                <div *ngIf="modoCrear || modoEditar" class="m-0 p-0">
+                    <form name="form">
                         <div class="form-floating mb-3">
                             <input [(ngModel)]="anuncio.titulo" type="text" class="form-control" name="titulo" id="titulo" placeholder="titulo">
                             <label for="titulo">Titulo:</label>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="input-group-text" for="contenido">Contenido</label>
-                            <input name="contenido" type="file" class="form-control" id="contenido" accept="video/,image/,.pdf,.html,.jpeg,.png,.gif" (change)="getFile($event,'contenido')">
+                            <label class="input-group" for="contenido">Contenido</label>
+                            <input name="contenido" type="file" class="form-control" id="contenido" accept=".png,.jpg,.jpeg,.pdf,.gif,.html,.mp4,.avi,.webm" (change)="getFile($event,'contenido')">
                         </div>
                         <div class="input-group mb-3">
                             <label class="input-group" for="fechaSalida">Fecha de Finalizacion:</label>
                             <input [(ngModel)]="anuncio.fechaSalidaVigencia" type="date" class="form-control" id="fechaSalida" name="fechaSalida">
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="form-floating mb-3">
                             <select [(ngModel)]="anuncio.tiempoLectura" class="form-select" id="tiempoLectura" name="tiempoLectura">
                                 <option value="corto">Corto</option>
                                 <option value="medio">Medio</option>
                                 <option value="largo">Largo</option>
                             </select>
-                            <label class="input-group-text" for="tiempoLectura">Tiempo de Lectura</label>
+                            <label for="tiempoLectura">Tiempo de Lectura</label>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="input-group-text" for="recurso">Recursos</label>
+                            <label class="input-group" for="recurso">Recursos</label>
                             <input name="recurso" type="file" class="form-control" id="recurso" accept=".png, .jpg, .jpeg, .pdf, .gif, .html, .mp4, .avi, .webm" multiple (change)="getFile($event,'recursos')">
                         </div>
-                        <div class="input-group mb-3">
-                            <select [(ngModel)]="area._id" (change)="cargarRolesArea(area._id)" class="form-control" name="areas" id="areas">
-                                <option *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
+                        <div class="form-floating">
+                            <select [(ngModel)]="area._id" (change)="cargarRolesArea(area._id)" class="form-control" name="areaAnuncio" id="areaAnuncio">
+                                <option *ngFor="let area of areas" [value]="area._id">{{area.nombre | titlecase}}</option>
                             </select>
+                            <label for="areaAnuncio">Area</label>
                         </div>
-                        <div class="d-flex mb-3" *ngIf="anuncio.destinatarios">
+                        <div class="d-flex my-3" *ngIf="anuncio.destinatarios && area._id">
                             <div *ngFor="let destinatario of anuncio.destinatarios">
                                 <span class="badge rounded-pill bg-primary p-3">{{destinatario.nombre|titlecase}}
                                 <button class="btn-close" type="button" (click)="quitarRol(anuncio.destinatarios.indexOf(rol))"></button></span>
                             </div>
                         </div>
-                        <!-- Llamado al segundo Modal -->
-                        <div *ngIf="area._id" class="input-group mb-3">
-                            <button class="btn btn-primary w-100" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Agregar Rol</button>
+                        <!-- Llamado al segundo Modal Roles -->
+                        <div *ngIf="area._id" class="form-floating mb-3">
+                            <button type="button" class="btn btn-primary w-100" data-bs-target="#modalRoles" data-bs-toggle="modal">Agregar Rol</button>
                         </div>
-                        <div class="input-group mb-3">
-                            <select class="form-control" [(ngModel)]="medio" name="medio" id="medio">
-                                <option *ngFor="let med of medios" [value]="med">{{med}}</option>
-                            </select>
-                            <button type="submit" class="btn btn-success" (click)="agregarMedios()">agregar medio
-                            </button>
+                        <div class="d-flex mb-3" *ngIf="anuncio.destinatarios && area._id">
+                            <div *ngFor="let medio of anuncio.mediosTransmision">
+                                <span class="badge rounded-pill p-3" [ngClass]="{' bg-primary':medio=='FaceBook',' bg-danger':medio=='Instagram',' bg-info':medio=='Twitter'}">
+                                    <i class="bi" [ngClass]="{' bi-facebook':medio=='FaceBook','bi-instagram':medio=='Instagram','bi-twitter':medio=='Twitter'}"></i> {{medio | titlecase}}
+                                <button class="btn-close" type="button" (click)="quitarMedio(anuncio.mediosTransmision.indexOf(medio))"></button></span>
+                            </div>
+                        </div>
+                        <!-- Llamado al segundo Modal MediosTransmision -->
+                        <div *ngIf="area._id" class="form-floating mb-3">
+                            <button type="button" class="btn btn-success w-100" data-bs-target="#modalMedios" data-bs-toggle="modal">Agregar Medio</button>
                         </div>
                     </form>
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-success" (click)="guardarAnuncio()">Guardar Anuncio</button>
+                <div class="d-flex justify-content-around w-100">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                    <button type="submit" class="btn btn-success" (click)="guardarAnuncio()" data-bs-dismiss="modal" aria-label="Close">Guardar Anuncio</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Segundo Modal -->
-<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+<!-- Segundo Modal MediosTransmision -->
+<div *ngIf="area._id" class="modal fade" id="modalMedios" aria-hidden="true" aria-labelledby="modalMedioTransmision" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalMedioTransmision">Agregar Medios</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <select class="form-control" [(ngModel)]="medio" name="medioAnuncio" id="medioAnuncio">
+                    <option *ngFor="let med of medios" [value]="med">{{med | titlecase}}</option>
+                </select>
+                <label for="medioAnuncio">Medio de Transmision</label>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" (click)="agregarMedios()" data-bs-target="#formAnuncio" data-bs-toggle="modal">agregar destinatario</button>
+                <button class="btn btn-danger" data-bs-target="#formAnuncio" data-bs-toggle="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Segundo Modal Roles -->
+<div *ngIf="area._id" class="modal fade" id="modalRoles" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -75,8 +102,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <select class="form-select" [(ngModel)]="rol._id" name="rol" id="rol" placeholder="Rol" aria-label="Example select with button addon">
-                    <option *ngFor="let role of roles" [value]="role._id">{{role.nombre}}</option>
+                <select class="form-select" [(ngModel)]="rol._id" name="rol" id="rol" placeholder="Rol" aria-label="Select de roles">
+                    <option *ngFor="let role of roles" [value]="role._id">{{role.nombre | titlecase}}</option>
                 </select>
             </div>
             <div class="modal-footer">
@@ -86,26 +113,50 @@
         </div>
     </div>
 </div>
-<a class="btnFormulario btn btn-primary rounded-fill" (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button">
-    Crear <i class="bi bi-plus fs-4"></i>
-</a>
 
-<div class="row row-cols-4 row-cols-md-3 row-cols-lg-4 row-coles-xl-4 row-cols-xxl-5">
-    <div *ngFor="let anuncioSelected of anuncios" class="card ">
-        <div class="card-header">
-            <img [src]="anuncioSelected.contenido" alt="Card image cap" class="card-img-top img-fluid">
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">{{anuncioSelected.titulo | titlecase}}</h5>
-            <p class="card-text"> Redactor: {{anuncioSelected.redactor.nombre | titlecase}} {{anuncioSelected.redactor.apellido | titlecase}}</p>
-            <p class="card-text"> Estados:</p>
-            <p *ngFor="let est of anuncioSelected.estados" class="card-text"><small>Area: {{est.area.nombre}} Estado:
-                    {{est.estado}}</small></p>
-        </div>
-        <div class="card-footer">
-            <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected)" (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
-            <button class="btn btn-primary" (click)="publicarAnuncio(anuncioSelected)">Publicar</button>
+<ng-template class="w-100" [ngIf]="anuncios.length>0" [ngIfElse]="sinAnuncios">
+    <a class="btnFormulario btn btn-primary rounded-fill " (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button">
+        Crear <i class="bi bi-plus fs-4"></i>
+    </a>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-coles-xl-4 row-cols-xxl-5 w-100">
+        <div *ngFor="let anuncioSelected of anuncios" class="card ">
+            <div class="card-header">
+                <div [ngSwitch]="anuncioSelected.tipoContenido" class="card">
+                    <div *ngSwitchCase="'pdf' || 'html'">
+                        <iframe allowfullscreen frameborder="0">
+                            <source *ngIf="anuncioSelected.tipoContenido == 'pdf'" type="aplication/pdf" [src]="anuncioSelected.contenido">
+                            <source *ngIf="anuncioSelected.tipoContenido == 'html'" type="text/html" [src]="anuncioSelected.contenido">
+                        </iframe>
+                    </div>
+                    <div *ngSwitchCase="'png' || 'jpg' || 'jpeg' || 'gif'">
+                        <img [src]="anuncioSelected.contenido" class="img-fluid">
+                    </div>
+                    <div *ngSwitchCase="'mp4' || 'avi' || 'webm'" class=" ratio ratio-16x9">
+                        <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
+                            <source [type]="'video/'+anuncioSelected.tipoContenido" [src]="anuncioSelected.contenido">
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{anuncioSelected.titulo | titlecase}}</h5>
+                <p class="card-text"> Redactor: {{anuncioSelected.redactor.nombre | titlecase}} {{anuncioSelected.redactor.apellido | titlecase}}</p>
+                <p class="card-text"> Estados:</p>
+                <p *ngFor="let est of anuncioSelected.estados" class="card-text"><small>Area: {{est.area.nombre | titlecase}} Estado:
+                    {{est.estado | titlecase}}</small></p>
+            </div>
+            <div class="card-footer d-flex justify-content-around">
+                <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected)" (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
+                <button class="btn btn-primary" (click)="publicarAnuncio(anuncioSelected)">Publicar</button>
+            </div>
         </div>
     </div>
-
-</div>
+</ng-template>
+<ng-template #sinAnuncios>
+    <div class="sinAnuncios d-flex justify-content-center align-items-center flex-column">
+        <h1>Aún no tienes anuncios para compartir</h1>
+        <a class="btn btn-primary rounded-fill" (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button">
+            Crea tus anuncios <i class="bi bi-plus fs-4"></i>
+        </a>
+    </div>
+</ng-template>

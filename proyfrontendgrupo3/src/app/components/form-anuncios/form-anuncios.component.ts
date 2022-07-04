@@ -215,6 +215,10 @@ export class FormAnunciosComponent implements OnInit {
     console.log(this.anuncio.mediosTransmision);
   }
 
+  quitarMedio(pos: number) {
+    this.anuncio.mediosTransmision.splice(pos,1)
+  }
+
   guardarAnuncio() {
 
     if(this.anuncio._id == null || this.anuncio._id == "")

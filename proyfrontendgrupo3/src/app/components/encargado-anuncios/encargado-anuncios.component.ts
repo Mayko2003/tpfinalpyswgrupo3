@@ -42,7 +42,7 @@ export class EncargadoAnunciosComponent implements OnInit {
 
     //validacion de peticion
     this.cargarMisRoles();
-    if(this.roles[0].nombre != "encargado"){
+    if (this.roles[0].nombre != "Encargado" && this.roles[0].nombre != "encargado"){
         this.router.navigate(['/Login'])
     }
     

@@ -4,3 +4,8 @@
     right: 15px;
     z-index: 1;
 }
+
+.sinAnuncios {
+    height: 75vh;
+    width: 100vw;
+}
