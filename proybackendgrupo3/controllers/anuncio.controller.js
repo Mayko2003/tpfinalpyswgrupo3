@@ -8,7 +8,7 @@ const anuncioController = {};
 // obtener anuncios --> para testing
 anuncioController.getAnuncios = async(req, res) => {
     try {
-        const anuncios = await Anuncio.find();
+        const anuncios = await Anuncio.find().populate({ path: 'redactor', select: 'nombre apellido' }).populate({ path: 'estados.area', select: 'nombre' });;
         res.status(200).json(anuncios);
     } catch (error) {
         res.status(500).json({
@@ -102,7 +102,7 @@ anuncioController.getAnuncioByRoles = async(req, res) => {
         const fecha = req.body.fecha;
         const area = req.body.area;
         var criteria = { "destinatarios": { $in: roles }, "fechaSalidaVigencia": { '$gte': fecha }, "estados": { '$elemMatch': { 'estado': 'autorizado', 'area': area } } };
-        const anuncios = await Anuncio.find(criteria);
+        const anuncios = await Anuncio.find(criteria).populate({ path: 'redactor', select: 'nombre apellido' }).populate({ path: 'estados.area', select: 'nombre' });
         res.status(200).json(anuncios);
     } catch (error) {
         res.status(500).json({
