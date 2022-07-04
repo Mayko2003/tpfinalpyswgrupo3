@@ -1,16 +1,16 @@
 <nav class="navbar navbar-dark nav-fondo fw-bold text-capitalize navegacion">
     <div class="container-fluid">
         <!-- Se muestra un menu lateral cuando se preciona el boton -->
-        <button *ngIf="loginService.userLoggedIn() && (comun || encargado)" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuNav" aria-controls="menuNav">
+        <button *ngIf="loginService.userLoggedIn() && comun" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuNav" aria-controls="menuNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="#">Navbar</a>
 
-        <!-- Button toggle par aadministrador -->
+        <!-- Button toggle para administrador -->
         <div *ngIf="loginService.userLoggedIn() && admin">
             <button type="button" class="d-flex align-items-center btn text-light dropdown-toggle p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <a class="rounded-circle col-2" href="#">
-                    <img [src]="userImg" class="imagen-admin" alt="">
+                    <img [src]="userImg" class="imagen-nav" alt="">
                 </a>
                 <div class="ms-3 col-8">
                     <h6 class="m-0 p-0">{{loginService.userLogged()}}</h6>
@@ -30,7 +30,50 @@
                 </li>
                 <li class="dropdown-item">
                     <a class=" text-decoration-none text-dark nav-link d-flex justify-content-between" [routerLink]="['Login']" (click)="logout()">
-                        <p class="m-0">Cerrar Sesion</p><i class="bi bi-box-arrow-right text-danger"></i>
+                        <p class="m-0">Cerrar Sesion</p><i class="mx-1 bi bi-box-arrow-right text-danger"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Button toggle para Encargado -->
+        <div *ngIf="loginService.userLoggedIn() && encargado">
+            <button type="button" class="d-flex align-items-center btn text-light dropdown-toggle p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="rounded-circle col-2" href="#">
+                    <img [src]="userImg" class="imagen-nav" alt="">
+                </a>
+                <div class="ms-3 col-8">
+                    <h6 class="m-0 p-0">{{loginService.userLogged()}}</h6>
+                    <small>Engargado de <br> {{area.nombre}}</small>
+                </div>
+            </button>
+            <!-- Se muestra cuando se preciona el boton -->
+            <ul class="dropdown-menu dropdown-menu-end">
+                <!------------------------------------para administrador----------------------------->
+                <li class="dropdown-item w-100">
+                    <a class=" text-decoration-none text-dark nav-link d-flex justify-content-between" [routerLink]="['Login']" (click)="logout()">
+                        <p class="m-0">Cerrar Sesion</p><i class="mx-1 bi bi-box-arrow-right text-danger"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Button toggle para Encargado -->
+        <div *ngIf="loginService.userLoggedIn() && autoridad">
+            <button type="button" class="d-flex align-items-center btn text-light dropdown-toggle p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="rounded-circle col-2" href="#">
+                    <img [src]="userImg" class="imagen-nav" alt="">
+                </a>
+                <div class="ms-3 col-8">
+                    <h6>Autoridad</h6>
+                </div>
+            </button>
+            <!-- Se muestra cuando se preciona el boton -->
+            <ul class="dropdown-menu dropdown-menu-end">
+                <!------------------------------------para administrador----------------------------->
+                <li class="dropdown-item w-100">
+                    <a class=" text-decoration-none text-dark nav-link d-flex justify-content-between" [routerLink]="['Login']" (click)="logout()">
+                        <p class="m-0">Cerrar Sesion</p><i class="mx-1 bi bi-box-arrow-right text-danger"></i>
                     </a>
                 </li>
             </ul>
@@ -51,12 +94,6 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" routerLink='/MenuAnuncio' data-bs-dismiss="offcanvas" aria-label="Close">Menu Anuncios</a>
-                        </li>
-                    </div>
-                    <div *ngIf="encargado">
-                        <!-----------------------------------para Encargado------------------------>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" routerLink='/Encargado' data-bs-dismiss="offcanvas" aria-label="Close">Administrar anuncios</a>
                         </li>
                     </div>
                 </ul>

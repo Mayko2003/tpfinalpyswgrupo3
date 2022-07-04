@@ -64,11 +64,12 @@ export class PersonaComponent implements OnInit {
 
   //agrega una persona a la base de datos
   guardarPersona() {
-    this.personaService.addPersona(this.persona).subscribe();
-    this.getPersonas();
-    this.modoCrear = false;
-    this.rol = new Rol();
-    this.area = new Area();
+    this.personaService.addPersona(this.persona).subscribe(() => {
+      this.getPersonas();
+      this.modoCrear = false;
+      this.rol = new Rol();
+      this.area = new Area();
+    });
   }
 
   //elimina una persona en la base de datos
@@ -106,8 +107,12 @@ export class PersonaComponent implements OnInit {
 
   //actualiza los datos de una persona
   actualizarPersona(persona: Persona) {
-    this.personaService.updatePasaje(persona).subscribe();
-    this.modoEditar = false;
+    this.personaService.updatePasaje(persona).subscribe(() => {
+      this.getPersonas();
+      this.modoEditar = false;
+      this.rol = new Rol();
+      this.area = new Area();
+    });
   }
 
   //obtiene todas las personas

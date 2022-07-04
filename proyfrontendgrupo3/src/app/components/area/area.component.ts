@@ -116,6 +116,7 @@ export class AreaComponent implements OnInit {
     Object.assign(this.area.roles, this.area.roles);
     this.areaService.updateArea(this.area).subscribe((res) => {
       this.getAreas();
+      this.modoEditar = false;
     });
   }
 

@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
             sessionStorage.setItem("area",JSON.stringify(this.user.area));
             //redirigimos a home o a pagina que llamo
             
-            
               if(this.user.roles[0].nombre == "administrador"){
                 this.router.navigate(['/Persona'])   
               }
@@ -49,7 +48,7 @@ export class LoginComponent implements OnInit {
                 this.router.navigate(['/Encargado'])  
               }
               else if(this.user.roles[0].nombre  == "autoridad"){
-                this.router.navigate(['/estadisticas'])  
+                this.router.navigate(['/Estadisticas'])  
               }
               else{
                 this.router.navigate(['/MenuAnuncio']) 

@@ -9,7 +9,7 @@
     user-select: none;
 }
 
-.imagen-admin {
+.imagen-nav {
     height: 40px;
     width: 40px;
     pointer-events: none;
@@ -17,5 +17,6 @@
 }
 
 .navegacion {
-    height: 10vh;
+    min-height: 10vh;
+    max-height: 15vh;
 }
