@@ -16,7 +16,7 @@ const routes: Routes = [
   {path: 'Login', component:LoginComponent},
   {path: 'FormAnuncio', component:FormAnunciosComponent},
   {path: 'MenuAnuncio', component:MenuAnunciosComponent},
-  {path: 'estadisticas', component: EstadisticasComponent},
+  {path: 'Estadisticas', component: EstadisticasComponent},
   {path: 'recursos/:id', component: RecursosAnuncioComponent},
   {path: 'Encargado', component: EncargadoAnunciosComponent},
   {path: '**', pathMatch:'full', redirectTo:'Login'} 

@@ -81,7 +81,6 @@ export class MenuAnunciosComponent implements OnInit {
       .getAnunciosByRoles(this.rolesId, this.fecha, this.area._id)
       .subscribe((res) => {
         Object.assign(this.anuncios, res);
-        console.log(this.anuncios);
       });
   }
 
