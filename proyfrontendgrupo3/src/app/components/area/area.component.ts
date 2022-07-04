@@ -85,11 +85,18 @@ export class AreaComponent implements OnInit {
 
   //metodos manejar un AREA
   guardarArea() {
-    this.areaService.addArea(this.area).subscribe((res) => {
-      this.area = new Area();
-      this.area.roles = new Array<Rol>();
-      this.getAreas();
-      this.modoCrear = false;
+    this.rol = new Rol();
+    this.rol.nombre = 'encargado' + this.area.nombre.substring(0, 1).toUpperCase() + this.area.nombre.substring(1);
+    this.rolService.addRol(this.rol).subscribe((res) => {
+      Object.assign(this.rol, res);
+      this.area.roles.push(this.rol);
+      this.areaService.addArea(this.area).subscribe(() => {
+        this.rol = new Rol();
+        this.area = new Area();
+        this.area.roles = new Array<Rol>();
+        this.getAreas();
+        this.modoCrear = false;
+      });
     });
   }
 
@@ -129,11 +136,11 @@ export class AreaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  //validacion de peticion
-  this.cargarMisRoles();
-  if(this.roles[0].nombre != "administrador"){
+    //validacion de peticion
+    this.cargarMisRoles();
+    if (this.roles[0].nombre != "administrador") {
       this.router.navigate(['/Login'])
-  }
+    }
     this.getAreas();
   }
 

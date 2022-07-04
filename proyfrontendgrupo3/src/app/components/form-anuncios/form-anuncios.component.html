@@ -40,8 +40,8 @@
                         </div>
                         <div class="d-flex mb-3" *ngIf="anuncio.destinatarios">
                             <div *ngFor="let destinatario of anuncio.destinatarios">
-                                <span class="badge rounded-pill bg-primary p-3">{{destinatario.nombre|
-                                    titlecase}}</span>
+                                <span class="badge rounded-pill bg-primary p-3">{{destinatario.nombre|titlecase}}
+                                <button class="btn-close" type="button" (click)="quitarRol(anuncio.destinatarios.indexOf(rol))"></button></span>
                             </div>
                         </div>
                         <!-- Llamado al segundo Modal -->

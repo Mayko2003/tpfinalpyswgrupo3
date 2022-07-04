@@ -204,6 +204,11 @@ export class FormAnunciosComponent implements OnInit {
     }
   }
 
+  //elimina un rol de los destinatarios del anuncio
+  quitarRol(pos: number) {
+    this.anuncio.destinatarios.splice(pos, 1);
+  }
+
   //metodo para cargar medios
   agregarMedios() {
     if (this.medio != '') this.anuncio.mediosTransmision.push(this.medio);
