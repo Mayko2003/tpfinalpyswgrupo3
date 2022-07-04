@@ -1,7 +1,7 @@
 <div *ngIf="modoEditar || modoCrear" class="d-flex justify-content-center aling-items-center p-4 m-1">
     <form name="form" class="p-3 col-12 col-sm-11 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
-        <div class="d-flex align-md-items-center">
-            <p class="my-3 ms-3">Roles:</p>
+        <div class="d-flex align-items-center">
+            <p class="ms-3">Roles:</p>
             <div *ngIf="area.roles" class="d-md-flex my-3">
                 <div *ngFor="let rol of area.roles">
                     <span class="badge rounded-pill bg-primary p-2 mx-2">{{rol.nombre | titlecase}}
@@ -9,25 +9,25 @@
                     </span>
                 </div>
             </div>
-            <button type="button" class="barge btn bg-info mx-2 text-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#agregarRol">Agregar <i class="bi bi-plus"></i></button>
-            <!-- Modal -->
-            <div class="modal fade" id="agregarRol" tabindex="-1" aria-labelledby="agregarRol" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="agregarRol">Agregar Rol</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="barge btn bg-info my-1 mx-2 mb-3 text-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#agregarRol">Agregar <i class="bi bi-plus"></i></button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="agregarRol" tabindex="-1" aria-labelledby="agregarRol" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="agregarRol">Agregar Rol</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating px-1 col-12">
+                            <input [(ngModel)]="rol.nombre" type="text" class="form-control" name="rol" id="rol" placeholder="Rol">
+                            <label for="rol">Nuevo Rol:</label>
                         </div>
-                        <div class="modal-body">
-                            <div class="form-floating px-1 col-12">
-                                <input [(ngModel)]="rol.nombre" type="text" class="form-control" name="rol" id="rol" placeholder="Rol">
-                                <label for="rol">Nuevo Rol:</label>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-warning col-3" data-bs-dismiss="modal" (click)="agregarRol()">Agregar Rol</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-warning col-3" data-bs-dismiss="modal" (click)="agregarRol()">Agregar Rol</button>
                     </div>
                 </div>
             </div>
@@ -37,8 +37,8 @@
             <label for="nombre">Nombre de Area:</label>
         </div>
         <div class="d-flex justify-content-center">
-            <button *ngIf="modoCrear" type="submit" class="btn btn-primary" (click)="guardarArea()">Guardar Area</button>
-            <button *ngIf="modoEditar" type="submit" class="btn btn-primary" (click)="actualizarArea()">Actualizar Area</button>
+            <button [disabled]="!this.area.roles" *ngIf="modoCrear" type="submit" class="btn btn-primary" (click)="guardarArea()">Guardar Area</button>
+            <button [disabled]="!this.area.roles" *ngIf="modoEditar" type="submit" class="btn btn-primary" (click)="actualizarArea()">Actualizar Area</button>
             <button type="submit" class="btn btn-danger" (click)="modoEditar = false;  modoCrear = false">Cancelar</button>
         </div>
     </form>

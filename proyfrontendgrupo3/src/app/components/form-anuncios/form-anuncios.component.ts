@@ -15,10 +15,9 @@ import { QrService } from 'src/app/services/qr.service';
 @Component({
   selector: 'app-form-anuncios',
   templateUrl: './form-anuncios.component.html',
-  styleUrls: ['./form-anuncios.component.css']
+  styleUrls: ['./form-anuncios.component.css'],
 })
 export class FormAnunciosComponent implements OnInit {
-
   //variable usada para guardar o editar un anuncio
   anuncio: Anuncio = new Anuncio();
 
@@ -38,20 +37,25 @@ export class FormAnunciosComponent implements OnInit {
   estados: Array<Estado> = [];
   estado: Estado = new Estado();
 
-  //varibale para asegurar la subida de archivos 
-  upload: boolean = false
+  //varibale para asegurar la subida de archivos
+  upload: boolean = false;
 
   //para guardar los medios de transmicion
-  medios: Array<string> = ["FaceBook", "Instagram", "Twitter",]; //implementar variables locales!!!!!!!!!!!!!
-  medio: string = ""
+  medios: Array<string> = ['FaceBook', 'Instagram', 'Twitter']; //implementar variables locales!!!!!!!!!!!!!
+  medio: string = '';
 
   modoCrear!: boolean;
   modoEditar!: boolean;
 
-
-
-  constructor(private anuncioService: AnuncioService, private loginService: LoginService,
-    private areaService: AreaService, private qrService: QrService, private router: Router, private activatedRoute: ActivatedRoute, private emailService: EmailService) {
+  constructor(
+    private anuncioService: AnuncioService,
+    private loginService: LoginService,
+    private areaService: AreaService,
+    private qrService: QrService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private emailService: EmailService
+  ) {
     this.anuncio = new Anuncio();
     this.anuncio.recursos = new Array<Recurso>();
     this.anuncio.destinatarios = new Array<Rol>();
@@ -63,23 +67,24 @@ export class FormAnunciosComponent implements OnInit {
     this.estados = new Array<Estado>();
     this.estado = new Estado();
     this.estado.area = new Area();
-  
 
     this.modoEditar = false;
     this.modoCrear = false;
   }
 
-
   ngOnInit(): void {
     //validacion de peticion
     this.cargarMisRoles();
-    if (this.roles[0].nombre == "encargado" || this.roles[0].nombre == "administrador" || this.roles[0].nombre == "autoridad") {
-      this.router.navigate(['/Login'])
+    if (
+      this.roles[0].nombre == 'encargado' ||
+      this.roles[0].nombre == 'administrador' ||
+      this.roles[0].nombre == 'autoridad'
+    ) {
+      this.router.navigate(['/Login']);
     }
 
-
-    this.cargarAreas()
-    this.mostrarMisAnuncios()
+    this.cargarAreas();
+    this.mostrarMisAnuncios();
   }
 
   //metodo para cargar mis roles
@@ -90,116 +95,129 @@ export class FormAnunciosComponent implements OnInit {
 
   //-----------------------METODOS PARA GUARDAR/EDITAR MIS ANUNCIOS---------------------
 
-
   //metodo para cargar contenido y los recursos en el anuncio
   getFile(e: any, accion: string) {
     //agregar tipo de archivos
-    var Extensions = ["png", "jpg", "jpeg", "pdf", "gif", "html", "mp4", "avi", "webm"]
+    var Extensions = [
+      'png',
+      'jpg',
+      'jpeg',
+      'pdf',
+      'gif',
+      'html',
+      'mp4',
+      'avi',
+      'webm',
+    ];
 
     for (var i = 0; i < e.target.files.length; i++) {
       //controlamos el tamaño
       if (e.target.files[i].size / 1024 / 1024 > 8) {
-
-        alert("El tamaño del archivo supera los 8 MB")
-        this.upload = false
+        alert('El tamaño del archivo supera los 8 MB');
+        this.upload = false;
         return;
       }
 
       //controlamos las extenciones
-      var nam: string = e.target.files[0].name.split('.').pop()
+      var nam: string = e.target.files[0].name.split('.').pop();
       if (!Extensions.includes(nam)) {
-        alert("La extencion del archivo no es reconocible")
-        this.upload = false
+        alert('La extencion del archivo no es reconocible');
+        this.upload = false;
         return;
       }
 
-      //convertimos a base 64 pero antes controlamos el cual input es 
-      if (accion == "contenido") {
-        const reader = new FileReader()
-        reader.readAsDataURL(e.target.files[0])
-        let base64 = ""
+      //convertimos a base 64 pero antes controlamos el cual input es
+      if (accion == 'contenido') {
+        const reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0]);
+        let base64 = '';
         reader.onload = () => {
           if (reader.result != null) {
-            base64 = reader.result.toString()
-            this.anuncio.contenido = base64
-            this.anuncio.tipoContenido = nam
+            base64 = reader.result.toString();
+            this.anuncio.contenido = base64;
+            this.anuncio.tipoContenido = nam;
           }
-        }
-        this.upload = true
-      }
-      else {
-        const reader = new FileReader()
-        reader.readAsDataURL(e.target.files[i])
-        let base64 = ""
+        };
+        this.upload = true;
+      } else {
+        const reader = new FileReader();
+        reader.readAsDataURL(e.target.files[i]);
+        let base64 = '';
         reader.onload = () => {
           if (reader.result != null) {
-            base64 = reader.result.toString()
+            base64 = reader.result.toString();
             this.recurso = new Recurso();
-            this.recurso.recurso = base64
-            this.recurso.tipo = nam
-            this.anuncio.recursos.push(this.recurso)
-
+            this.recurso.recurso = base64;
+            this.recurso.tipo = nam;
+            this.anuncio.recursos.push(this.recurso);
           }
-        }
+        };
       }
     }
   }
 
-  //metodos para cargar las listas del formulario 
+  //metodos para cargar las listas del formulario
   cargarAreas() {
     this.areas = new Array<Area>();
-    this.areaService.getAreas().subscribe(res => {
-      Object.assign(this.areas, res)
-    })
+    this.areaService.getAreas().subscribe((res) => {
+      Object.assign(this.areas, res);
+    });
   }
 
   //metodo que carga la lista de roles segun el area
   cargarRolesArea(areaid: string) {
     this.roles = new Array<Rol>();
-    this.areaService.getRolesArea(areaid).subscribe(res => {
-      Object.assign(this.roles, res)
-    })
+    this.areaService.getRolesArea(areaid).subscribe((res) => {
+      Object.assign(this.roles, res);
+    });
   }
 
   //metodo para cargar los roles a un anuncios
   agregarRol(areaid: string) {
     //realizamos una verificacion de las areas para agregarlas a los estados
     if (this.estados) {
-      var band = false
+      var band = false;
       this.estados.forEach((element: any) => {
-        if (element.area._id == areaid) band = true
-      })
+        if (element.area._id == areaid) band = true;
+      });
       //en caso de que ningun estado sea igual se procede a crear un estado y asignarle el area
       if (!band) {
-        this.estado.area._id = areaid
-        this.estados.push(this.estado)
-        this.estado = new Estado()
+        this.estado.area._id = areaid;
+        this.estados.push(this.estado);
+        this.estado = new Estado();
         this.estado.area = new Area();
       }
     }
 
     //realizamos una verificacion para no guardar dos veces el mismo destinatario
 
-    band = false
+    band = false;
     this.anuncio.destinatarios.forEach((element: any) => {
-      if (element._id == this.rol._id) band = true
-    })
+      if (element._id == this.rol._id) band = true;
+    });
 
-    if (!band && JSON.stringify(this.rol) != "{}") {
+    if (!band && JSON.stringify(this.rol) != '{}') {
       var rolC = this.roles.find((r) => r._id == this.rol._id);
-      if (rolC) this.anuncio.destinatarios.push(rolC)
+      if (rolC) this.anuncio.destinatarios.push(rolC);
       this.rol = new Rol();
-      console.log(this.anuncio.destinatarios)
+      console.log(this.anuncio.destinatarios);
     }
+  }
+
+  //elimina un rol de los destinatarios del anuncio
+  quitarRol(pos: number) {
+    this.anuncio.destinatarios.splice(pos, 1);
   }
 
   //metodo para cargar medios
   agregarMedios() {
-    if (this.medio != "") this.anuncio.mediosTransmision.push(this.medio)
-    console.log(this.anuncio.mediosTransmision)
-
+    if (this.medio != '') this.anuncio.mediosTransmision.push(this.medio);
+    console.log(this.anuncio.mediosTransmision);
   }
 
+  quitarMedio(pos: number) {
+    this.anuncio.mediosTransmision.splice(pos,1)
+  }
 
   guardarAnuncio() {
 
@@ -225,32 +243,29 @@ export class FormAnunciosComponent implements OnInit {
           this.actualizarAnuncio();
           this.anuncio = new Anuncio();
         });
-    })
-    }
-    else{
+      });
+    } else {
       this.actualizarAnuncio();
     }
-    
   }
 
   actualizarAnuncio() {
-    this.anuncioService.updateAnuncio(this.anuncio).subscribe(res => { });
+    this.anuncioService.updateAnuncio(this.anuncio).subscribe((res) => {});
     this.anuncio = new Anuncio();
   }
 
-
   //------------------------------METODOS PAR CARGAR MIS ANUNCIOS----------------------------
   mostrarMisAnuncios() {
-    this.anuncios = new Array<Anuncio>()
-    var userid = this.loginService.idLogged()
+    this.anuncios = new Array<Anuncio>();
+    var userid = this.loginService.idLogged();
     if (userid) {
-      this.anuncioService.getAnunciosByUser(userid).subscribe(res => {
+      this.anuncioService.getAnunciosByUser(userid).subscribe((res) => {
         Object.assign(this.anuncios, res);
-        this.anuncios.forEach(anuncio => {
-          var fecha = new Date(anuncio.fechaSalidaVigencia).toISOString()
+        this.anuncios.forEach((anuncio) => {
+          var fecha = new Date(anuncio.fechaSalidaVigencia).toISOString();
           anuncio.fechaSalidaVigencia = new Date(fecha.substring(0, 10));
-        })
-      })
+        });
+      });
     }
   }
 

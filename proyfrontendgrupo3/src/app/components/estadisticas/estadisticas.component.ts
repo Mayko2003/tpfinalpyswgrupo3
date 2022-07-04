@@ -30,7 +30,7 @@ export class EstadisticasComponent implements OnInit {
   private meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
   roles: Array<Rol> = []
 
-  constructor(private anucioService: AnuncioService, private areaService: AreaService, private loginService: LoginService,private router: Router) {
+  constructor(private anucioService: AnuncioService, private areaService: AreaService, private loginService: LoginService, private router: Router) {
     this.anuncios = new Array<Anuncio>()
     this.areas = new Array<Area>()
     this.datosPieChart1 = []
@@ -42,8 +42,8 @@ export class EstadisticasComponent implements OnInit {
   ngOnInit(): void {
     //validacion de peticion
     this.cargarMisRoles();
-    if(this.roles[0].nombre != "autoridad"){
-        this.router.navigate(['/Login'])
+    if (this.roles[0].nombre != "autoridad") {
+      this.router.navigate(['/Login'])
     }
 
     this.areaService.getAreas().subscribe(
@@ -57,19 +57,19 @@ export class EstadisticasComponent implements OnInit {
     Object.assign(this.roles, rolesLogin);
   }
 
-  initBarChartDatos(tipo:string) {
+  initBarChartDatos(tipo: string) {
     this.datosBarChart = new Array<any>()
     var yearInicio = new Date(this.fechaInicio).getFullYear()
     var yearFin = new Date(this.fechaFin).getFullYear()
-    
+
     for (let i = yearInicio; i <= yearFin; i++) {
-      if(tipo == 'meses'){
+      if (tipo == 'meses') {
         this.meses.forEach(mes => {
           var item = { label: mes + " " + i, value: 0 }
           this.datosBarChart.push(item)
         })
       }
-      else{
+      else {
         var item = { label: i, value: 0 }
         this.datosBarChart.push(item)
       }
@@ -77,9 +77,9 @@ export class EstadisticasComponent implements OnInit {
   }
 
   setDatosBarChart(anuncio: Anuncio, index: number = 0) {
-    
-    if(this.tipo == 'meses'){
-      
+
+    if (this.tipo == 'meses') {
+
       var mes = anuncio.fechaEntradaVigencia.toLocaleString('es-ES', { month: 'long' })
       //capitalize the mes
       mes = mes.charAt(0).toUpperCase() + mes.slice(1)
@@ -89,7 +89,7 @@ export class EstadisticasComponent implements OnInit {
       //ya que un anuncio puede estar en 2 anios distintos
       var label1 = mes + " " + anuncio.fechaEntradaVigencia.getFullYear()
       var label2 = mes + " " + anuncio.fechaSalidaVigencia.getFullYear()
-      if(label1 == label2){
+      if (label1 == label2) {
         label2 = label2 + " sin efecto"
       }
       for (let i = 0; i < this.datosBarChart.length; i++) {
@@ -123,7 +123,7 @@ export class EstadisticasComponent implements OnInit {
   setDatosPieChart2(anuncio: Anuncio) {
     // generar datos para el grafico 2, segun tipo de rol
     anuncio.destinatarios.forEach(destinatario => {
-     var label = destinatario.nombre
+      var label = destinatario.nombre
 
       for (let i = 0; i < this.datosPieChart2.length; i++) {
         if (this.datosPieChart2[i].label == label) {
@@ -175,13 +175,13 @@ export class EstadisticasComponent implements OnInit {
   }
 
   filtrar() {
-    this.anucioService.getAnunciosFechaRango(this.fechaInicio, this.fechaFin,this.areaSeleccionada).subscribe(
+    this.anucioService.getAnunciosFechaRango(this.fechaInicio, this.fechaFin, this.areaSeleccionada).subscribe(
       result => {
         this.anuncios = result
-        if(this.anuncios.length == 0){
-          if(this.barChart) this.barChart.destroy()
-          if(this.pieChart1) this.pieChart1.destroy()
-          if(this.pieChart2) this.pieChart2.destroy()
+        if (this.anuncios.length == 0) {
+          if (this.barChart) this.barChart.destroy()
+          if (this.pieChart1) this.pieChart1.destroy()
+          if (this.pieChart2) this.pieChart2.destroy()
           return;
         }
         //generar datos

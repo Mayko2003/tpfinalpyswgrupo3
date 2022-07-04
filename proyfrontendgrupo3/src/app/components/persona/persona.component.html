@@ -36,17 +36,45 @@
                 </span>
             </div>
         </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="areas">Areas</label>
-            <select [(ngModel)]="persona.area._id" class="form-select" (change)="getRolesArea()" name="areas" id="areas">
-                <option *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
-            </select>
+        <div *ngIf="persona.area._id" class="d-flex align-md-items-center pb-3">
+            <p class="my-3 ms-3">Roles:</p>
+            <div *ngIf="persona.area.roles" class="d-md-flex my-3">
+                <div *ngFor="let rol of area.roles">
+                    <span class="badge rounded-pill bg-primary p-2 mx-2">{{rol.nombre | titlecase}}
+                        <button class="btn-close" type="button" (click)="quitarRol(area.roles.indexOf(rol))"></button>
+                    </span>
+                </div>
+            </div>
+            <button type="button" class="barge btn bg-info mx-2 my-1 text-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#agregarRol">Agregar <i class="bi bi-plus"></i></button>
+            <!-- Modal -->
+            <div class="modal fade" id="agregarRol" tabindex="-1" aria-labelledby="agregarRol" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="agregarRol">Agregar Rol</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-floating px-1 col-12">
+                                <select [(ngModel)]="rol._id" class="form-select" name="rolSelect" id="rolSelect">
+                                    <option *ngFor="let role of area.roles" [value]="role._id">{{role.nombre}}</option>
+                                </select>
+                                <label for="rolSelect">Seleccione Rol:</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal">Close</button>
+                            <button [disabled]="!rol._id" type="button" class="btn btn-warning col-3" data-bs-dismiss="modal" (click)="agregarRol(rol._id)">Agregar Rol</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div *ngIf="persona.area._id" class="input-group mb-3">
-            <select [(ngModel)]="rol._id" class="form-select" name="rol" id="rol" placeholder="Seleccione el Rol a asignar:">
-                <option *ngFor="let role of area.roles" [value]="role._id">{{role.nombre}}</option>
+        <div class="form-floating mb-3">
+            <select [(ngModel)]="persona.area._id" class="form-select" (change)="getRolesArea()" name="areasSelect" id="areasSelect">
+                <option [disabled]="persona.roles.length!=0"  [attr.data-bs-toggle]="{'modal':!persona.roles.length}" [attr.data-bs-target]="{'#actualizar':!persona.roles.length}" *ngFor="let area of areas" [value]="area._id">{{area.nombre}}</option>
             </select>
-            <button class="btn btn-primary" type="button" (click)="agregarRol(rol._id)">Agregar Rol</button>
+            <label for="areasSelect">Seleccione Area:</label>
         </div>
         <div class="d-flex justify-content-center">
             <button *ngIf="modoCrear" type="submit" class="btn btn-success" (click)="guardarPersona()">Guardar

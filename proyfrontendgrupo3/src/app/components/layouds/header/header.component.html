@@ -1,5 +1,6 @@
 <nav class="navbar navbar-dark nav-fondo fw-bold text-capitalize navegacion">
     <div class="container-fluid">
+        <!-- Se muestra un menu lateral cuando se preciona el boton -->
         <button *ngIf="loginService.userLoggedIn() && (comun || encargado)" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuNav" aria-controls="menuNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,6 +36,7 @@
             </ul>
         </div>
 
+        <!-- Menu lateral -->
         <div *ngIf="loginService.userLoggedIn()" class="offcanvas offcanvas-start nav-fondo" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="menuNav" aria-labelledby="menuNavLabel">
             <div class="offcanvas-header">
                 <h3 class="offcanvas-title text-light" id="menuNavLabel">Menu</h3>
