@@ -30,3 +30,5 @@ emailController.sendEmail = async(req, res) => {
     });
     
 }
+// export controller
+module.exports = emailController;

@@ -201,10 +201,12 @@ export class FormAnunciosComponent implements OnInit {
   }
 
 
-  guardarAnuncio(estado: string) {
+  guardarAnuncio() {
 
+    if(this.anuncio._id == null || this.anuncio._id == "")
+    {
     //agregamos los estados al anuncio 
-    this.estados.forEach((element: any) => { element.estado = estado })
+    this.estados.forEach((element: any) => { element.estado = "editar" })
     this.anuncio.estados = this.estados
 
     //agragamos el redactor al anuncio 
@@ -223,10 +225,12 @@ export class FormAnunciosComponent implements OnInit {
           this.actualizarAnuncio();
           this.anuncio = new Anuncio();
         });
-
-        //enviar correo
-
     })
+    }
+    else{
+      this.actualizarAnuncio();
+    }
+    
   }
 
   actualizarAnuncio() {
@@ -250,8 +254,8 @@ export class FormAnunciosComponent implements OnInit {
     }
   }
 
-  cambiarEstado(anuncio: Anuncio, estado: string) {
-    anuncio.estados.forEach((element:Estado)=>{ element.estado = estado})
+  publicarAnuncio(anuncio: Anuncio) {
+    anuncio.estados.forEach((element:Estado)=>{ element.estado = "confeccionado"})
     Object.assign(this.anuncio,anuncio)
     this.actualizarAnuncio();
     //editar -> solo  lo ve el usuario creador
@@ -261,16 +265,20 @@ export class FormAnunciosComponent implements OnInit {
     //cancelado -> nadie mas que el encargado lo ve
 
     //enviar correo
-    if(estado == 'confeccionado'){
-      this.anuncio.estados.forEach((element:Estado)=>{
-        this.areaService.getEncargado(element.area._id).subscribe(res=>{
-          var email = res.email
-          var text = 'El anuncio ' + anuncio.titulo + ' ha sido confeccionado por ' + anuncio.redactor.nombre + ' ' + anuncio.redactor.apellido + ' y esta pendiente de ser validado por usted'
-          this.emailService.send(email,text).subscribe(res=>{
-            console.log(res)
-          })
+    this.anuncio.estados.forEach((element:Estado)=>{
+      this.areaService.getEncargado(element.area._id).subscribe(res=>{
+        var email = res.email
+        var text = 'El anuncio ' + anuncio.titulo + ' ha sido confeccionado por ' + anuncio.redactor.nombre + ' ' + anuncio.redactor.apellido + ' y esta pendiente de ser validado por usted'
+        this.emailService.send(email,text).subscribe(res=>{
+          console.log(res)
         })
       })
-    }
+    })
+  }
+
+  editarAnuncio(anuncio: Anuncio){
+    
+    this.anuncio = anuncio
+
   }
 }

@@ -58,8 +58,7 @@
             </div>
             <div class="modal-footer">
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-success" (click)="guardarAnuncio('editar')">Guardar Anuncio</button>
-                    <button type="submit" class="btn btn-success" (click)="guardarAnuncio('confeccionado')">Publicar</button>
+                    <button type="submit" class="btn btn-success" (click)="guardarAnuncio()">Guardar Anuncio</button>
                 </div>
             </div>
         </div>
@@ -89,22 +88,22 @@
     Crear <i class="bi bi-plus fs-4"></i>
 </a>
 
-
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-coles-xl-4 row-cols-xxl-5">
-    <div *ngFor="let anuncioSelected of anuncios" class="card">
+<div class="row row-cols-4 row-cols-md-3 row-cols-lg-4 row-coles-xl-4 row-cols-xxl-5">
+    <div *ngFor="let anuncioSelected of anuncios" class="card ">
         <div class="card-header">
             <img [src]="anuncioSelected.contenido" alt="Card image cap" class="card-img-top img-fluid">
-            <div class="card-img-overlay"></div>
         </div>
         <div class="card-body">
-            <h5 class="card-title">{{anuncioSelected.titulo | titlecase}}</h5>
-            <p class="card-text">{{anuncioSelected.redactor.nombre | titlecase}} {{anuncioSelected.redactor.apellido | titlecase}}</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          <h5 class="card-title">{{anuncioSelected.titulo | titlecase}}</h5>
+          <p class="card-text"> Redactor: {{anuncioSelected.redactor.nombre | titlecase}} {{anuncioSelected.redactor.apellido | titlecase}}</p>
+          <p class="card-text"> Estados:</p>
+          <p *ngFor="let est of anuncioSelected.estados" class="card-text"><small>Area: {{est.area.nombre}} Estado: {{est.estado}}</small></p>
         </div>
         <div class="card-footer">
-            <a href="#form-anuncio" class="btn btn-warning" (click)="cambiarEstado(anuncioSelected,'editar');modoEditar=true;modoCrear=false" data-bs-toggle="modal" role="button">Editar</a>
-            <button type="submit" class="btn btn-success" (click)="cambiarEstado(anuncioSelected,'confeccionado')">Publicar</button>
+            <button  class="btn btn-success" (click)="editarAnuncio(anuncioSelected)" (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button" >Editar</button>
+            <button  class="btn btn-primary" (click)="publicarAnuncio(anuncioSelected)">Publicar</button>
         </div>
-    </div>
+      </div>
+
 </div>
 
