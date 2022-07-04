@@ -84,8 +84,9 @@ anuncioController.getAnunciosAreaEncargado = async(req,res)=>{
 anuncioController.getMisAnuncios = async(req,res)=>{
     try {
         var criteria = {"redactor":req.params.idPersona};
-        const anuncios = await Anuncio.find(criteria);
+        const anuncios = await Anuncio.find(criteria).populate({path:'redactor',select:'nombre apellido'}).populate({path:'estados.area',select:'nombre'});
         res.status(200).json(anuncios);
+        //console.log(anuncios[0].estados[0])
     } catch (error) {
         res.status(500).json({
             message: error,
