@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Area } from 'src/app/models/area';
 import { AreaService } from 'src/app/services/area.service';
 import { RolService } from 'src/app/services/rol.service';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-area',
@@ -25,9 +27,12 @@ export class AreaComponent implements OnInit {
   //variable que activa el modo crear
   modoCrear!: boolean;
 
+  roles!: Array<Rol>;
+
   constructor(
     private areaService: AreaService,
-    private rolService: RolService
+    private rolService: RolService, private router: Router, private loginService: LoginService
+
   ) {
     this.area = new Area();
     this.area.roles = new Array<Rol>();
@@ -36,6 +41,8 @@ export class AreaComponent implements OnInit {
 
     this.modoEditar = false;
     this.modoCrear = false;
+
+    this.roles = new Array<Rol>()
   }
 
   //metodos para cargar un ROL
@@ -122,6 +129,18 @@ export class AreaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  //validacion de peticion
+  this.cargarMisRoles();
+  if(this.roles[0].nombre != "administrador"){
+      this.router.navigate(['/Login'])
+  }
     this.getAreas();
   }
+
+  //metodo para cargar mis roles
+  cargarMisRoles() {
+    var rolesLogin = this.loginService.rolLogged();
+    Object.assign(this.roles, rolesLogin);
+  }
+
 }

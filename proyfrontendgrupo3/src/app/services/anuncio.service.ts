@@ -100,13 +100,13 @@ export class AnuncioService {
     return this._http.get(this.urlBase+"/area/"+area_id, httpOptions)
   }
   
-  public getAnunciosFiltro(roles:Array<string>,titulo:string,fecha1:string,fecha2:string,destinatarios:string,medio:string,redactor:string,estado:string,tipoContenido:string):Observable<any>{
+  public getAnunciosFiltro(area: string,titulo:string,fecha1:string,fecha2:string,destinatarios:string,medio:string,redactor:string,estado:string,tipoContenido:string):Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       }),
       params: {
-        'roles': roles,
+        'area': area,
         'titulo': titulo,
         'fechaSalidaVigencia':fecha1,
         'fechaEntradaVigencia': fecha2,
@@ -117,23 +117,9 @@ export class AnuncioService {
         'tipoContenido': tipoContenido
       }
     }
-    return this._http.get(this.urlBase+"/busqueda", httpOptions);
+    return this._http.post(this.urlBase+"/busqueda",null, httpOptions);
   }
 
-  public getAnunciosFechaRango(area:string,fechaInicio:Date,fechaFin:Date):Observable<any>{
-    const httpOptions = {
-      method: 'POST',
-      headers: new HttpHeaders({
-        "Content-Type": "application/json"
-      })
-    }
-    const body = {
-      "area": area,
-      "fechaI": fechaInicio.toString(),
-      "fechaF": fechaFin.toString()
-    }
-    return this._http.post(this.urlBase+"/fecha", body,httpOptions);
-  }
 
   //servicio para enviar un anuncio --> usado en el componente recursos
   public getAnuncio(id:string): Observable<any>{
@@ -143,5 +129,19 @@ export class AnuncioService {
       })
     }
     return this._http.get(this.urlBase+"/"+id, httpOptions)
+  }
+
+  public getAnunciosFechaRango(fechaI:string,fechaF:string,area:string): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      }),
+    }
+    const body = {
+      "fechaI": fechaI,
+      "fechaF": fechaF,
+      "area": area
+    }
+    return this._http.post(this.urlBase+"/fecha",body, httpOptions)
   }
 }

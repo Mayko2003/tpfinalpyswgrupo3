@@ -211,21 +211,21 @@ export class FormAnunciosComponent implements OnInit {
   }
 
   guardarAnuncio() {
-    if (this.anuncio._id == null || this.anuncio._id == '') {
-      //agregamos los estados al anuncio
-      this.estados.forEach((element: any) => {
-        element.estado = 'editar';
-      });
-      this.anuncio.estados = this.estados;
 
-      //agragamos el redactor al anuncio
-      var id = this.loginService.idLogged();
-      if (id != null) this.anuncio.redactor._id = id;
+    if(this.anuncio._id == null || this.anuncio._id == "")
+    {
+    //agregamos los estados al anuncio 
+    this.estados.forEach((element: any) => { element.estado = "editar" })
+    this.anuncio.estados = this.estados
 
-      //guardamos el anuncio
-      this.anuncioService.addAnuncio(this.anuncio).subscribe((res) => {
-        //en este momento generamos los qr para que se acoplen a cada host en caso de que se cambie de host
-        this.anuncio._id = res.id;
+    //agragamos el redactor al anuncio 
+    var id = this.loginService.idLogged()
+    if (id != null) this.anuncio.redactor._id = id
+
+    //guardamos el anuncio 
+    this.anuncioService.addAnuncio(this.anuncio).subscribe(res => {
+      //en este momento generamos los qr para que se acoplen a cada host en caso de que se cambie de host
+      this.anuncio._id = res.id;
         //generamos el url para el qr con el host actual, la direccion del componente y el parametro del id del anuncio
         var text = window.location.host + '/recursos/' + this.anuncio._id;
         console.log(text);
@@ -261,10 +261,8 @@ export class FormAnunciosComponent implements OnInit {
   }
 
   publicarAnuncio(anuncio: Anuncio) {
-    anuncio.estados.forEach((element: Estado) => {
-      element.estado = 'confeccionado';
-    });
-    Object.assign(this.anuncio, anuncio);
+    anuncio.estados.forEach((element:Estado)=>{ element.estado = "confeccionado"})
+    Object.assign(this.anuncio,anuncio)
     this.actualizarAnuncio();
     //editar -> solo  lo ve el usuario creador
     //confeccionado -> se lo envia al encargado
@@ -273,25 +271,20 @@ export class FormAnunciosComponent implements OnInit {
     //cancelado -> nadie mas que el encargado lo ve
 
     //enviar correo
-    this.anuncio.estados.forEach((element: Estado) => {
-      this.areaService.getEncargado(element.area._id).subscribe((res) => {
-        var email = res.email;
-        var text =
-          'El anuncio ' +
-          anuncio.titulo +
-          ' ha sido confeccionado por ' +
-          anuncio.redactor.nombre +
-          ' ' +
-          anuncio.redactor.apellido +
-          ' y esta pendiente de ser validado por usted';
-        this.emailService.send(email, text).subscribe((res:any) => {
-          console.log(res);
-        });
-      });
-    });
+    this.anuncio.estados.forEach((element:Estado)=>{
+      this.areaService.getEncargado(element.area._id).subscribe(res=>{
+        var email = res.email
+        var text = 'El anuncio ' + anuncio.titulo + ' ha sido confeccionado por ' + anuncio.redactor.nombre + ' ' + anuncio.redactor.apellido + ' y esta pendiente de ser validado por usted'
+        this.emailService.send(email,text).subscribe(res=>{
+          console.log(res)
+        })
+      })
+    })
   }
 
-  editarAnuncio(anuncio: Anuncio) {
-    this.anuncio = anuncio;
+  editarAnuncio(anuncio: Anuncio){
+    
+    this.anuncio = anuncio
+
   }
 }
