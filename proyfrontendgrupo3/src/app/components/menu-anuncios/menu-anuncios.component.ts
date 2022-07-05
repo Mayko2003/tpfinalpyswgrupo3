@@ -50,7 +50,6 @@ export class MenuAnunciosComponent implements OnInit {
 
     this.cargarAnunciosVigentes();
   }
-
   cargarMisRoles() {
     var rolesLogin = this.loginService.rolLogged();
     Object.assign(this.roles, rolesLogin);

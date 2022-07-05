@@ -158,8 +158,8 @@ export class EstadisticasComponent implements OnInit {
     return "rgba(" + r + "," + g + "," + b + "," + a + ")";
   }
 
-  crearChart(id: string, datos: Array<any>, tipo: any) {
-    var barChart = new Chart(id, {
+  crearChart(id: string, datos: Array<any>, tipo: any):any {
+    var chart = new Chart(id, {
       type: tipo,
       data: {
         labels: datos.map(dato => dato.label),
@@ -171,7 +171,7 @@ export class EstadisticasComponent implements OnInit {
       },
       options: {}
     });
-    return barChart
+    return chart
   }
 
   filtrar() {
@@ -189,13 +189,20 @@ export class EstadisticasComponent implements OnInit {
         this.generarDatos()
 
         //barchart
-        if (this.barChart) this.barChart.destroy()
+        if (this.barChart)
+          this.barChart.destroy()
         this.barChart = this.crearChart('barChart', this.datosBarChart, 'bar')
+
+
         //crear torta 1
-        if (this.pieChart1) this.pieChart1.destroy()
+        if (this.pieChart1)
+          this.pieChart1.destroy()
         this.pieChart1 = this.crearChart('pieChart1', this.datosPieChart1, 'pie')
+
+        
         //crear grafico torta 2
-        if (this.pieChart2) this.pieChart2.destroy()
+        if (this.pieChart2)
+          this.pieChart2.destroy()
         this.pieChart2 = this.crearChart('pieChart2', this.datosPieChart2, 'pie')
       }
     )

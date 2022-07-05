@@ -51,7 +51,7 @@
                         </div>
                         <div class="d-flex mb-3" *ngIf="anuncio.destinatarios && area._id">
                             <div *ngFor="let medio of anuncio.mediosTransmision">
-                                <span class="badge rounded-pill p-3" [ngClass]="{' bg-primary':medio=='FaceBook',' bg-danger':medio=='Instagram',' bg-info':medio=='Twitter'}">
+                                <span class="badge rounded-pill p-3" [ngClass]="{' bg-primary':medio==medios[0],' bg-danger':medio==medios[1],' bg-info':medio==medios[2]}">
                                     <i class="bi" [ngClass]="{' bi-facebook':medio=='FaceBook','bi-instagram':medio=='Instagram','bi-twitter':medio=='Twitter'}"></i> {{medio | titlecase}}
                                 <button class="btn-close" type="button" (click)="quitarMedio(anuncio.mediosTransmision.indexOf(medio))"></button></span>
                             </div>
@@ -122,7 +122,7 @@
         <div *ngFor="let anuncioSelected of anuncios" class="card ">
             <div class="card-header">
                 <div *ngIf="anuncioSelected.tipoContenido == 'mp4' || anuncioSelected.tipoContenido == 'avi' || anuncioSelected.tipoContenido == 'webm'" class="ratio ratio-16x9">
-                    <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
+                    <video allowfullscreen loop controls [controlsList]="'nodownload'" scrolling="no">
                         <source [type]="'video/'+anuncioSelected.tipoContenido" [src]="anuncioSelected.contenido">
                     </video>
                 </div>
@@ -130,18 +130,47 @@
                     <img [src]="anuncioSelected.contenido" [alt]="anuncioSelected.titulo+'.'+anuncioSelected.tipoContenido" class="w-100 img-fluid">
                 </div>
                 <div *ngIf="anuncioSelected.tipoContenido == 'pdf' || anuncioSelected.tipoContenido == 'html'">
-                    <iframe [src]="contenidos[anuncios.indexOf(anuncioSelected)]" frameborder="0" class="w-100"></iframe>
+                    <iframe [src]="contenidos[anuncios.indexOf(anuncioSelected)]" class="w-100"></iframe>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body d-flex flex-column justify-content-between">
                 <h5 class="card-title">{{anuncioSelected.titulo | titlecase}}</h5>
                 <p class="card-text"> Redactor: {{anuncioSelected.redactor.nombre | titlecase}} {{anuncioSelected.redactor.apellido | titlecase}}</p>
-                <p class="card-text"> Estados:</p>
-                <p *ngFor="let est of anuncioSelected.estados" class="card-text"><small>Area: {{est.area.nombre | titlecase}} Estado:
-                    {{est.estado | titlecase}}</small></p>
+                <div>
+                    <p>Medios de Transmision: </p>
+                    <div class="" *ngFor="let medio of anuncioSelected.mediosTransmision">
+                        <span class="badge rounded-pill p-3" [ngClass]="{' bg-primary':medio==medios[0],' bg-danger':medio==medios[1],' bg-info':medio==medios[2]}">
+                        <i class="bi pe-1" [ngClass]="{' bi-facebook':medio=='Facebook','bi-instagram':medio=='Instagram','bi-twitter':medio=='Twitter'}"></i>{{medio | titlecase}}
+                    </span>
+                    </div>
+                </div>
+                <p class="card-text pt-3 pb-0 mb-0"> Estados:</p>
+                <div *ngFor="let est of anuncioSelected.estados">
+                    <small class="card-text">Area: {{est.area.nombre | titlecase}} Estado: {{est.estado | titlecase}}</small>
+                </div>
+                <!-- Button Modal -->
+                <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" data-bs-target="#modalRecursos">Recursos <i
+                        class="bi bi-archive"></i></button>
             </div>
-            <div class="card-footer d-flex justify-content-around">
-                <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected)" (click)="modoCrear=false;modoEditar=true" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
+            <!-- Modal QR -->
+            <div class="modal fade" id="modalRecursos" tabindex="-1" aria-labelledby="modalRecursosLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalRecursosLabel">Recursos de {{anuncioSelected.titulo}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex justify-content-center">
+                            <img [src]="anuncioSelected.codigoQR" class="w-50" alt="QR Anuncio">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="anuncioSelected.estados[0].estado!='confeccionado' && anuncioSelected.estados[0].estado!='autorizado'" class="card-footer d-flex justify-content-around">
+                <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected);modoCrear=false;modoEditar=true" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
                 <button class="btn btn-primary" (click)="publicarAnuncio(anuncioSelected)">Publicar</button>
             </div>
         </div>

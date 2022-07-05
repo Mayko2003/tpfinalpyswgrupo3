@@ -20,7 +20,7 @@ export class EncargadoAnunciosComponent implements OnInit {
 
   //variables para cargar los anuncios
   anuncios: Array<Anuncio> = [];
-  anuncios2: Array<Anuncio> = [];
+  anuncioFiltro: Array<Anuncio> = [];
   anuncio: Anuncio = new Anuncio();
   areaId!:string;
   //variables para realizar el filtro segun el encargado y segun un estado de su eleccion "confeccionado, autorizado, cancelado"
@@ -72,14 +72,6 @@ export class EncargadoAnunciosComponent implements OnInit {
     this.rolesId = new Array<string>();
     var id = this.loginService.idLogged();
     var rolesLogin = this.loginService.rolLogged();
-    
-    /* if(rolesLogin != null){
-      Object.assign(this.roles,rolesLogin);
-      this.roles.forEach((element:any) => {
-        this.rolesId.push(element._id);
-      });
-      console.log(this.rolesId);
-    } */
     this.anuncios = new Array<Anuncio>();
     if (id) {
       this.personaService.getPersonabyID(id).subscribe(res=>{
@@ -143,11 +135,11 @@ export class EncargadoAnunciosComponent implements OnInit {
     this.cargarMiArea()
     console.log(this.area._id+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     
-    this.anuncios2 = new Array<Anuncio>();
+    this.anuncioFiltro = new Array<Anuncio>();
 
     this.anuncioService.getAnunciosFiltro(this.area._id,this.texto,this.fechaSalida,this.fechaEntrada,this.destinatario,this.medioPublicacion,this.redactor,this.estado2,this.tipoContenido).subscribe(res=>{
       console.log(res+"abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-      Object.assign(this.anuncios2,res);
+      Object.assign(this.anuncioFiltro,res);
     })
   }
   limpiarFiltro(){

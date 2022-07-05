@@ -20,7 +20,6 @@ export class HeaderComponent implements OnInit {
     this.roles = loginService.rolLogged();
     this.area = new Area();
     Object.assign(this.area, loginService.areaLogged())
-    console.log(this.area.nombre)
     if (this.roles) {
       this.roles.forEach((rol: any) => {
         switch (rol.nombre.toLowerCase()) {

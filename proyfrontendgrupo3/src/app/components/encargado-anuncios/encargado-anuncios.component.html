@@ -1,105 +1,104 @@
 <!---->
 <div class="row row-cols-1 row-cols-md-12 g-12">
-  <div class="filtros">
-      <div class="form-floating">
-          <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="estado" name="estado" (ngModelChange)="cargarAnuncios()">
-            <option value="autorizado">Autorizado</option>
-            <option value="cancelado">Cancelado</option>
-            <option value="confeccionado">Pendientes</option>
-          </select>
-          <label for="floatingSelect">Estados</label>
-      </div>
-  </div>
-  <div class="col">
-      <div class="card" *ngFor="let a of anuncios">
-          <div class="card-body">
-              <h5 class="card-title">Titulo: {{a.titulo}}</h5>
-              <p class="card-text">
-                  <ng-container *ngFor="let e of a.estados">
-                      <li><b *ngIf="e.area.toString()==areaId">{{e.estado}}</b></li>
-                  </ng-container>
-              </p>
-          </div>
-          <div class="d-grid gap-2 d-sm-block">
-              <button class="btn btn-primary" type="button" (click)="actualizarEstadoAnuncio(a,'autorizado')">Autorizar</button>
-              <button class="btn btn-danger" type="button" (click)="actualizarEstadoAnuncio(a,'cancelado')">Cancelar</button>
-              <button class="btn btn-warning" type="button" (click)="actualizarEstadoAnuncio(a,'confeccionado')">Confeccionado</button>
-          </div>
-      </div>
-      <div *ngIf="anuncios.length==0">
-          <h3>No hay anuncios con el estado {{estado}}</h3>
-      </div>
-  </div>
-<!--Filtros(botones y selectores)-->
-<h2 class="m-3 text-center">Busquedas avanzadas</h2>
-<div class="col">
-  <div class="card" *ngFor="let a of anuncios2">
-      <div class="card-body">
-          <h5 class="card-title">Titulo: {{a.titulo}}</h5>
-          <p class="card-text">
-              <ng-container *ngFor="let e of a.estados">
-                  <li><b *ngIf="e.area.toString()==areaId">{{e.estado}}</b></li>
-              </ng-container>
-          </p>
-      </div>
-  </div>
-  <div *ngIf="anuncios2.length==0">
-      <h3 class="text-center">Sin Resultados en tu Busqueda</h3>
-  </div>
-</div>
-<div class="filtros row">
-  <div class="form-floating col-6 p-0">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="tipoContenido" name="tipo" (ngModelChange)="actualizarFiltro()">
-      <option value="texto plano">Texto plano</option>
-      <option value="img">Imagen</option>
-      <option value="html">HTML</option>
-      <option value="tv">TV</option>
-      <option value="email">Email</option>
-      <option value="pdf">PDF</option>
-    </select>
-    <label for="floatingSelect">Tipo contenido</label>
-  </div>
-  <div class="form-floating col-6 p-0">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="estado2" name="estado2" (ngModelChange)="actualizarFiltro()">
-      <option value="confeccionado">Confeccionado</option>
-      <option value="autorizado">Autorizado</option>
-      <option value="cancelado">Cancelado</option>
-    </select>
-    <label for="floatingSelect">Estado</label>
-  </div>
-  <div class="form-floating col-6 p-0">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="medioPublicacion" name="medio" (ngModelChange)="actualizarFiltro()">
-      <option value="FaceBook">Facebook</option>
-      <option value="Instagram">Instagram</option>
-      <option value="Twitter">Twitter</option>
-    </select>
-    <label for="floatingSelect">Medio de publicacion</label>
-  </div>
-  <div class="form-floating col-6 p-0">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="redactor" name="redactor" (ngModelChange)="actualizarFiltro()">
-      <option value="{{r._id}}" *ngFor="let r of redactores">{{r.nombre|titlecase}}, {{r.apellido|titlecase}}</option>
-    </select>
-    <label for="floatingSelect">Redactor</label>
-  </div>
-  <div class="form-floating col-6 p-0">
-    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="destinatario" name="destinatario" (ngModelChange)="actualizarFiltro()">
-      <option value="{{d._id}}" *ngFor="let d of destinatarios">{{d.nombre|titlecase}}</option>
-    </select>
-    <label for="floatingSelect">Destinatarios</label>
-  </div>
-  <div class="form-floating col-6 p-0">
-    <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" [(ngModel)]="texto" name="texto" (ngModelChange)="actualizarFiltro()">
-    <label for="floatingInput">Texto</label>
-  </div>
-  <div class="form-floating col-6 p-0">
-    <input type="date" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="fechaEntrada" name="fechaEntrada" (ngModelChange)="actualizarFiltro()">
-    <label for="floatingPassword">Fecha de Entrada</label>
-  </div>
-  <div class="form-floating col-6 p-0">
-    <input type="date" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="fechaSalida" name="fechaSalida" (ngModelChange)="actualizarFiltro()">
-    <label for="floatingPassword">Fecha de Vigencia</label>
-  </div>
-  <button type="button" class="btn btn-warning" (click)="limpiarFiltro()">Limpiar</button>
-</div>
-
+    <div class="filtros">
+        <div class="form-floating">
+            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="estado" name="estado" (ngModelChange)="cargarAnuncios()">
+              <option value="autorizado">Autorizado</option>
+              <option value="cancelado">Cancelado</option>
+              <option value="confeccionado">Pendientes</option>
+            </select>
+            <label for="floatingSelect">Estados</label>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card" *ngFor="let a of anuncios">
+            <div class="card-body">
+                <h5 class="card-title">Titulo: {{a.titulo}}</h5>
+                <p class="card-text">
+                    <ng-container *ngFor="let e of a.estados">
+                        <li><b *ngIf="e.area.toString()==areaId">{{e.estado}}</b></li>
+                    </ng-container>
+                </p>
+            </div>
+            <div class="d-grid gap-2 d-sm-block">
+                <button class="btn btn-primary" type="button" (click)="actualizarEstadoAnuncio(a,'autorizado')">Autorizar</button>
+                <button class="btn btn-danger" type="button" (click)="actualizarEstadoAnuncio(a,'cancelado')">Cancelar</button>
+                <button class="btn btn-warning" type="button" (click)="actualizarEstadoAnuncio(a,'confeccionado')">Confeccionado</button>
+            </div>
+        </div>
+        <div *ngIf="anuncios.length==0">
+            <h3>No hay anuncios con el estado {{estado}}</h3>
+        </div>
+    </div>
+    <!--Filtros(botones y selectores)-->
+    <h2 class="m-3 text-center">Busquedas avanzadas</h2>
+    <div class="col">
+        <div class="card" *ngFor="let a of anuncioFiltro">
+            <div class="card-body">
+                <h5 class="card-title">Titulo: {{a.titulo}}</h5>
+                <p class="card-text">
+                    <ng-container *ngFor="let e of a.estados">
+                        <li><b *ngIf="e.area.toString()==areaId">{{e.estado}}</b></li>
+                    </ng-container>
+                </p>
+            </div>
+        </div>
+        <div *ngIf="anuncioFiltro.length==0">
+            <h3 class="text-center">Sin Resultados en tu Busqueda</h3>
+        </div>
+    </div>
+    <div class="filtros row">
+        <div class="form-floating col-6 p-0">
+            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="tipoContenido" name="tipo" (ngModelChange)="actualizarFiltro()">
+              <option value="texto plano">Texto plano</option>
+              <option value="img">Imagen</option>
+              <option value="html">HTML</option>
+              <option value="tv">TV</option>
+              <option value="email">Email</option>
+              <option value="pdf">PDF</option>
+            </select>
+            <label for="floatingSelect">Tipo contenido</label>
+        </div>
+        <div class="form-floating col-6 p-0">
+            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="estado2" name="estado2" (ngModelChange)="actualizarFiltro()">
+              <option value="confeccionado">Confeccionado</option>
+              <option value="autorizado">Autorizado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+            <label for="floatingSelect">Estado</label>
+        </div>
+        <div class="form-floating col-6 p-0">
+            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="medioPublicacion" name="medio" (ngModelChange)="actualizarFiltro()">
+              <option value="FaceBook">Facebook</option>
+              <option value="Instagram">Instagram</option>
+              <option value="Twitter">Twitter</option>
+            </select>
+            <label for="floatingSelect">Medio de publicacion</label>
+        </div>
+        <div class="form-floating col-6 p-0">
+            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="redactor" name="redactor" (ngModelChange)="actualizarFiltro()">
+              <option value="{{r._id}}" *ngFor="let r of redactores">{{r.nombre|titlecase}}, {{r.apellido|titlecase}}</option>
+            </select>
+            <label for="floatingSelect">Redactor</label>
+        </div>
+        <div class="form-floating col-6 p-0">
+            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="destinatario" name="destinatario" (ngModelChange)="actualizarFiltro()">
+              <option value="{{d._id}}" *ngFor="let d of destinatarios">{{d.nombre|titlecase}}</option>
+            </select>
+            <label for="floatingSelect">Destinatarios</label>
+        </div>
+        <div class="form-floating col-6 p-0">
+            <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" [(ngModel)]="texto" name="texto" (ngModelChange)="actualizarFiltro()">
+            <label for="floatingInput">Texto</label>
+        </div>
+        <div class="form-floating col-6 p-0">
+            <input type="date" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="fechaEntrada" name="fechaEntrada" (ngModelChange)="actualizarFiltro()">
+            <label for="floatingPassword">Fecha de Entrada</label>
+        </div>
+        <div class="form-floating col-6 p-0">
+            <input type="date" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="fechaSalida" name="fechaSalida" (ngModelChange)="actualizarFiltro()">
+            <label for="floatingPassword">Fecha de Vigencia</label>
+        </div>
+        <button type="button" class="btn btn-warning" (click)="limpiarFiltro()">Limpiar</button>
+    </div>
 </div>

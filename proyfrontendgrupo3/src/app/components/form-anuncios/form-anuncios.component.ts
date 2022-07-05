@@ -29,20 +29,20 @@ export class FormAnunciosComponent implements OnInit {
   recurso!: Recurso;
 
   //variable para agregar las areas y los roles
-  areas: Array<Area> = [];
+  areas: Array<Area>;
   area: Area = new Area();
-  roles: Array<Rol> = [];
+  roles: Array<Rol>;
   rol: Rol = new Rol();
 
   //para guardar estados de
-  estados: Array<Estado> = [];
+  estados: Array<Estado>;
   estado: Estado = new Estado();
 
   //varibale para asegurar la subida de archivos
   upload: boolean = false;
 
   //para guardar los medios de transmicion
-  medios: Array<string> = ['FaceBook', 'Instagram', 'Twitter']; //implementar variables locales!!!!!!!!!!!!!
+  medios: Array<string> = ['Facebook', 'Instagram', 'Twitter']; //implementar variables locales!!!!!!!!!!!!!
   medio: string = '';
 
   modoCrear!: boolean;
@@ -225,6 +225,7 @@ export class FormAnunciosComponent implements OnInit {
           this.actualizarAnuncio();
           this.anuncio = new Anuncio();
         });
+      this.mostrarMisAnuncios()
       });
     } else {
       this.actualizarAnuncio();
@@ -273,8 +274,6 @@ export class FormAnunciosComponent implements OnInit {
   }
 
   editarAnuncio(anuncio: Anuncio){
-    
-    this.anuncio = anuncio
-
+    Object.assign(this.anuncio,anuncio)
   }
 }
