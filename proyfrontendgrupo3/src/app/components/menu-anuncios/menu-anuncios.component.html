@@ -1,32 +1,25 @@
 <ng-template [ngIf]="anuncios.length" [ngIfElse]="sinAnuncios">
     <!------------------------------Slider para los tiempo de lectura---------------------------------->
     <div class="d-flex justify-content-center">
-        <div id="carouselAnuncios" class="carousel slide" data-bs-ride="carousel" style="max-width:80vw">
+        <div id="carouselAnuncios" class="carousel slide overflow-hidden" data-bs-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item" *ngFor="let anuncio of anuncios; let i = index" [ngClass]="{'active': i === 1}" [attr.data-bs-interval]="{'2000':(anuncio.tiempoLectura == 'corto'),'5000':(anuncio.tiempoLectura == 'medio'),'10000':(anuncio.tiempoLectura == 'largo')}">
-
-                    <div [ngSwitch]="anuncio.tipoContenido" class="card">
-                        <div *ngSwitchCase="'pdf' || 'html'" class="w-100">
-                            <iframe [src]="anuncio.contenido" frameborder="0"></iframe>
-                        </div>
-                        <div *ngSwitchCase="'png' || 'jpg' || 'jpeg' || 'gif'">
-                            <img [src]="anuncio.contenido" class="img-fluid">
-                        </div>
-                        <div *ngSwitchCase="'avi'||'mp4'||'webm'" class="ratio ratio-16x9">
-                            <iframe allowfullscreen controls frameborder="0" scrolling="no" [src]="anuncio.contenido"></iframe>
-                            <video allowfullscreen controls frameborder="0" scrolling="no" [src]="anuncio.contenido"></video>
-                        </div>
-                        <div class="carousel-caption bg-transduced d-none d-md-block">
-                            <h5>{{anuncio.titulo}}</h5>
-                            <p>Vigencia del {{anuncio.fechaEntradaVigencia | date}} al {{anuncio.fechaSalidaVigencia|date}}</p>
-                            <div *ngFor="let medio of anuncio.mediosTransmision">
-                                <span class="py-1 px-3 my-0 mx-1">{{medio}}</span>
-                            </div>
-                        </div>
+                <div class="carousel-item p-0 m-0 w-100" *ngFor="let anuncio of anuncios; let i = index" [ngClass]="{'active': i === 1}" [attr.data-bs-interval]="{'2000':(anuncio.tiempoLectura == 'corto'),'5000':(anuncio.tiempoLectura == 'medio'),'10000':(anuncio.tiempoLectura == 'largo')}">
+                    <!-- Muestra contenido autiovisual -->
+                    <div *ngIf="anuncio.tipoContenido == 'mp4' || anuncio.tipoContenido == 'avi' || anuncio.tipoContenido == 'webm'" class="ratio ratio-16x9">
+                        <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no" width="100%">
+                            <source [type]="'video/'+anuncio.tipoContenido" [src]="contenidos[anuncios.indexOf(anuncio)]">
+                        </video>
+                    </div>
+                    <!-- Muestra imagenes y gifs -->
+                    <div *ngIf="anuncio.tipoContenido == 'jpg' || anuncio.tipoContenido == 'jpeg' || anuncio.tipoContenido == 'png'  || anuncio.tipoContenido == 'gif'" class="w-100 h-100">
+                        <img [src]="contenidos[anuncios.indexOf(anuncio)]" [alt]="anuncio.titulo+'.'+anuncio.tipoContenido" class="img-fluid w-100">
+                    </div>
+                    <!-- muestra archivos -->
+                    <div *ngIf="anuncio.tipoContenido == 'pdf' || anuncio.tipoContenido == 'html'">
+                        <iframe class="w-100" style="height: 50vh;" allowfullscreen controls [src]="contenidos[anuncios.indexOf(anuncio)]" frameborder="0"></iframe>
                     </div>
                 </div>
             </div>
-
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselAnuncios" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
@@ -39,21 +32,33 @@
     </div>
 
     <!------------------------------mostrar anuncios vigentes para sus roles---------------------------------->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 pt-5 pb-5 mx-0">
-        <div class="col my-4 mx-auto shadow-lg rounded-3" *ngFor="let a of anuncios">
-            <img class="card-img-top" [src]=a.contenido alt="Card image cap">
-            <div class="card-body">
+    <hr class="dropdown-divider">
+    <h3 class="w-100 d-flex justify-content-center">Anuncios Vigentes</h3>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 pt-3 pb-5 mx-0">
+        <div class="col my-4 mx-auto shadow-lg rounded-3 card" *ngFor="let a of anuncios" class="card">
+            <div class="card-header">
+                <div *ngIf="a.tipoContenido == 'mp4' || a.tipoContenido == 'avi' || a.tipoContenido == 'webm'" class="ratio ratio-16x9">
+                    <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
+                        <source [type]="'video/'+a.tipoContenido" [src]="contenidos[anuncios.indexOf(a)]">
+                    </video>
+                </div>
+                <div *ngIf="a.tipoContenido == 'jpg' || a.tipoContenido == 'jpeg' || a.tipoContenido == 'png'  || a.tipoContenido == 'gif'">
+                    <img [src]="contenidos[anuncios.indexOf(a)]" [alt]="a.titulo+'.'+a.tipoContenido" class="w-100 img-fluid">
+                </div>
+                <div *ngIf="a.tipoContenido == 'pdf' || a.tipoContenido == 'html'">
+                    <iframe [src]="contenidos[anuncios.indexOf(a)]" frameborder="0" class="w-100"></iframe>
+                </div>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-between">
                 <h5 class="card-title">{{a.titulo}}</h5>
                 <p class="card-text">{{a.redactor.nombre}} {{a.redactor.apellido}}</p>
                 <p class="card-text">
                     <ng-container *ngFor="let e of a.estados">
-                        <li class="list-group-item bg-success">Estado del Anuncio: {{e.estado}}</li>
+                        <li class="list-group-item" [ngClass]="{'bg-success':e.estado=='autorizado'}">Estado del Anuncio: {{e.estado}}</li>
                     </ng-container>
                 </p>
                 <!-- Button Modal -->
-                <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" data-bs-target="#modalRecursos">
-              Recursos <i class="bi bi-archive"></i>
-            </button>
+                <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" data-bs-target="#modalRecursos">Recursos <i class="bi bi-archive"></i></button>
             </div>
             <!-- Modal QR -->
             <div class="modal fade" id="modalRecursos" tabindex="-1" aria-labelledby="modalRecursosLabel" aria-hidden="true">
@@ -77,6 +82,7 @@
 
     <!------------filtrar anuncios historicos para algunos de sus roles---------------------->
     <div class="container-fluid">
+        <h2>Filtrar Anuncios Historicos</h2>
         <div class="d-flex">
             <select class="form-select" [(ngModel)]="rolElegido" name="rolElegido">
                 <option *ngFor="let r of roles" value={{r._id}}>{{r.nombre}}</option>

@@ -38,10 +38,7 @@ export class PersonaComponent implements OnInit {
 
   roles!: Array<Rol>;
 
-  constructor(
-    private personaService: PersonaService,
-    private areaService: AreaService, private router: Router, private loginService: LoginService
-  ) {
+  constructor( private personaService: PersonaService, private areaService: AreaService, private router: Router, private loginService: LoginService ) {
     this.modoEditar = false;
     this.modoCrear = false;
 

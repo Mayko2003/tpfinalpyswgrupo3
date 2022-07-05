@@ -71,7 +71,7 @@ anuncioController.getAnuncio = async(req, res) => {
 // obtener un anuncio segun area encargado de acuerdo al estado
 anuncioController.getAnunciosAreaEncargado = async(req, res) => {
     try {
-        const anuncios = await Anuncio.find({ '$or': [{ "estados": { '$elemMatch': { 'estado': req.params.estado, 'area': req.params.idArea } } }] });
+        const anuncios = await Anuncio.find({ '$or': [{ "estados": { '$elemMatch': { 'estado': req.params.estado, 'area': req.params.idArea } } }] }).populate('redactor', 'nombre apellido').populate('destinatarios', 'nombre');
         res.status(200).json(anuncios);
     } catch (error) {
         res.status(500).json({
@@ -86,7 +86,6 @@ anuncioController.getMisAnuncios = async(req, res) => {
         var criteria = { "redactor": req.params.idPersona };
         const anuncios = await Anuncio.find(criteria).populate({ path: 'redactor', select: 'nombre apellido' }).populate({ path: 'estados.area', select: 'nombre' });
         res.status(200).json(anuncios);
-        //console.log(anuncios[0].estados[0])
     } catch (error) {
         res.status(500).json({
             message: error,
@@ -129,7 +128,6 @@ anuncioController.obtenerAnunciosFecha = async(req, res) => {
             toDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), valor + 1);
             criteria = { "fechaSalidaVigencia": { '$gte': fromDate, '$lte': toDate } };
         }
-        console.log(criteria);
         const anuncios = await Anuncio.find(criteria);
         res.status(200).json(anuncios);
     } catch (error) {
@@ -145,8 +143,7 @@ anuncioController.obtenerAnunciosFechaRango = async(req, res) => {
         const fechaInicio = req.body.fechaI;
         const fechaFinal = req.body.fechaF;
         const area = req.body.area;
-        var criteria = { fechaEntradaVigencia: { '$gte': fechaInicio }, fechaSalidaVigencia: { '$lte': fechaFinal }, "estados.area": area };
-        console.log(criteria);
+        var criteria = { fechaEntradaVigencia: { '$gte': fechaInicio }, fechaSalidaVigencia: { '$lte': fechaFinal }, "estados.area": area, "estados.estado": 'autorizado' };
         const anuncios = await Anuncio.find(criteria).populate('destinatarios');
         res.status(200).json(anuncios);
     } catch (error) {
@@ -159,7 +156,6 @@ anuncioController.obtenerAnunciosFechaRango = async(req, res) => {
 // busqueda de anuncio por tipoContenido(probado)
 anuncioController.busquedaAnuncioTipoContenido = async(req, res) => {
     try {
-        console.log(req.params.tipo);
         var criteria = { "tipoContenido": req.params.tipo };
         const anuncios = await Anuncio.find(criteria);
         res.status(200).json(anuncios);
@@ -201,7 +197,6 @@ anuncioController.getAnuncioFiltro = async(req, res) => {
             const fechaSalidaVigencia = req.query.fechaSalidaVigencia == '' ? null : req.query.fechaSalidaVigencia;
             const fechaEntradaVigencia = req.query.fechaEntradaVigencia == '' ? null : req.query.fechaEntradaVigencia;
             const titulo = req.query.titulo == '' ? null : new RegExp(`${req.query.titulo}`);
-            //console.log(fechaEntradaVigencia+fechaSalidaVigencia+"aaaaaaaasheuuuua"+medioTransmision+area);
             const criteria = {
                 '$and': [
                     { "fechaSalidaVigencia": { '$gte': fecha }, "estados": { '$elemMatch': { 'estado': { '$ne': 'editar' }, 'area': area } } },
@@ -210,15 +205,15 @@ anuncioController.getAnuncioFiltro = async(req, res) => {
                     { "redactor": redactor == null ? { '$exists': true } : redactor },
                     { "mediosTransmision": medioTransmision == null ? { '$in': /[a-zA-Z0-9]/ } : medioTransmision },
                     { "destinatarios": destinatarios == null ? { '$exists': true } : destinatarios },
-                    /* {'$and':[{"fechaSalidaVigencia":fechaSalidaVigencia == null ? {'$exists':true} : {'$lte':fechaSalidaVigencia}},
-                             {"fechaEntradaVigencia":fechaEntradaVigencia == null ? {'$exists':true} : {'$gte':fechaEntradaVigencia}}]
-                    }, POR ALGUNA RAZON ALGUNOS ANUNCIOS NO TIENEN FECHADEENTRADA, PERO SI ANDA*/
+                    {
+                        '$and': [{ "fechaSalidaVigencia": fechaSalidaVigencia == null ? { '$exists': true } : { '$lte': fechaSalidaVigencia } },
+                            { "fechaEntradaVigencia": fechaEntradaVigencia == null ? { '$exists': true } : { '$gte': fechaEntradaVigencia } }
+                        ]
+                    },
                     { "titulo": titulo == null ? /[a-zA-Z0-9]/ : titulo }
                 ]
             }
-            console.log(req.query.estado);
-            const anuncios = await Anuncio.find(criteria);
-            console.log(anuncios.length)
+            const anuncios = await Anuncio.find(criteria).populate('redactor', 'nombre apellido').populate('destinatarios');
             res.status(200).json(anuncios);
         } catch (error) {
             res.status(500).json({

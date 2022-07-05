@@ -75,11 +75,16 @@ areaController.getRoles = async(req, res) => {
 
 areaController.getEncargado = async(req, res) => {
     try {
-        const area = req.params.id
-        const rol = await Rol.findOne({ nombre: 'Encargado' });
+        const IDarea = req.params.id;
         //find an person with the area and the roles include the rol
-        const encargado = await Persona.find({ area: area, roles: rol._id });
-        res.status(200).json(encargado);
+        const area = await Area.findById(IDarea).populate('roles');
+        var encargado = ''
+        area.roles.forEach(async(rol) => {
+            if (rol.nombre == 'encargado' || rol.nombre == 'Encargado') {
+                encargado = await Persona.findOne({ roles: { $in: rol } })
+                res.status(200).json(encargado);
+            }
+        })
     } catch (error) {
         res.status(500).json({
             message: error

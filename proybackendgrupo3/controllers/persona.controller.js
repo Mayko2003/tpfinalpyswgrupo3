@@ -70,8 +70,7 @@ personaController.loginPersona = async(req, res) => {
             res.status(400).json({
                 message: "Usuario o contraseña incorrectos",
             });
-        }
-        else{
+        } else {
             token = jwt.sign({ id: persona._id }, "jwtsecret");
             res.status(200).json({
                 persona: persona,
@@ -79,7 +78,6 @@ personaController.loginPersona = async(req, res) => {
             });
         }
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             msj: "Error al obtener la persona",
         });
@@ -97,26 +95,26 @@ personaController.getLoggedPersona = async(req, res) => {
     }
 }
 
-personaController.getPersonaById = async(req,res)=>{
-    try{
+personaController.getPersonaById = async(req, res) => {
+    try {
         const persona = await Persona.findById(req.params.id);
         res.status(200).json(persona);
-    }catch(error){
+    } catch (error) {
         res.status(500).json({
             message: error,
         });
     }
 }
 
-personaController.getPersonasByArea = async(req,res)=>{
-    try{
-        const personas = await Persona.find({'area':req.params.idArea});
-        res.status(200).json(personas);
-    }catch(error){
-        res.status(500).json({
-            message: error,
-        });
+personaController.getPersonasByArea = async(req, res) => {
+        try {
+            const personas = await Persona.find({ 'area': req.params.idArea });
+            res.status(200).json(personas);
+        } catch (error) {
+            res.status(500).json({
+                message: error,
+            });
+        }
     }
-}
-// export controller
+    // export controller
 module.exports = personaController;

@@ -4,7 +4,7 @@
         <button *ngIf="loginService.userLoggedIn() && comun" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuNav" aria-controls="menuNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">Navbar</a>
+        <h4 class="navbar-brand">Grupo 3</h4>
 
         <!-- Button toggle para administrador -->
         <div *ngIf="loginService.userLoggedIn() && admin">
@@ -44,7 +44,7 @@
                 </a>
                 <div class="ms-3 col-8">
                     <h6 class="m-0 p-0">{{loginService.userLogged()}}</h6>
-                    <small>Engargado de <br> {{area.nombre}}</small>
+                    <small>{{roles[0].nombre}} de <br> {{area.nombre}}</small>
                 </div>
             </button>
             <!-- Se muestra cuando se preciona el boton -->
@@ -58,7 +58,7 @@
             </ul>
         </div>
 
-        <!-- Button toggle para Encargado -->
+        <!-- Button toggle para Autoridad -->
         <div *ngIf="loginService.userLoggedIn() && autoridad">
             <button type="button" class="d-flex align-items-center btn text-light dropdown-toggle p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <a class="rounded-circle col-2" href="#">
