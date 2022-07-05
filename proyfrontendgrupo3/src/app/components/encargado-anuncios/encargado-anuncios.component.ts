@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
@@ -15,8 +16,6 @@ import { PersonaService } from 'src/app/services/persona.service';
   styleUrls: ['./encargado-anuncios.component.css']
 })
 export class EncargadoAnunciosComponent implements OnInit {
-
-  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService:PersonaService, private areaService:AreaService,private router: Router) { }
 
   //variables para cargar los anuncios
   anuncios: Array<Anuncio> = [];
@@ -37,9 +36,15 @@ export class EncargadoAnunciosComponent implements OnInit {
   texto:string = '';
   destinatarios!:Array<Rol>;
   fechaSalida:string = '';
-  fechaEntrada:string = '';
-  ngOnInit(): void {
+  fechaEntrada: string = '';
 
+  //valida los recursos que se mostraran en la visata
+  contenidos!: Array<SafeResourceUrl>;
+  contenidosFiltro!: Array<SafeResourceUrl>;
+
+  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService:PersonaService, private areaService:AreaService,private router: Router, private sanitizer:DomSanitizer) { }
+  
+  ngOnInit(): void {
     //validacion de peticion
     this.cargarMisRoles();
     if (this.roles[0].nombre != "Encargado" && this.roles[0].nombre != "encargado"){
@@ -51,13 +56,13 @@ export class EncargadoAnunciosComponent implements OnInit {
     this.cargarDestinatarios();
     this.cargarPersonas();
     this.cargarMiArea()
+    this.limpiarFiltro();
   }
 
   cargarMiArea() {
     this.area = new Area();
     var areaLogin = this.loginService.areaLogged()
     Object.assign(this.area, areaLogin)
-    console.log(this.area)
   }
 
   //metodo para cargar mis roles
@@ -65,7 +70,6 @@ export class EncargadoAnunciosComponent implements OnInit {
     var rolesLogin = this.loginService.rolLogged();
     Object.assign(this.roles, rolesLogin);
   }
-
 
   //este procesimiento cargara los anuncios que pertenezcan al area del encargado y tengan el estado "confeccionado"
   cargarAnuncios() {
@@ -77,14 +81,17 @@ export class EncargadoAnunciosComponent implements OnInit {
       this.personaService.getPersonabyID(id).subscribe(res=>{
         this.area = res.area;
         this.areaId = res.area;
+        this.contenidos = new Array<SafeResourceUrl>();
         this.anuncioService.getAnunciosByEncargado(this.areaId,this.estado).subscribe(res => {
           Object.assign(this.anuncios, res)
+          (this.anuncios)
+          this.anuncios.forEach(anuncio => {
+            this.contenidos.push(this.sanitizer.bypassSecurityTrustResourceUrl(anuncio.contenido))
+          })
         })
       })
     }
   }
-
- 
 
   //con este procedimiento se cambia el estado de un anuncio para autorizarlo, cancelarlo o volverlo a su estado original
   actualizarEstadoAnuncio(anuncioModificado: Anuncio,accion:string){
@@ -125,21 +132,14 @@ export class EncargadoAnunciosComponent implements OnInit {
     })
   }
   actualizarFiltro(){
-    console.log(this.estado2);
-    console.log(this.tipoContenido);
-    console.log(this.medioPublicacion);
-    console.log(this.redactor);
-    console.log(this.destinatario);
-    console.log(this.fechaSalida);
-    console.log(this.fechaEntrada);
     this.cargarMiArea()
-    console.log(this.area._id+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    
     this.anuncioFiltro = new Array<Anuncio>();
-
+    this.contenidosFiltro = new Array<SafeResourceUrl>();
     this.anuncioService.getAnunciosFiltro(this.area._id,this.texto,this.fechaSalida,this.fechaEntrada,this.destinatario,this.medioPublicacion,this.redactor,this.estado2,this.tipoContenido).subscribe(res=>{
-      console.log(res+"abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-      Object.assign(this.anuncioFiltro,res);
+      Object.assign(this.anuncioFiltro, res);
+      this.anuncioFiltro.forEach(anuncio => {
+        this.contenidosFiltro.push(this.sanitizer.bypassSecurityTrustResourceUrl(anuncio.contenido))
+      })
     })
   }
   limpiarFiltro(){
@@ -151,5 +151,8 @@ export class EncargadoAnunciosComponent implements OnInit {
     this.fechaSalida = "";
     this.fechaEntrada = "";
     this.actualizarFiltro();
+  }
+  mostrar(text: string) {
+    (text)
   }
 }

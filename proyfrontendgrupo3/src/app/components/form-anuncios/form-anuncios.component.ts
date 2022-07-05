@@ -42,7 +42,7 @@ export class FormAnunciosComponent implements OnInit {
   upload: boolean = false;
 
   //para guardar los medios de transmicion
-  medios: Array<string> = ['Facebook', 'Instagram', 'Twitter']; //implementar variables locales!!!!!!!!!!!!!
+  medios: Array<string> = ['facebook', 'instagram', 'twitter'];
   medio: string = '';
 
   modoCrear!: boolean;
@@ -182,7 +182,7 @@ export class FormAnunciosComponent implements OnInit {
       var rolC = this.roles.find((r) => r._id == this.rol._id);
       if (rolC) this.anuncio.destinatarios.push(rolC);
       this.rol = new Rol();
-      console.log(this.anuncio.destinatarios);
+      (this.anuncio.destinatarios);
     }
   }
 
@@ -194,7 +194,7 @@ export class FormAnunciosComponent implements OnInit {
   //metodo para cargar medios
   agregarMedios() {
     if (this.medio != '') this.anuncio.mediosTransmision.push(this.medio);
-    console.log(this.anuncio.mediosTransmision);
+    (this.anuncio.mediosTransmision);
   }
 
   quitarMedio(pos: number) {
@@ -219,7 +219,7 @@ export class FormAnunciosComponent implements OnInit {
       this.anuncio._id = res.id;
         //generamos el url para el qr con el host actual, la direccion del componente y el parametro del id del anuncio
         var text = window.location.host + '/recursos/' + this.anuncio._id;
-        console.log(text);
+        (text);
         this.qrService.generarQr(text, 'url').subscribe((res) => {
           this.anuncio.codigoQR = res.url;
           this.actualizarAnuncio();
@@ -262,12 +262,12 @@ export class FormAnunciosComponent implements OnInit {
     //enviar correo
     anuncio.estados.forEach((element:Estado)=>{
       this.areaService.getEncargado(element.area._id).subscribe(res => {
-        console.log(res)
+        (res)
         var email = res.email
         var text = 'El anuncio ' + anuncio.titulo + ' ha sido confeccionado por ' + anuncio.redactor.nombre + ' ' + anuncio.redactor.apellido + ' y esta pendiente de ser validado por usted'
-        console.log(email,text)
+        (email,text)
         this.emailService.send(email,text).subscribe(res=>{
-          console.log(res)
+          (res)
         })
       })
     })

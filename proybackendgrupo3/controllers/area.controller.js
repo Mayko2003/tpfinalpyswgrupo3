@@ -82,7 +82,7 @@ areaController.getEncargado = async(req, res) => {
         area.roles.forEach(async(rol) => {
             if (rol.nombre == 'encargado' || rol.nombre == 'Encargado') {
                 encargado = await Persona.findOne({ roles: { $in: rol } })
-                console.log(encargado)
+                    (encargado)
                 res.status(200).json(encargado);
             }
         })

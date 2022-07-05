@@ -7,12 +7,12 @@
                     <!-- Muestra contenido autiovisual -->
                     <div *ngIf="anuncio.tipoContenido == 'mp4' || anuncio.tipoContenido == 'avi' || anuncio.tipoContenido == 'webm'" class="ratio ratio-16x9">
                         <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no" width="100%">
-                            <source [type]="'video/'+anuncio.tipoContenido" [src]="anuncio.contenido">
+                            <source [type]="'video/'+anuncio.tipoContenido" [src]="contenidos[anuncios.indexOf(anuncio)]">
                         </video>
                     </div>
                     <!-- Muestra imagenes y gifs -->
                     <div *ngIf="anuncio.tipoContenido == 'jpg' || anuncio.tipoContenido == 'jpeg' || anuncio.tipoContenido == 'png'  || anuncio.tipoContenido == 'gif'" class="w-100 h-100">
-                        <img [src]="anuncio.contenido" [alt]="anuncio.titulo+'.'+anuncio.tipoContenido" class="img-fluid w-100">
+                        <img [src]="contenidos[anuncios.indexOf(anuncio)]" [alt]="anuncio.titulo+'.'+anuncio.tipoContenido" class="img-fluid w-100">
                     </div>
                     <!-- muestra archivos -->
                     <div *ngIf="anuncio.tipoContenido == 'pdf' || anuncio.tipoContenido == 'html'">
@@ -39,11 +39,11 @@
             <div class="card-header">
                 <div *ngIf="a.tipoContenido == 'mp4' || a.tipoContenido == 'avi' || a.tipoContenido == 'webm'" class="ratio ratio-16x9">
                     <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
-                        <source [type]="'video/'+a.tipoContenido" [src]="a.contenido">
+                        <source [type]="'video/'+a.tipoContenido" [src]="contenidos[anuncios.indexOf(a)]">
                     </video>
                 </div>
                 <div *ngIf="a.tipoContenido == 'jpg' || a.tipoContenido == 'jpeg' || a.tipoContenido == 'png'  || a.tipoContenido == 'gif'">
-                    <img [src]="a.contenido" [alt]="a.titulo+'.'+a.tipoContenido" class="w-100 img-fluid">
+                    <img [src]="contenidos[anuncios.indexOf(a)]" [alt]="a.titulo+'.'+a.tipoContenido" class="w-100 img-fluid">
                 </div>
                 <div *ngIf="a.tipoContenido == 'pdf' || a.tipoContenido == 'html'">
                     <iframe [src]="contenidos[anuncios.indexOf(a)]" frameborder="0" class="w-100"></iframe>

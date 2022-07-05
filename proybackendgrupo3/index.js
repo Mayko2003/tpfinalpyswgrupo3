@@ -8,8 +8,8 @@ const app = express()
 
 // middlewares
 app.use(cors({ origin: 'http://localhost:4200' })) // para que angular pueda acceder a la api
-app.use(express.json({limit:'50mb'})) // para que el servidor entienda los datos en formato json
-app.use(express.urlencoded({ extended: true})) // para que el servidor entienda los datos en formato urlencoded
+app.use(express.json({ limit: '50mb' })) // para que el servidor entienda los datos en formato json
+app.use(express.urlencoded({ extended: true })) // para que el servidor entienda los datos en formato urlencoded
 
 // routes
 app.use('/api/personas', require('./routes/persona.routes'))
@@ -17,10 +17,10 @@ app.use('/api/roles', require('./routes/rol.routes'))
 app.use('/api/areas', require('./routes/area.routes'))
 app.use('/api/anuncios', require('./routes/anuncio.routes'))
 app.use('/api/emails', require('./routes/email.routes'))
-// configs
+    // configs
 app.set('port', process.env.PORT || 3000)
 
 // start server
 app.listen(app.get('port'), () => {
-    console.log('Servidor corriendo en el puerto ', app.get('port'))
+    ('Servidor corriendo en el puerto ', app.get('port'))
 })

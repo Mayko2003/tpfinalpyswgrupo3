@@ -52,7 +52,7 @@
                         <div class="d-flex mb-3" *ngIf="anuncio.destinatarios && area._id">
                             <div *ngFor="let medio of anuncio.mediosTransmision">
                                 <span class="badge rounded-pill p-3" [ngClass]="{' bg-primary':medio==medios[0],' bg-danger':medio==medios[1],' bg-info':medio==medios[2]}">
-                                    <i class="bi" [ngClass]="{' bi-facebook':medio=='FaceBook','bi-instagram':medio=='Instagram','bi-twitter':medio=='Twitter'}"></i> {{medio | titlecase}}
+                                    <i class="bi" [ngClass]="'bi-'+medio"></i> {{medio | titlecase}}
                                 <button class="btn-close" type="button" (click)="quitarMedio(anuncio.mediosTransmision.indexOf(medio))"></button></span>
                             </div>
                         </div>
@@ -140,7 +140,7 @@
                     <p>Medios de Transmision: </p>
                     <div class="" *ngFor="let medio of anuncioSelected.mediosTransmision">
                         <span class="badge rounded-pill p-3" [ngClass]="{' bg-primary':medio==medios[0],' bg-danger':medio==medios[1],' bg-info':medio==medios[2]}">
-                        <i class="bi pe-1" [ngClass]="{' bi-facebook':medio=='Facebook','bi-instagram':medio=='Instagram','bi-twitter':medio=='Twitter'}"></i>{{medio | titlecase}}
+                        <i class="bi" [ngClass]="'bi-'+medio"></i> {{medio | titlecase}}
                     </span>
                     </div>
                 </div>
