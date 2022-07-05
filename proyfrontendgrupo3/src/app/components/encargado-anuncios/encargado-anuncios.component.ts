@@ -82,8 +82,8 @@ export class EncargadoAnunciosComponent implements OnInit {
         this.area = res.area;
         this.areaId = res.area;
         this.contenidos = new Array<SafeResourceUrl>();
-        this.anuncioService.getAnunciosByEncargado(this.areaId,this.estado).subscribe(res => {
-          Object.assign(this.anuncios, res)
+        this.anuncioService.getAnunciosByEncargado(this.areaId, this.estado).subscribe(res => {
+          this.anuncios = res;
           (this.anuncios)
           this.anuncios.forEach(anuncio => {
             this.contenidos.push(this.sanitizer.bypassSecurityTrustResourceUrl(anuncio.contenido))
