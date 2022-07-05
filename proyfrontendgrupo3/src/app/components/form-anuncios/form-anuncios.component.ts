@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
@@ -47,15 +48,10 @@ export class FormAnunciosComponent implements OnInit {
   modoCrear!: boolean;
   modoEditar!: boolean;
 
-  constructor(
-    private anuncioService: AnuncioService,
-    private loginService: LoginService,
-    private areaService: AreaService,
-    private qrService: QrService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private emailService: EmailService
-  ) {
+  //valida los recursos que se mostraran en la visata
+  contenidos!: Array<SafeResourceUrl>;
+
+  constructor( private anuncioService: AnuncioService, private loginService: LoginService, private areaService: AreaService, private qrService: QrService, private router: Router, private activatedRoute: ActivatedRoute, private emailService: EmailService, private sanitizer:DomSanitizer ) {
     this.anuncio = new Anuncio();
     this.anuncio.recursos = new Array<Recurso>();
     this.anuncio.destinatarios = new Array<Rol>();
@@ -75,11 +71,7 @@ export class FormAnunciosComponent implements OnInit {
   ngOnInit(): void {
     //validacion de peticion
     this.cargarMisRoles();
-    if (
-      this.roles[0].nombre == 'encargado' ||
-      this.roles[0].nombre == 'administrador' ||
-      this.roles[0].nombre == 'autoridad'
-    ) {
+    if ( this.roles[0].nombre == 'encargado' || this.roles[0].nombre == 'administrador' || this.roles[0].nombre == 'autoridad' ) {
       this.router.navigate(['/Login']);
     }
 
@@ -98,17 +90,7 @@ export class FormAnunciosComponent implements OnInit {
   //metodo para cargar contenido y los recursos en el anuncio
   getFile(e: any, accion: string) {
     //agregar tipo de archivos
-    var Extensions = [
-      'png',
-      'jpg',
-      'jpeg',
-      'pdf',
-      'gif',
-      'html',
-      'mp4',
-      'avi',
-      'webm',
-    ];
+    var Extensions = ['png','jpg','jpeg','pdf','gif','html','mp4','avi','webm',];
 
     for (var i = 0; i < e.target.files.length; i++) {
       //controlamos el tamaño
@@ -257,6 +239,7 @@ export class FormAnunciosComponent implements OnInit {
   //------------------------------METODOS PAR CARGAR MIS ANUNCIOS----------------------------
   mostrarMisAnuncios() {
     this.anuncios = new Array<Anuncio>();
+    this.contenidos = new Array<SafeResourceUrl>()
     var userid = this.loginService.idLogged();
     if (userid) {
       this.anuncioService.getAnunciosByUser(userid).subscribe((res) => {
@@ -264,6 +247,7 @@ export class FormAnunciosComponent implements OnInit {
         this.anuncios.forEach((anuncio) => {
           var fecha = new Date(anuncio.fechaSalidaVigencia).toISOString();
           anuncio.fechaSalidaVigencia = new Date(fecha.substring(0, 10));
+          this.contenidos.push(this.sanitizer.bypassSecurityTrustResourceUrl(anuncio.contenido))
         });
       });
     }
@@ -273,17 +257,14 @@ export class FormAnunciosComponent implements OnInit {
     anuncio.estados.forEach((element:Estado)=>{ element.estado = "confeccionado"})
     Object.assign(this.anuncio,anuncio)
     this.actualizarAnuncio();
-    //editar -> solo  lo ve el usuario creador
-    //confeccionado -> se lo envia al encargado
-    //valido -> lo ven todos
-    //denegado -> denegado para editar
-    //cancelado -> nadie mas que el encargado lo ve
 
     //enviar correo
-    this.anuncio.estados.forEach((element:Estado)=>{
-      this.areaService.getEncargado(element.area._id).subscribe(res=>{
+    anuncio.estados.forEach((element:Estado)=>{
+      this.areaService.getEncargado(element.area._id).subscribe(res => {
+        console.log(res)
         var email = res.email
         var text = 'El anuncio ' + anuncio.titulo + ' ha sido confeccionado por ' + anuncio.redactor.nombre + ' ' + anuncio.redactor.apellido + ' y esta pendiente de ser validado por usted'
+        console.log(email,text)
         this.emailService.send(email,text).subscribe(res=>{
           console.log(res)
         })

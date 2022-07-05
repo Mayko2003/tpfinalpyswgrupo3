@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
@@ -26,11 +27,10 @@ export class MenuAnunciosComponent implements OnInit {
   fechaFiltro!: Date;
   fecha2: Date = new Date();
 
-  constructor(
-    private anuncioService: AnuncioService,
-    private loginService: LoginService,
-    private router: Router
-  ) {
+  //valida los recursos que se mostraran en la visata
+  contenidos!: Array<SafeResourceUrl>;
+
+  constructor(private anuncioService: AnuncioService,private loginService: LoginService,private router: Router,private sanitizer: DomSanitizer) {
     this.anuncios = new Array<Anuncio>();
     this.fecha = new Date();
     this.roles = new Array<Rol>();
@@ -44,11 +44,7 @@ export class MenuAnunciosComponent implements OnInit {
     this.cargarMisRoles();
     this.cargarMiArea();
 
-    if (
-      this.roles[0].nombre == 'encargado' ||
-      this.roles[0].nombre == 'administrador' ||
-      this.roles[0].nombre == 'autoridad'
-    ) {
+    if (this.roles[0].nombre.toLowerCase() == 'encargado' || this.roles[0].nombre.toLowerCase() == 'administrador' || this.roles[0].nombre.toLowerCase() == 'autoridad') {
       this.router.navigate(['/Login']);
     }
 
@@ -77,11 +73,13 @@ export class MenuAnunciosComponent implements OnInit {
     });
 
     //thisfecha <= fechaSalida
-    this.anuncioService
-      .getAnunciosByRoles(this.rolesId, this.fecha, this.area._id)
-      .subscribe((res) => {
-        Object.assign(this.anuncios, res);
-      });
+    this.contenidos = new Array<SafeResourceUrl>();
+    this.anuncioService.getAnunciosByRoles(this.rolesId, this.fecha, this.area._id).subscribe((res) => {
+      Object.assign(this.anuncios, res);
+      this.anuncios.forEach((anuncio) => {
+        this.contenidos.push(this.sanitizer.bypassSecurityTrustResourceUrl(anuncio.contenido))
+      })
+    });
   }
 
   //metodo para cargar los anuncios historicos de el rol de una persona
@@ -94,9 +92,7 @@ export class MenuAnunciosComponent implements OnInit {
     //uso una fecha para sacar los anuncios vigentes
     this.fechaFiltro = new Date();
 
-    this.anuncioService
-      .getAnunciosByRoles(this.rolesFiltrados, this.fecha, this.area._id)
-      .subscribe((res) => {
+    this.anuncioService.getAnunciosByRoles(this.rolesFiltrados, this.fecha, this.area._id).subscribe((res) => {
         res.forEach((resAnuncio: Anuncio) => {
           //guardo la fecha para filtrar solo los que ya no tienen vigencia
           this.fecha2 = new Date(resAnuncio.fechaSalidaVigencia);

@@ -210,9 +210,11 @@ anuncioController.getAnuncioFiltro = async(req, res) => {
                     { "redactor": redactor == null ? { '$exists': true } : redactor },
                     { "mediosTransmision": medioTransmision == null ? { '$in': /[a-zA-Z0-9]/ } : medioTransmision },
                     { "destinatarios": destinatarios == null ? { '$exists': true } : destinatarios },
-                    /* {'$and':[{"fechaSalidaVigencia":fechaSalidaVigencia == null ? {'$exists':true} : {'$lte':fechaSalidaVigencia}},
-                             {"fechaEntradaVigencia":fechaEntradaVigencia == null ? {'$exists':true} : {'$gte':fechaEntradaVigencia}}]
-                    }, POR ALGUNA RAZON ALGUNOS ANUNCIOS NO TIENEN FECHADEENTRADA, PERO SI ANDA*/
+                    {
+                        '$and': [{ "fechaSalidaVigencia": fechaSalidaVigencia == null ? { '$exists': true } : { '$lte': fechaSalidaVigencia } },
+                            { "fechaEntradaVigencia": fechaEntradaVigencia == null ? { '$exists': true } : { '$gte': fechaEntradaVigencia } }
+                        ]
+                    },
                     { "titulo": titulo == null ? /[a-zA-Z0-9]/ : titulo }
                 ]
             }

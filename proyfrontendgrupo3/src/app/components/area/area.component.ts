@@ -86,7 +86,7 @@ export class AreaComponent implements OnInit {
   //metodos manejar un AREA
   guardarArea() {
     this.rol = new Rol();
-    this.rol.nombre = 'encargado' + this.area.nombre.substring(0, 1).toUpperCase() + this.area.nombre.substring(1);
+    this.rol.nombre = 'encargado';
     this.rolService.addRol(this.rol).subscribe((res) => {
       Object.assign(this.rol, res);
       this.area.roles.push(this.rol);

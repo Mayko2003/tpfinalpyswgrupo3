@@ -5,3 +5,8 @@
 .sinAnuncios {
     height: 75vh;
 }
+
+#carouselAnuncios {
+    width: auto;
+    max-height: 80vh;
+}

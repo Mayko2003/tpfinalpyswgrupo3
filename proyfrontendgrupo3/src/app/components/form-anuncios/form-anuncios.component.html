@@ -121,21 +121,16 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-coles-xl-4 row-cols-xxl-5 w-100">
         <div *ngFor="let anuncioSelected of anuncios" class="card ">
             <div class="card-header">
-                <div [ngSwitch]="anuncioSelected.tipoContenido" class="card">
-                    <div *ngSwitchCase="'pdf' || 'html'">
-                        <iframe allowfullscreen frameborder="0">
-                            <source *ngIf="anuncioSelected.tipoContenido == 'pdf'" type="aplication/pdf" [src]="anuncioSelected.contenido">
-                            <source *ngIf="anuncioSelected.tipoContenido == 'html'" type="text/html" [src]="anuncioSelected.contenido">
-                        </iframe>
-                    </div>
-                    <div *ngSwitchCase="'png' || 'jpg' || 'jpeg' || 'gif'">
-                        <img [src]="anuncioSelected.contenido" class="img-fluid">
-                    </div>
-                    <div *ngSwitchCase="'mp4' || 'avi' || 'webm'" class=" ratio ratio-16x9">
-                        <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
-                            <source [type]="'video/'+anuncioSelected.tipoContenido" [src]="anuncioSelected.contenido">
-                        </video>
-                    </div>
+                <div *ngIf="anuncioSelected.tipoContenido == 'mp4' || anuncioSelected.tipoContenido == 'avi' || anuncioSelected.tipoContenido == 'webm'" class="ratio ratio-16x9">
+                    <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
+                        <source [type]="'video/'+anuncioSelected.tipoContenido" [src]="anuncioSelected.contenido">
+                    </video>
+                </div>
+                <div *ngIf="anuncioSelected.tipoContenido == 'jpg' || anuncioSelected.tipoContenido == 'jpeg' || anuncioSelected.tipoContenido == 'png'  || anuncioSelected.tipoContenido == 'gif'">
+                    <img [src]="anuncioSelected.contenido" [alt]="anuncioSelected.titulo+'.'+anuncioSelected.tipoContenido" class="w-100 img-fluid">
+                </div>
+                <div *ngIf="anuncioSelected.tipoContenido == 'pdf' || anuncioSelected.tipoContenido == 'html'">
+                    <iframe [src]="contenidos[anuncios.indexOf(anuncioSelected)]" frameborder="0" class="w-100"></iframe>
                 </div>
             </div>
             <div class="card-body">
@@ -146,7 +141,7 @@
                     {{est.estado | titlecase}}</small></p>
             </div>
             <div class="card-footer d-flex justify-content-around">
-                <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected)" (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
+                <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected)" (click)="modoCrear=false;modoEditar=true" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
                 <button class="btn btn-primary" (click)="publicarAnuncio(anuncioSelected)">Publicar</button>
             </div>
         </div>
