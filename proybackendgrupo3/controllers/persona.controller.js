@@ -78,7 +78,6 @@ personaController.loginPersona = async(req, res) => {
             });
         }
     } catch (error) {
-        (error);
         res.status(500).json({
             msj: "Error al obtener la persona",
         });

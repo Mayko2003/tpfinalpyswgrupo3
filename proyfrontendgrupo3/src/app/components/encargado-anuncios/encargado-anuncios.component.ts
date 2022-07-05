@@ -152,7 +152,4 @@ export class EncargadoAnunciosComponent implements OnInit {
     this.fechaEntrada = "";
     this.actualizarFiltro();
   }
-  mostrar(text: string) {
-    (text)
-  }
 }

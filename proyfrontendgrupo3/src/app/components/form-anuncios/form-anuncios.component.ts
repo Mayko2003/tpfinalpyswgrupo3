@@ -182,7 +182,6 @@ export class FormAnunciosComponent implements OnInit {
       var rolC = this.roles.find((r) => r._id == this.rol._id);
       if (rolC) this.anuncio.destinatarios.push(rolC);
       this.rol = new Rol();
-      (this.anuncio.destinatarios);
     }
   }
 
@@ -194,7 +193,6 @@ export class FormAnunciosComponent implements OnInit {
   //metodo para cargar medios
   agregarMedios() {
     if (this.medio != '') this.anuncio.mediosTransmision.push(this.medio);
-    (this.anuncio.mediosTransmision);
   }
 
   quitarMedio(pos: number) {
@@ -219,7 +217,6 @@ export class FormAnunciosComponent implements OnInit {
       this.anuncio._id = res.id;
         //generamos el url para el qr con el host actual, la direccion del componente y el parametro del id del anuncio
         var text = window.location.host + '/recursos/' + this.anuncio._id;
-        (text);
         this.qrService.generarQr(text, 'url').subscribe((res) => {
           this.anuncio.codigoQR = res.url;
           this.actualizarAnuncio();
@@ -262,12 +259,9 @@ export class FormAnunciosComponent implements OnInit {
     //enviar correo
     anuncio.estados.forEach((element:Estado)=>{
       this.areaService.getEncargado(element.area._id).subscribe(res => {
-        (res)
         var email = res.email
         var text = 'El anuncio ' + anuncio.titulo + ' ha sido confeccionado por ' + anuncio.redactor.nombre + ' ' + anuncio.redactor.apellido + ' y esta pendiente de ser validado por usted'
-        (email,text)
         this.emailService.send(email,text).subscribe(res=>{
-          (res)
         })
       })
     })
