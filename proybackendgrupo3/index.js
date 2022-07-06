@@ -22,5 +22,5 @@ app.set('port', process.env.PORT || 3000)
 
 // start server
 app.listen(app.get('port'), () => {
-    ('Servidor corriendo en el puerto ', app.get('port'))
+    console.log('Servidor corriendo en el puerto ', app.get('port'))
 })
