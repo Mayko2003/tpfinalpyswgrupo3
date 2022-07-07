@@ -72,7 +72,7 @@ anuncioController.getAnuncio = async(req, res) => {
 // obtener un anuncio segun area encargado de acuerdo al estado
 anuncioController.getAnunciosAreaEncargado = async(req, res) => {
     try {
-        const anuncios = await Anuncio.find({ '$or': [{ "estados": { '$elemMatch': { 'estado': req.params.estado, 'area': req.params.idArea } } }] }).populate('redactor', 'nombre apellido').populate('destinatarios', 'nombre');
+        const anuncios = await Anuncio.find({ '$or': [{ "estados": { '$elemMatch': { 'estado': req.params.estado, 'area': req.params.idArea } } }] }).populate('redactor', 'nombre apellido').populate('destinatarios');
         res.status(200).json(anuncios);
     } catch (error) {
         res.status(500).json({

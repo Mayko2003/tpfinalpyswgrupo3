@@ -348,6 +348,7 @@ export class FormAnunciosComponent implements OnInit {
     this.modoCrear = false
     this.modoEditar = true
     Object.assign(this.anuncio, anuncio)
+    this.upload = true
     this.setFiles()
   }
 }

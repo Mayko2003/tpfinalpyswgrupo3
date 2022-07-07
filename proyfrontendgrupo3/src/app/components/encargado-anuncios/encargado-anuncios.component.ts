@@ -96,6 +96,7 @@ export class EncargadoAnunciosComponent implements OnInit {
 
   //con este procedimiento se cambia el estado de un anuncio para autorizarlo, cancelarlo o volverlo a su estado original
   actualizarEstadoAnuncio(anuncioModificado: Anuncio,accion:string){
+    var estado
     anuncioModificado.estados.forEach((element:any)=>{
       if(element.area==this.areaId){
         element.estado = accion;
@@ -113,7 +114,7 @@ export class EncargadoAnunciosComponent implements OnInit {
           
 
           //remove element from array estados of anuncioModificado
-          anuncioModificado.estados.splice(anuncioModificado.estados.indexOf(element), 1);
+          estado = element
 
           //save clon
           this.anuncioService.addAnuncio(clon).subscribe(res=>{
@@ -128,8 +129,11 @@ export class EncargadoAnunciosComponent implements OnInit {
         }
       }
     })
+    //remove estado from estados of anuncioModificado
+    if(estado) anuncioModificado.estados.splice(anuncioModificado.estados.indexOf(estado),1)
     this.anuncioService.updateAnuncio(anuncioModificado).subscribe();
-    //this.cargarAnuncios();
+    this.cargarAnuncios();
+    this.limpiarFiltro();
   }
 
   obtenerEstado(anuncio:Anuncio):string{
