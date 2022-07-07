@@ -11,6 +11,11 @@
         <div class="form-floating mb-3">
             <input [(ngModel)]="persona.nombreUsuario" type="text" class="form-control" name="usuarioPersona" id="usuarioPersona" placeholder="Username">
             <label for="usuarioPersona">Nombre de Usuario:</label>
+            <div *ngIf="errores.nombreUsuario">
+                <div class="alert alert-danger" role="alert">
+                    {{errores.nombreUsuario}}
+                </div>
+            </div>
         </div>
         <div class="form-floating mb-3">
             <input [(ngModel)]="persona.contrasenia" [type]="viewPassword?'text':'password'" class="form-control" name="contraseniaPersona" id="contraseniaPersona" placeholder="Password">
@@ -20,14 +25,29 @@
         <div class="form-floating mb-3">
             <input [(ngModel)]="persona.email" type="text" class="form-control" name="emailPersona" id="emailPersona" placeholder="Email">
             <label for="emailPersona">Email:</label>
+            <div *ngIf="errores.email">
+                <div class="alert alert-danger" role="alert">
+                    {{errores.email}}
+                </div>
+            </div>
         </div>
         <div class="form-floating mb-3">
             <input [(ngModel)]="persona.legajo" type="number" class="form-control" name="legajoPersona" id="legajoPersona" placeholder="Legajo">
             <label for="legajoPersona">Legajo:</label>
+            <div *ngIf="errores.legajo">
+                <div class="alert alert-danger" role="alert">
+                    {{errores.legajo}}
+                </div>
+            </div>
         </div>
         <div class="form-floating mb-3">
-            <input [(ngModel)]="persona.dni" type="text" class="form-control" name="dniPersona" id="dniPersona" placeholder="DNI">
+            <input [(ngModel)]="persona.dni" type="number" class="form-control" name="dniPersona" id="dniPersona" placeholder="DNI">
             <label for="dniPersona">DNI:</label>
+            <div *ngIf="errores.dni">
+                <div class="alert alert-danger" role="alert">
+                    {{errores.dni}}
+                </div>
+            </div>
         </div>
         <div class="d-flex mb-3" *ngIf="persona.roles.length > 0">
             <div *ngFor="let rol of persona.roles">
@@ -108,7 +128,7 @@
 </div>
 <button type="button" class="col-12 btn btn-success d-flex justify-content-center" (click)="activarModoCrear()">
             <h5 class="bi bi-plus">Agregar Persona</h5>
-        </button>
+</button>
 <div class="table-responsive col-12">
     <table class="table table-dark table-borderless m-0 p-0">
         <thead>
@@ -137,12 +157,13 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
+                                    {{persona.nombre}} {{persona.apellido}}
                                     <h5 class="modal-title" id="eliminarPersona">Confirmacion</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="px-1 col-12">
-                                        <h5>Esta seguro que desea eliminar a {{person.nombre | titlecase}} {{person.apellido | titlecase}}?</h5>
+                                        <h5>Esta seguro que desea eliminar a {{persona.nombre | titlecase}} {{persona.apellido | titlecase}}?</h5>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

@@ -9,6 +9,7 @@ import { AnuncioService } from 'src/app/services/anuncio.service';
 import { AreaService } from 'src/app/services/area.service';
 import { LoginService } from 'src/app/services/login.service';
 import { PersonaService } from 'src/app/services/persona.service';
+import { QrService } from 'src/app/services/qr.service';
 
 @Component({
   selector: 'app-encargado-anuncios',
@@ -42,7 +43,7 @@ export class EncargadoAnunciosComponent implements OnInit {
   contenidos!: Array<SafeResourceUrl>;
   contenidosFiltro!: Array<SafeResourceUrl>;
 
-  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService:PersonaService, private areaService:AreaService,private router: Router, private sanitizer:DomSanitizer) { }
+  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService:PersonaService, private areaService:AreaService,private router: Router, private sanitizer:DomSanitizer, private qrService: QrService) { }
   
   ngOnInit(): void {
     //validacion de peticion
@@ -95,14 +96,54 @@ export class EncargadoAnunciosComponent implements OnInit {
 
   //con este procedimiento se cambia el estado de un anuncio para autorizarlo, cancelarlo o volverlo a su estado original
   actualizarEstadoAnuncio(anuncioModificado: Anuncio,accion:string){
+    var estado
     anuncioModificado.estados.forEach((element:any)=>{
       if(element.area==this.areaId){
         element.estado = accion;
-        if(accion == "autorizado") anuncioModificado.fechaEntradaVigencia = new Date();
+        if(accion == "autorizado"){
+          anuncioModificado.fechaEntradaVigencia = new Date();
+        }
+        if(accion == "editar" && anuncioModificado.estados.length > 1){
+          var clon = new Anuncio();
+          Object.assign(clon, anuncioModificado);
+          clon._id = undefined as any;
+          clon.codigoQR = ""
+          clon.estados = new Array<any>();
+          clon.estados.push(element);
+
+          
+
+          //remove element from array estados of anuncioModificado
+          estado = element
+
+          //save clon
+          this.anuncioService.addAnuncio(clon).subscribe(res=>{
+            //update qr code 
+            var text = window.location.host + '/recursos/' + res.id;
+            clon._id = "" + res.id;
+            this.qrService.generarQr(text, 'url').subscribe((res) => {
+              clon.codigoQR = res.url
+              this.anuncioService.updateAnuncio(clon).subscribe()
+            });
+          })
+        }
       }
     })
+    //remove estado from estados of anuncioModificado
+    if(estado) anuncioModificado.estados.splice(anuncioModificado.estados.indexOf(estado),1)
     this.anuncioService.updateAnuncio(anuncioModificado).subscribe();
     this.cargarAnuncios();
+    this.limpiarFiltro();
+  }
+
+  obtenerEstado(anuncio:Anuncio):string{
+    for(let i = 0; i < anuncio.estados.length; i++){
+      var area = anuncio.estados[i].area as unknown as string;
+      if(area == this.areaId){
+        return anuncio.estados[i].estado;
+      }
+    }
+    return "";
   }
 
   //Búsquedas avanzadas, se podrá realizar por destinatario, fechas, medio de publicación, texto, 

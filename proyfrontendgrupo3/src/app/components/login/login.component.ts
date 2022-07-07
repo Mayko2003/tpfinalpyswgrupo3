@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   msglogin!: string; // mensaje que indica si no paso el loguin
   user: Persona = new Persona();
 
-  
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -25,38 +25,50 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-  
+    if(this.loginService.userLoggedIn()){
+      //console.log(this.user.roles)
+      //this.redirect();
+    }
+  }
+
+  redirect(){
+    //redirigimos a home o a pagina que llamo
+    if (this.user.roles[0].nombre.toLowerCase() == "administrador") {
+      this.router.navigate(['/Persona'])
+      // window.location.href = "/Persona";
+    }
+    else if (this.user.roles[0].nombre.toLowerCase() == "encargado") {
+      this.router.navigate(['/Encargado'])
+      // window.location.href = "/Encargado";
+    }
+    else if (this.user.roles[0].nombre.toLowerCase() == "autoridad") {
+      this.router.navigate(['/Estadisticas'])
+      //window.location.href = "/Estadisticas";
+    }
+    else {
+      this.router.navigate(['/MenuAnuncio'])
+      // window.location.href = "/MenuAnuncio";
+    }
   }
 
   login() {
     this.loginService.login(this.userform.nombreUsuario, this.userform.contrasenia).subscribe(
-        (result : any) => {
-          Object.assign(this.user,result.persona)
-          if (this.user != null && this.user.estado) {
-            //guardamos el user en cookies en el cliente
-            sessionStorage.setItem("token", result.token);
-            sessionStorage.setItem("username", this.user.nombreUsuario);
-            sessionStorage.setItem("userid", this.user._id);
-            sessionStorage.setItem("roles", JSON.stringify(this.user.roles));
-            sessionStorage.setItem("area",JSON.stringify(this.user.area));
-            //redirigimos a home o a pagina que llamo
-            if (this.user.roles[0].nombre.toLowerCase() == "administrador"){
-                this.router.navigate(['/Persona'])   
-              }
-              else if(this.user.roles[0].nombre.toLowerCase()  == "encargado"){
-                this.router.navigate(['/Encargado'])  
-              }
-              else if (this.user.roles[0].nombre.toLowerCase()  == "autoridad"){
-                this.router.navigate(['/Estadisticas'])  
-              }
-              else{
-                this.router.navigate(['/MenuAnuncio']) 
-              }
-          } else {
-            //usuario no encontrado muestro mensaje en la vista
-            this.msglogin = "Credenciales incorrectas..";
-          }
-        },
+      (result: any) => {
+        Object.assign(this.user, result.persona)
+        if (this.user != null && this.user.estado) {
+          //guardamos el user en cookies en el cliente
+          sessionStorage.setItem("token", result.token);
+          sessionStorage.setItem("username", this.user.nombreUsuario);
+          sessionStorage.setItem("userid", this.user._id);
+          sessionStorage.setItem("roles", JSON.stringify(this.user.roles));
+          sessionStorage.setItem("area", JSON.stringify(this.user.area));
+          
+          this.redirect();
+        } else {
+          //usuario no encontrado muestro mensaje en la vista
+          this.msglogin = "Credenciales incorrectas..";
+        }
+      },
       error => {
         //usuario no encontrado muestro mensaje en la vista
         this.msglogin = "Credenciales incorrectas..";

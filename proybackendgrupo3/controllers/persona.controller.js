@@ -18,15 +18,33 @@ personaController.getPersonas = async(req, res) => {
 // crear persona
 personaController.createPersona = async(req, res) => {
     try {
-        const persona = new Persona(req.body);
-        await persona.save();
-        res.status(200).json({
-            message: "Persona guardada",
-        });
+        //const persona = new Persona(req.body);
+        var errores = {}
+        //check nombre usuario
+        var q = await Persona.findOne({ nombreUsuario: req.body.nombreUsuario })
+        if(q) errores.nombreUsuario = "El nombre de usuario ya existe"
+        //check email
+        var q = await Persona.findOne({ email: req.body.email })
+        if(q) errores.email = "El email ya existe"
+        //check dni
+        var q = await Persona.findOne({ dni: req.body.dni })
+        if(q) errores.dni = "El dni ya existe"
+        //check legajo
+        var q = await Persona.findOne({ legajo: req.body.legajo })
+        if(q) errores.legajo = "El legajo ya existe"
+        
+        if(Object.keys(errores).length > 0){
+            res.status(400).json(errores)
+        }
+        else{
+            const persona = new Persona(req.body);
+            await persona.save();
+            res.status(200).json({
+                message: "Persona creada",
+            });
+        }
     } catch (error) {
-        res.status(500).json({
-            message: error,
-        });
+        res.status(500).json(error);
     }
 };
 // eliminar persona
@@ -63,7 +81,7 @@ personaController.loginPersona = async(req, res) => {
         const username = req.body.username,
             password = req.body.password;
         const persona = await Persona.findOne({
-            $and: [{ nombreUsuario: username }, { contrasenia: password }],
+            $and: [{ nombreUsuario: username }, { contrasenia: password }, { estado: true }]
         }).populate('roles', 'nombre').populate('area', 'nombre roles');
 
         if (!persona) {

@@ -38,6 +38,9 @@ export class PersonaComponent implements OnInit {
 
   roles!: Array<Rol>;
 
+  //variable para mostrar errores
+  errores:any = {}
+
   constructor( private personaService: PersonaService, private areaService: AreaService, private router: Router, private loginService: LoginService ) {
     this.modoEditar = false;
     this.modoCrear = false;
@@ -61,11 +64,14 @@ export class PersonaComponent implements OnInit {
 
   //agrega una persona a la base de datos
   guardarPersona() {
-    this.personaService.addPersona(this.persona).subscribe(() => {
+    this.personaService.addPersona(this.persona).subscribe(res => {
       this.getPersonas();
       this.modoCrear = false;
       this.rol = new Rol();
       this.area = new Area();
+    }, err => {
+      this.errores = {}
+      Object.assign(this.errores, err.error);
     });
   }
 
@@ -80,8 +86,8 @@ export class PersonaComponent implements OnInit {
   editarPersona(persona: Persona) {
     this.modoEditar = true;
     this.modoCrear = false;
-    Object.assign(this.persona, persona);
-    Object.assign(this.persona.area, persona.area)
+    this.persona = persona;
+    this.persona.area = persona.area;
     this.getRolesArea();
   }
 
