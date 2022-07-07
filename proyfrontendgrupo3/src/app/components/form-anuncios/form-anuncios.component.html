@@ -49,7 +49,7 @@
                         <div *ngIf="area._id" class="form-floating mb-3">
                             <button type="button" class="btn btn-primary w-100" data-bs-target="#modalRoles" data-bs-toggle="modal">Agregar Rol</button>
                         </div>
-                        <div class="d-flex mb-3" *ngIf="anuncio.destinatarios && area._id">
+                        <div class="d-flex mb-3 mt-2">
                             <div *ngFor="let medio of anuncio.mediosTransmision">
                                 <span class="badge rounded-pill p-3" [ngClass]="{' bg-primary':medio==medios[0],' bg-danger':medio==medios[1],' bg-info':medio==medios[2]}">
                                     <i class="bi" [ngClass]="'bi-'+medio"></i> {{medio | titlecase}}
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <!-- Llamado al segundo Modal MediosTransmision -->
-                        <div *ngIf="area._id" class="form-floating mb-3">
+                        <div class="form-floating mb-3">
                             <button type="button" class="btn btn-success w-100" data-bs-target="#modalMedios" data-bs-toggle="modal">Agregar Medio</button>
                         </div>
                     </form>
@@ -73,7 +73,7 @@
     </div>
 </div>
 <!-- Segundo Modal MediosTransmision -->
-<div *ngIf="area._id" class="modal fade" id="modalMedios" aria-hidden="true" aria-labelledby="modalMedioTransmision" tabindex="-1">
+<div class="modal fade" id="modalMedios" aria-hidden="true" aria-labelledby="modalMedioTransmision" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -87,7 +87,7 @@
                 <label for="medioAnuncio">Medio de Transmision</label>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success" (click)="agregarMedios()" data-bs-target="#formAnuncio" data-bs-toggle="modal">agregar destinatario</button>
+                <button type="submit" class="btn btn-success" (click)="agregarMedios()" data-bs-target="#formAnuncio" data-bs-toggle="modal">Agregar Medio</button>
                 <button class="btn btn-danger" data-bs-target="#formAnuncio" data-bs-toggle="modal">Cancelar</button>
             </div>
         </div>
@@ -115,7 +115,7 @@
 </div>
 
 <ng-template class="w-100" [ngIf]="anuncios.length>0" [ngIfElse]="sinAnuncios">
-    <a class="btnFormulario btn btn-primary rounded-fill " (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button">
+    <a class="btnFormulario btn btn-primary rounded-fill " (click)="clearForm()" data-bs-toggle="modal" href="#formAnuncio" role="button">
         Crear <i class="bi bi-plus fs-4"></i>
     </a>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-coles-xl-4 row-cols-xxl-5 w-100">
@@ -149,15 +149,15 @@
                     <small class="card-text">Area: {{est.area.nombre | titlecase}} Estado: {{est.estado | titlecase}}</small>
                 </div>
                 <!-- Button Modal -->
-                <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" data-bs-target="#modalRecursos">Recursos <i
+                <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" [attr.data-bs-target]="'#modalRecursos'+anuncioSelected._id">Recursos <i
                         class="bi bi-archive"></i></button>
             </div>
             <!-- Modal QR -->
-            <div class="modal fade" id="modalRecursos" tabindex="-1" aria-labelledby="modalRecursosLabel" aria-hidden="true">
+            <div class="modal fade" id="modalRecursos{{anuncioSelected._id}}" tabindex="-1" [attr.aria-labelledby]="'modalRecursosLabel'+anuncioSelected._id" aria-hidden="true">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalRecursosLabel">Recursos de {{anuncioSelected.titulo}}</h5>
+                            <h5 class="modal-title" id="modalRecursosLabel+{{anuncioSelected._id}}">Recursos de {{anuncioSelected.titulo}}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body d-flex justify-content-center">
@@ -169,7 +169,7 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="anuncioSelected.estados[0].estado!='confeccionado' && anuncioSelected.estados[0].estado!='autorizado'" class="card-footer d-flex justify-content-around">
+            <div *ngIf="anuncioSelected.estados[0].estado=='editar'" class="card-footer d-flex justify-content-around">
                 <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected);modoCrear=false;modoEditar=true" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
                 <button class="btn btn-primary" (click)="publicarAnuncio(anuncioSelected)">Publicar</button>
             </div>
@@ -179,7 +179,7 @@
 <ng-template #sinAnuncios>
     <div class="sinAnuncios w-100 d-flex justify-content-center align-items-center flex-column">
         <h1>Aún no tienes anuncios para compartir</h1>
-        <a class="btn btn-primary rounded-fill" (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button">
+        <a class="btn btn-primary rounded-fill" (click)="clearForm()" data-bs-toggle="modal" href="#formAnuncio" role="button">
             Crea tus anuncios <i class="bi bi-plus fs-4"></i>
         </a>
     </div>

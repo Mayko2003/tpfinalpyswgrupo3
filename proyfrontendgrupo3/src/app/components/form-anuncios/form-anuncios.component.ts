@@ -51,7 +51,7 @@ export class FormAnunciosComponent implements OnInit {
   //valida los recursos que se mostraran en la visata
   contenidos!: Array<SafeResourceUrl>;
 
-  constructor( private anuncioService: AnuncioService, private loginService: LoginService, private areaService: AreaService, private qrService: QrService, private router: Router, private activatedRoute: ActivatedRoute, private emailService: EmailService, private sanitizer:DomSanitizer ) {
+  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private areaService: AreaService, private qrService: QrService, private router: Router, private activatedRoute: ActivatedRoute, private emailService: EmailService, private sanitizer: DomSanitizer) {
     this.anuncio = new Anuncio();
     this.anuncio.recursos = new Array<Recurso>();
     this.anuncio.destinatarios = new Array<Rol>();
@@ -71,7 +71,7 @@ export class FormAnunciosComponent implements OnInit {
   ngOnInit(): void {
     //validacion de peticion
     this.cargarMisRoles();
-    if ( this.roles[0].nombre == 'encargado' || this.roles[0].nombre == 'administrador' || this.roles[0].nombre == 'autoridad' ) {
+    if (this.roles[0].nombre == 'encargado' || this.roles[0].nombre == 'administrador' || this.roles[0].nombre == 'autoridad') {
       this.router.navigate(['/Login']);
     }
 
@@ -90,7 +90,7 @@ export class FormAnunciosComponent implements OnInit {
   //metodo para cargar contenido y los recursos en el anuncio
   getFile(e: any, accion: string) {
     //agregar tipo de archivos
-    var Extensions = ['png','jpg','jpeg','pdf','gif','html','mp4','avi','webm',];
+    var Extensions = ['png', 'jpg', 'jpeg', 'pdf', 'gif', 'html', 'mp4', 'avi', 'webm',];
 
     for (var i = 0; i < e.target.files.length; i++) {
       //controlamos el tamaño
@@ -196,25 +196,24 @@ export class FormAnunciosComponent implements OnInit {
   }
 
   quitarMedio(pos: number) {
-    this.anuncio.mediosTransmision.splice(pos,1)
+    this.anuncio.mediosTransmision.splice(pos, 1)
   }
 
   guardarAnuncio() {
 
-    if(this.anuncio._id == null || this.anuncio._id == "")
-    {
-    //agregamos los estados al anuncio 
-    this.estados.forEach((element: any) => { element.estado = "editar" })
-    this.anuncio.estados = this.estados
+    if (this.anuncio._id == null || this.anuncio._id == "") {
+      //agregamos los estados al anuncio 
+      this.estados.forEach((element: any) => { element.estado = "editar" })
+      this.anuncio.estados = this.estados
 
-    //agragamos el redactor al anuncio 
-    var id = this.loginService.idLogged()
-    if (id != null) this.anuncio.redactor._id = id
+      //agragamos el redactor al anuncio 
+      var id = this.loginService.idLogged()
+      if (id != null) this.anuncio.redactor._id = id
 
-    //guardamos el anuncio 
-    this.anuncioService.addAnuncio(this.anuncio).subscribe(res => {
-      //en este momento generamos los qr para que se acoplen a cada host en caso de que se cambie de host
-      this.anuncio._id = res.id;
+      //guardamos el anuncio 
+      this.anuncioService.addAnuncio(this.anuncio).subscribe(res => {
+        //en este momento generamos los qr para que se acoplen a cada host en caso de que se cambie de host
+        this.anuncio._id = res.id;
         //generamos el url para el qr con el host actual, la direccion del componente y el parametro del id del anuncio
         var text = window.location.host + '/recursos/' + this.anuncio._id;
         this.qrService.generarQr(text, 'url').subscribe((res) => {
@@ -222,7 +221,7 @@ export class FormAnunciosComponent implements OnInit {
           this.actualizarAnuncio();
           this.anuncio = new Anuncio();
         });
-      this.mostrarMisAnuncios()
+        this.mostrarMisAnuncios()
       });
     } else {
       this.actualizarAnuncio();
@@ -230,8 +229,21 @@ export class FormAnunciosComponent implements OnInit {
   }
 
   actualizarAnuncio() {
-    this.anuncioService.updateAnuncio(this.anuncio).subscribe((res) => {});
+    this.anuncioService.updateAnuncio(this.anuncio).subscribe((res) => { });
     this.anuncio = new Anuncio();
+  }
+
+  clearForm(){
+    this.anuncio = new Anuncio();
+    this.estados = new Array<Estado>();
+    this.estado = new Estado();
+    this.estado.area = new Area();
+    this.rol = new Rol();
+    this.recurso = new Recurso();
+    this.medio = '';
+    this.upload = false;
+    this.modoCrear = true;
+    this.modoEditar = false;
   }
 
   //------------------------------METODOS PAR CARGAR MIS ANUNCIOS----------------------------
@@ -252,22 +264,22 @@ export class FormAnunciosComponent implements OnInit {
   }
 
   publicarAnuncio(anuncio: Anuncio) {
-    anuncio.estados.forEach((element:Estado)=>{ element.estado = "confeccionado"})
-    Object.assign(this.anuncio,anuncio)
+    anuncio.estados.forEach((element: Estado) => { element.estado = "confeccionado" })
+    Object.assign(this.anuncio, anuncio)
     this.actualizarAnuncio();
 
     //enviar correo
-    anuncio.estados.forEach((element:Estado)=>{
+    anuncio.estados.forEach((element: Estado) => {
       this.areaService.getEncargado(element.area._id).subscribe(res => {
         var email = res.email
         var text = 'El anuncio ' + anuncio.titulo + ' ha sido confeccionado por ' + anuncio.redactor.nombre + ' ' + anuncio.redactor.apellido + ' y esta pendiente de ser validado por usted'
-        this.emailService.send(email,text).subscribe(res=>{
-        })
+        // this.emailService.send(email,text).subscribe(res=>{
+        // })
       })
     })
   }
 
-  editarAnuncio(anuncio: Anuncio){
-    Object.assign(this.anuncio,anuncio)
+  editarAnuncio(anuncio: Anuncio) {
+    Object.assign(this.anuncio, anuncio)
   }
 }

@@ -81,7 +81,7 @@ personaController.loginPersona = async(req, res) => {
         const username = req.body.username,
             password = req.body.password;
         const persona = await Persona.findOne({
-            $and: [{ nombreUsuario: username }, { contrasenia: password }],
+            $and: [{ nombreUsuario: username }, { contrasenia: password }, { estado: true }]
         }).populate('roles', 'nombre').populate('area', 'nombre roles');
 
         if (!persona) {

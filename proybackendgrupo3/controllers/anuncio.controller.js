@@ -84,7 +84,7 @@ anuncioController.getAnunciosAreaEncargado = async(req, res) => {
 anuncioController.getMisAnuncios = async(req, res) => {
     try {
         var criteria = { "redactor": req.params.idPersona };
-        const anuncios = await Anuncio.find(criteria).populate({ path: 'redactor', select: 'nombre apellido' }).populate({ path: 'estados.area', select: 'nombre' });
+        const anuncios = await Anuncio.find(criteria).populate({ path: 'redactor', select: 'nombre apellido' }).populate({ path: 'estados.area', select: 'nombre' }).populate('destinatarios', 'nombre');
         res.status(200).json(anuncios);
     } catch (error) {
         res.status(500).json({
@@ -197,21 +197,43 @@ anuncioController.getAnuncioFiltro = async(req, res) => {
             const fechaSalidaVigencia = req.query.fechaSalidaVigencia == '' ? null : req.query.fechaSalidaVigencia;
             const fechaEntradaVigencia = req.query.fechaEntradaVigencia == '' ? null : req.query.fechaEntradaVigencia;
             const titulo = req.query.titulo == '' ? null : new RegExp(`${req.query.titulo}`);
-            const criteria = {
+
+            const criteria1 = {
                 '$and': [
                     { "fechaSalidaVigencia": { '$gte': fecha }, "estados": { '$elemMatch': { 'estado': { '$ne': 'editar' }, 'area': area } } },
                     { "tipoContenido": tipoContenido == null ? /[a-zA-Z0-9]/ : tipoContenido },
-                    { "estados": { '$elemMatch': { 'estado': estado == null ? /[a-zA-Z0-9]/ : estado, 'area': area } } },
+                    { "estados": { '$elemMatch': { 'estado': estado == null? /[a-zA-Z0-9]/:estado, 'area': area } } },
                     { "redactor": redactor == null ? { '$exists': true } : redactor },
                     { "mediosTransmision": medioTransmision == null ? { '$in': /[a-zA-Z0-9]/ } : medioTransmision },
                     { "destinatarios": destinatarios == null ? { '$exists': true } : destinatarios },
                     {
                         '$and': [{ "fechaSalidaVigencia": fechaSalidaVigencia == null ? { '$exists': true } : { '$lte': fechaSalidaVigencia } },
-                            { "fechaEntradaVigencia": fechaEntradaVigencia == null ? { '$exists': true } : { '$gte': fechaEntradaVigencia } }
+                            { "fechaEntradaVigencia": fechaEntradaVigencia == null ? { '$exists': true }: { '$gte': fechaEntradaVigencia } }
                         ]
                     },
                     { "titulo": titulo == null ? /[a-zA-Z0-9]/ : titulo }
                 ]
+            }
+            const criteria2 = {
+                '$and': [
+                    { "fechaSalidaVigencia": { '$gte': fecha }, "estados": { '$elemMatch': { 'estado': { '$ne': 'editar' }, 'area': area } } },
+                    { "tipoContenido": tipoContenido == null ? /[a-zA-Z0-9]/ : tipoContenido },
+                    { "estados": { '$elemMatch': { 'estado': estado == null? /[a-zA-Z0-9]/:estado, 'area': area } } },
+                    { "redactor": redactor == null ? { '$exists': true } : redactor },
+                    { "mediosTransmision": medioTransmision == null ? { '$in': /[a-zA-Z0-9]/ } : medioTransmision },
+                    { "destinatarios": destinatarios == null ? { '$exists': true } : destinatarios },
+                    {
+                        '$and': [{ "fechaSalidaVigencia": fechaSalidaVigencia == null ? { '$exists': true } : { '$lte': fechaSalidaVigencia } },
+                            { "fechaEntradaVigencia": fechaEntradaVigencia == null ? { '$exists': false }: { '$gte': fechaEntradaVigencia } }
+                        ]
+                    },
+                    { "titulo": titulo == null ? /[a-zA-Z0-9]/ : titulo }
+                ]
+            }
+            const criteria = {
+                '$or': [
+                criteria1,
+                criteria2]
             }
             const anuncios = await Anuncio.find(criteria).populate('redactor', 'nombre apellido').populate('destinatarios');
             res.status(200).json(anuncios);
