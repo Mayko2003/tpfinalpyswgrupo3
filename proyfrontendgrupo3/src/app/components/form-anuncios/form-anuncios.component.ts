@@ -89,6 +89,7 @@ export class FormAnunciosComponent implements OnInit {
 
   //metodo para cargar contenido y los recursos en el anuncio
   getFile(e: any, accion: string) {
+    if(accion == 'contenido' && e.target.files.length == 0) this.upload = false;
     //agregar tipo de archivos
     var Extensions = ['png', 'jpg', 'jpeg', 'pdf', 'gif', 'html', 'mp4', 'avi', 'webm',];
 
@@ -223,9 +224,11 @@ export class FormAnunciosComponent implements OnInit {
         });
         this.mostrarMisAnuncios()
       });
+
     } else {
       this.actualizarAnuncio();
     }
+    this.clearForm();
   }
 
   actualizarAnuncio() {
@@ -233,17 +236,37 @@ export class FormAnunciosComponent implements OnInit {
     this.anuncio = new Anuncio();
   }
 
-  clearForm(){
+  clearForm() {
+    if(this.modoCrear) return;
     this.anuncio = new Anuncio();
     this.estados = new Array<Estado>();
+    this.anuncio.destinatarios = new Array<Rol>();
+    this.anuncio.mediosTransmision = new Array<string>();
+    this.anuncio.recursos = new Array<Recurso>();
+    this.anuncio.estados = new Array<Estado>();
+    this.anuncio.redactor = new Persona();
+
     this.estado = new Estado();
+    this.estados = new Array<Estado>();
     this.estado.area = new Area();
     this.rol = new Rol();
-    this.recurso = new Recurso();
     this.medio = '';
     this.upload = false;
     this.modoCrear = true;
     this.modoEditar = false;
+
+    this.clearFiles();
+  }
+
+  clearFiles() {
+    var contenido = document.getElementById('contenido') as HTMLInputElement;
+    if (contenido != null) contenido.value = '';
+
+    var recursos = document.getElementById('recurso') as HTMLInputElement;
+    if (recursos != null) {
+      recursos.value = '';
+      this.recurso = new Recurso();
+    }
   }
 
   //------------------------------METODOS PAR CARGAR MIS ANUNCIOS----------------------------
@@ -279,7 +302,52 @@ export class FormAnunciosComponent implements OnInit {
     })
   }
 
+  getMimeType(dataURI:string):string{
+    return dataURI.split(',')[0].split(':')[1].split(';')[0];
+  }
+
+  dataURItoBlob(dataURI:any):Blob {
+    var byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = this.getMimeType(dataURI);
+
+    // write the bytes of the string to an ArrayBuffer
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ab], { type: mimeString });
+  }
+
+  setFiles(){
+    //contenindo
+    var input = document.getElementById('contenido') as HTMLInputElement;
+    const base64 = this.anuncio.contenido;
+    const blob = this.dataURItoBlob(base64);
+    const file = new File([blob], 'contenido.'+this.anuncio.tipoContenido, { type: this.getMimeType(base64) });
+    var container = new DataTransfer();
+    container.items.add(file);
+    input.files = container.files;
+
+    //recursos
+    input = document.getElementById('recurso') as HTMLInputElement;
+    container = new DataTransfer();
+    this.anuncio.recursos.forEach((recurso: Recurso) => {
+      const base64 = recurso.recurso;
+      const blob = this.dataURItoBlob(base64);
+      const file = new File([blob], 'recurso.'+recurso.tipo, { type: this.getMimeType(base64) });
+      container.items.add(file);
+    })
+    input.files = container.files;
+  }
+
   editarAnuncio(anuncio: Anuncio) {
+    this.modoCrear = false
+    this.modoEditar = true
     Object.assign(this.anuncio, anuncio)
+    this.setFiles()
   }
 }

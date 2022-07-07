@@ -7,22 +7,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body pb-0 m-0">
-                <div *ngIf="modoCrear || modoEditar" class="m-0 p-0">
-                    <form name="form">
+                <div [hidden]="!modoCrear && !modoEditar" class="m-0 p-0">
+                    <form name="form" #form="ngForm">
                         <div class="form-floating mb-3">
-                            <input [(ngModel)]="anuncio.titulo" type="text" class="form-control" name="titulo" id="titulo" placeholder="titulo">
+                            <input [(ngModel)]="anuncio.titulo" type="text" class="form-control" name="titulo" id="titulo" placeholder="titulo" required="">
                             <label for="titulo">Titulo:</label>
                         </div>
                         <div class="input-group mb-3">
                             <label class="input-group" for="contenido">Contenido</label>
-                            <input name="contenido" type="file" class="form-control" id="contenido" accept=".png,.jpg,.jpeg,.pdf,.gif,.html,.mp4,.avi,.webm" (change)="getFile($event,'contenido')">
+                            <input name="contenido" type="file" class="form-control" id="contenido" accept=".png,.jpg,.jpeg,.pdf,.gif,.html,.mp4,.avi,.webm" (change)="getFile($event,'contenido')" required>
                         </div>
                         <div class="input-group mb-3">
                             <label class="input-group" for="fechaSalida">Fecha de Finalizacion:</label>
-                            <input [(ngModel)]="anuncio.fechaSalidaVigencia" type="date" class="form-control" id="fechaSalida" name="fechaSalida">
+                            <input [(ngModel)]="anuncio.fechaSalidaVigencia" type="date" class="form-control" id="fechaSalida" name="fechaSalida" required>
                         </div>
                         <div class="form-floating mb-3">
-                            <select [(ngModel)]="anuncio.tiempoLectura" class="form-select" id="tiempoLectura" name="tiempoLectura">
+                            <select [(ngModel)]="anuncio.tiempoLectura" class="form-select" id="tiempoLectura" name="tiempoLectura" required>
                                 <option value="corto">Corto</option>
                                 <option value="medio">Medio</option>
                                 <option value="largo">Largo</option>
@@ -39,7 +39,7 @@
                             </select>
                             <label for="areaAnuncio">Area</label>
                         </div>
-                        <div class="d-flex my-3" *ngIf="anuncio.destinatarios && area._id">
+                        <div class="d-flex my-3" *ngIf="anuncio.destinatarios">
                             <div *ngFor="let destinatario of anuncio.destinatarios">
                                 <span class="badge rounded-pill bg-primary p-3">{{destinatario.nombre|titlecase}}
                                 <button class="btn-close" type="button" (click)="quitarRol(anuncio.destinatarios.indexOf(rol))"></button></span>
@@ -66,7 +66,9 @@
             <div class="modal-footer">
                 <div class="d-flex justify-content-around w-100">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-                    <button type="submit" class="btn btn-success" (click)="guardarAnuncio()" data-bs-dismiss="modal" aria-label="Close">Guardar Anuncio</button>
+                    <button type="submit" class="btn btn-success" (click)="guardarAnuncio()" data-bs-dismiss="modal" aria-label="Close" [disabled]="form.form.invalid || !anuncio.destinatarios.length || !upload">
+                        {{modoCrear? 'Crear Anuncio':'Actualizar Anuncio'}}
+                    </button>
                 </div>
             </div>
         </div>
@@ -107,7 +109,7 @@
                 </select>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success" (click)="agregarRol(area._id)" data-bs-target="#formAnuncio" data-bs-toggle="modal">agregar destinatario</button>
+                <button type="submit" class="btn btn-success" (click)="agregarRol(area._id)" data-bs-target="#formAnuncio" data-bs-toggle="modal">Agregar destinatario</button>
                 <button class="btn btn-danger" data-bs-target="#formAnuncio" data-bs-toggle="modal">Cancelar</button>
             </div>
         </div>
@@ -170,7 +172,7 @@
                 </div>
             </div>
             <div *ngIf="anuncioSelected.estados[0].estado=='editar'" class="card-footer d-flex justify-content-around">
-                <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected);modoCrear=false;modoEditar=true" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
+                <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected)" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
                 <button class="btn btn-primary" (click)="publicarAnuncio(anuncioSelected)">Publicar</button>
             </div>
         </div>
@@ -179,7 +181,7 @@
 <ng-template #sinAnuncios>
     <div class="sinAnuncios w-100 d-flex justify-content-center align-items-center flex-column">
         <h1>Aún no tienes anuncios para compartir</h1>
-        <a class="btn btn-primary rounded-fill" (click)="clearForm()" data-bs-toggle="modal" href="#formAnuncio" role="button">
+        <a class="btn btn-primary rounded-fill" (click)="modoCrear=true;modoEditar=false" data-bs-toggle="modal" href="#formAnuncio" role="button">
             Crea tus anuncios <i class="bi bi-plus fs-4"></i>
         </a>
     </div>
