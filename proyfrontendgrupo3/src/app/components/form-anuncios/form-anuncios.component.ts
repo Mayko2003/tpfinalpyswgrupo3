@@ -318,8 +318,8 @@ export class FormAnunciosComponent implements OnInit {
       this.areaService.getEncargado(element.area._id).subscribe(res => {
         var email = res.email
         var text = 'El anuncio ' + anuncio.titulo + ' ha sido confeccionado por ' + anuncio.redactor.nombre + ' ' + anuncio.redactor.apellido + ' y esta pendiente de ser validado por usted'
-        // this.emailService.send(email,text).subscribe(res=>{
-        // })
+        this.emailService.send(email,text).subscribe(res=>{
+        })
       })
     })
   }
