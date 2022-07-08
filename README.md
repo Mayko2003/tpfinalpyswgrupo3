@@ -3,12 +3,12 @@ Programacion y Servicios WEB, TP FINAL, Grupo 3
 
 Integrantes:
 
-Chorolque Mariano
+Chorolque Mariano 😕 💤
 
-Fernandez Torres Fernando
+Fernandez Torres Fernando 😴 ⭐
 
-Paredes Samuel Elias
+Paredes Samuel Elias 😎 🎶
 
-Rodruiguez Luis Eduardo
+Rodruiguez Luis Eduardo 😐 🌟
 
-Tintilay Santiago
+Tintilay Santiago 😐 👍
