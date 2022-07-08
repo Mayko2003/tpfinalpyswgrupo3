@@ -1,111 +1,184 @@
 <ng-template [ngIf]="anuncios.length" [ngIfElse]="sinAnuncios">
-    <!------------------------------Slider para los tiempo de lectura---------------------------------->
-    <div class="d-flex justify-content-center">
-        <div id="carouselAnuncios" class="carousel slide overflow-hidden" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item p-0 m-0 w-100" *ngFor="let anuncio of anuncios; let i = index" [ngClass]="{'active': i === 1}" [attr.data-bs-interval]="{'2000':(anuncio.tiempoLectura == 'corto'),'5000':(anuncio.tiempoLectura == 'medio'),'10000':(anuncio.tiempoLectura == 'largo')}">
-                    <!-- Muestra contenido autiovisual -->
-                    <div *ngIf="anuncio.tipoContenido == 'mp4' || anuncio.tipoContenido == 'avi' || anuncio.tipoContenido == 'webm'" class="ratio ratio-16x9">
-                        <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no" width="100%">
-                            <source [type]="'video/'+anuncio.tipoContenido" [src]="contenidos[anuncios.indexOf(anuncio)]">
-                        </video>
-                    </div>
-                    <!-- Muestra imagenes y gifs -->
-                    <div *ngIf="anuncio.tipoContenido == 'jpg' || anuncio.tipoContenido == 'jpeg' || anuncio.tipoContenido == 'png'  || anuncio.tipoContenido == 'gif'" class="w-100 h-100">
-                        <img [src]="contenidos[anuncios.indexOf(anuncio)]" [alt]="anuncio.titulo+'.'+anuncio.tipoContenido" class="img-fluid w-100">
-                    </div>
-                    <!-- muestra archivos -->
-                    <div *ngIf="anuncio.tipoContenido == 'pdf' || anuncio.tipoContenido == 'html'">
-                        <iframe class="w-100" style="height: 50vh;" allowfullscreen controls [src]="contenidos[anuncios.indexOf(anuncio)]" frameborder="0"></iframe>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAnuncios" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselAnuncios" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-        </div>
+  <!------------------------------Slider para los tiempo de lectura---------------------------------->
+  <div *ngIf="anuncios.length == 1" class="d-flex justify-content-center">
+    <div
+      *ngIf="anuncios[0].tipoContenido == 'jpg' || anuncios[0].tipoContenido == 'jpeg' || anuncios[0].tipoContenido == 'png'  || anuncios[0].tipoContenido == 'gif'"
+      class="w-95 h-100">
+      <img [src]="contenidos[0]" [alt]="anuncios[0].titulo+'.'+anuncios[0].tipoContenido" class="img-fluid w-100" style="height: 50vh;">
     </div>
+  </div>
+  <div class="d-flex justify-content-center">
+    <div id="carouselAnuncios" class="carousel slide overflow-hidden" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item p-0 m-0 w-100" *ngFor="let anuncio of anuncios; let i = index"
+          [ngClass]="{'active': i === 1}"
+          [attr.data-bs-interval]="{'2000':(anuncio.tiempoLectura == 'corto'),'5000':(anuncio.tiempoLectura == 'medio'),'10000':(anuncio.tiempoLectura == 'largo')}">
+          <!-- Muestra contenido autiovisual -->
+          <div
+            *ngIf="anuncio.tipoContenido == 'mp4' || anuncio.tipoContenido == 'avi' || anuncio.tipoContenido == 'webm'"
+            class="ratio ratio-16x9">
+            <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no"
+              width="100%">
+              <source [type]="'video/'+anuncio.tipoContenido" [src]="contenidos[anuncios.indexOf(anuncio)]">
+            </video>
+          </div>
+          <!-- Muestra imagenes y gifs -->
+          <div
+            *ngIf="anuncio.tipoContenido == 'jpg' || anuncio.tipoContenido == 'jpeg' || anuncio.tipoContenido == 'png'  || anuncio.tipoContenido == 'gif'"
+            class="w-100 h-100">
+            <img [src]="contenidos[anuncios.indexOf(anuncio)]" [alt]="anuncio.titulo+'.'+anuncio.tipoContenido"
+              class="img-fluid w-100" style="height: 50vh;">
+          </div>
+          <!-- muestra archivos -->
+          <div *ngIf="anuncio.tipoContenido == 'pdf' || anuncio.tipoContenido == 'html'">
+            <iframe class="w-100" style="height: 50vh;" allowfullscreen controls
+              [src]="contenidos[anuncios.indexOf(anuncio)]" frameborder="0"></iframe>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselAnuncios" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselAnuncios" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
 
-    <!------------------------------mostrar anuncios vigentes para sus roles---------------------------------->
-    <hr class="dropdown-divider">
-    <h3 class="w-100 d-flex justify-content-center">Anuncios Vigentes</h3>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 pt-3 pb-5 mx-0">
-        <div class="col my-4 mx-auto shadow-lg rounded-3 card" *ngFor="let a of anuncios" class="card">
-            <div class="card-header">
-                <div *ngIf="a.tipoContenido == 'mp4' || a.tipoContenido == 'avi' || a.tipoContenido == 'webm'" class="ratio ratio-16x9">
-                    <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
-                        <source [type]="'video/'+a.tipoContenido" [src]="contenidos[anuncios.indexOf(a)]">
-                    </video>
-                </div>
-                <div *ngIf="a.tipoContenido == 'jpg' || a.tipoContenido == 'jpeg' || a.tipoContenido == 'png'  || a.tipoContenido == 'gif'">
-                    <img [src]="contenidos[anuncios.indexOf(a)]" [alt]="a.titulo+'.'+a.tipoContenido" class="w-100 img-fluid">
-                </div>
-                <div *ngIf="a.tipoContenido == 'pdf' || a.tipoContenido == 'html'">
-                    <iframe [src]="contenidos[anuncios.indexOf(a)]" frameborder="0" class="w-100"></iframe>
-                </div>
-            </div>
-            <div class="card-body d-flex flex-column justify-content-between">
-                <h5 class="card-title">{{a.titulo}}</h5>
-                <p class="card-text">{{a.redactor.nombre}} {{a.redactor.apellido}}</p>
-                <p class="card-text">
-                    <ng-container *ngFor="let e of a.estados">
-                        <li class="list-group-item" [ngClass]="{'bg-success':e.estado=='autorizado'}">Estado del Anuncio: {{e.estado}}</li>
-                    </ng-container>
-                </p>
-                <!-- Button Modal -->
-                <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" data-bs-target="#modalRecursos">Recursos <i class="bi bi-archive"></i></button>
-            </div>
-            <!-- Modal QR -->
-            <div class="modal fade" id="modalRecursos" tabindex="-1" aria-labelledby="modalRecursosLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalRecursosLabel">Recursos de {{a.titulo}}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex justify-content-center">
-                            <img [src]="a.codigoQR" class="w-50" alt="QR Anuncio">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <!------------------------------mostrar anuncios vigentes para sus roles---------------------------------->
+  <hr class="dropdown-divider">
+  <h3 class="w-100 d-flex justify-content-center">Anuncios Vigentes</h3>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
+    <div class="col my-4 mx-auto shadow-lg rounded-3 card" *ngFor="let a of anuncios" class="card">
+      <div class="card-header">
+        <div *ngIf="a.tipoContenido == 'mp4' || a.tipoContenido == 'avi' || a.tipoContenido == 'webm'"
+          class="ratio ratio-16x9">
+          <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
+            <source [type]="'video/'+a.tipoContenido" [src]="contenidos[anuncios.indexOf(a)]">
+          </video>
         </div>
+        <div
+          *ngIf="a.tipoContenido == 'jpg' || a.tipoContenido == 'jpeg' || a.tipoContenido == 'png'  || a.tipoContenido == 'gif'">
+          <img [src]="contenidos[anuncios.indexOf(a)]" [alt]="a.titulo+'.'+a.tipoContenido" class="w-100 img-fluid">
+        </div>
+        <div *ngIf="a.tipoContenido == 'pdf' || a.tipoContenido == 'html'">
+          <iframe [src]="contenidos[anuncios.indexOf(a)]" frameborder="0" class="w-100"></iframe>
+        </div>
+      </div>
+      <div class="card-body d-flex flex-column justify-content-between">
+        <!--titulo-->
+        <h5 class="card-title text-center">{{a.titulo}}</h5>
+        <!--estado-->
+        <li class="list-group-item d-flex justify-content-center">
+          <i class="bi ms-2 bi-check-circle-fill text-success">Autorizado</i>
+        </li>
+        <!--redactor-->
+        <p class="card-text">Redactor: {{a.redactor.nombre}} {{a.redactor.apellido}}</p>
+        <!-- Fecha Entrada -->
+        <p class="card-text">Fecha Entrada: {{a.fechaEntradaVigencia|date}} </p>
+        <!-- Fecha Salida -->
+        <p class="card-text">Fecha Salida: {{a.fechaSalidaVigencia|date}}</p>
+        <!-- Button Modal -->
+        <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal"
+          [attr.data-bs-target]="'#modalRecursos'+a._id">Recursos <i class="bi bi-archive"></i></button>
+      </div>
+      <!-- Modal QR -->
+      <div class="modal fade" id="modalRecursos{{a._id}}" tabindex="-1"
+        [attr.aria-labelledby]="'modalRecursosLabel'+a._id" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalRecursosLabel+{{a._id}}">Recursos de
+                {{a.titulo}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+              <img [src]="a.codigoQR" class="w-50" alt="QR Anuncio">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!------------filtrar anuncios historicos para algunos de sus roles---------------------->
-    <div class="container-fluid">
-        <h2>Filtrar Anuncios Historicos</h2>
-        <div class="d-flex">
-            <select class="form-select" [(ngModel)]="rolElegido" name="rolElegido">
-                <option *ngFor="let r of roles" value={{r._id}}>{{r.nombre}}</option>
-            </select>
-            <button type="button" class="btn btn-primary" [ngClass]="{'disabled':rolElegido==''}" (click)="filtrarAnuncios()">Filtrar</button>
-        </div>
-        <div class="row container pt-5 pb-5 mx-0">
-            <div class="col-4" *ngFor="let b of anunciosFiltrados" style="width: 18rem;">
-                <img class="card-img-top" [src]=b.contenido alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">{{b.titulo}}</h5>
-                    <p class="card-text">{{b.redactor}}</p>
-                    <a href="#" class="btn btn-primary">Tiempo de lectura {{b.tiempoLectura}}</a>
-                </div>
-            </div>
-        </div>
+  <!------------filtrar anuncios historicos para algunos de sus roles---------------------->
+  <div class="container-fluid">
+    <h2>Filtrar Anuncios Historicos</h2>
+    <div class="d-flex">
+      <select class="form-select" [(ngModel)]="rolElegido" name="rolElegido">
+        <option *ngFor="let r of roles" value={{r._id}}>{{r.nombre}}</option>
+      </select>
+      <button type="button" class="btn btn-primary" [ngClass]="{'disabled':rolElegido==''}"
+        (click)="filtrarAnuncios()">Filtrar</button>
     </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
+      <div class="col my-4 mx-auto shadow-lg rounded-3 card" *ngFor="let b of anunciosFiltrados" class="card">
+        <div class="card-header">
+          <div *ngIf="b.tipoContenido == 'mp4' || b.tipoContenido == 'avi' || b.tipoContenido == 'webm'"
+            class="ratio ratio-16x9">
+            <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
+              <source [type]="'video/'+b.tipoContenido" [src]="contenidosHistoricos[anunciosFiltrados.indexOf(b)]">
+            </video>
+          </div>
+          <div
+            *ngIf="b.tipoContenido == 'jpg' || b.tipoContenido == 'jpeg' || b.tipoContenido == 'png'  || b.tipoContenido == 'gif'">
+            <img [src]="contenidosHistoricos[anunciosFiltrados.indexOf(b)]" [alt]="b.titulo+'.'+b.tipoContenido"
+              class="w-100 img-fluid">
+          </div>
+          <div *ngIf="b.tipoContenido == 'pdf' || b.tipoContenido == 'html'">
+            <iframe [src]="contenidosHistoricos[anunciosFiltrados.indexOf(b)]" frameborder="0" class="w-100"></iframe>
+          </div>
+        </div>
+        <div class="card-body d-flex flex-column justify-content-between">
+          <!--titulo-->
+          <h5 class="card-title text-center">{{b.titulo}}</h5>
+          <!--estado-->
+          <li class="list-group-item d-flex justify-content-center">
+            <i class="bi ms-2 bi-check-circle-fill text-success">Autorizado</i>
+          </li>
+          <!--redactor-->
+          <p class="card-text">Redactor: {{b.redactor.nombre}} {{b.redactor.apellido}}</p>
+          <!-- Fecha Entrada -->
+          <p class="card-text">Fecha Entrada: {{b.fechaEntradaVigencia|date}} </p>
+          <!-- Fecha Salida -->
+          <p class="card-text">Fecha Salida: {{b.fechaSalidaVigencia|date}}</p>
+          <!-- Button Modal -->
+          <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal"
+            [attr.data-bs-target]="'#modalRecursos'+b._id">Recursos <i class="bi bi-archive"></i></button>
+        </div>
+        <!-- Modal QR -->
+        <div class="modal fade" id="modalRecursos{{b._id}}" tabindex="-1"
+          [attr.aria-labelledby]="'modalRecursosLabel'+b._id" aria-hidden="true">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalRecursosLabel+{{b._id}}">Recursos de
+                  {{b.titulo}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body d-flex justify-content-center">
+                <img [src]="b.codigoQR" class="w-50" alt="QR Anuncio">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </ng-template>
 
 
 <ng-template #sinAnuncios>
-    <div class="sinAnuncios w-100 d-flex justify-content-center align-items-center flex-column">
-        <h1>No hay anuncios para mostrar aqui</h1>
-    </div>
+  <div class="sinAnuncios w-100 d-flex justify-content-center align-items-center flex-column">
+    <h1>No hay anuncios para mostrar aqui</h1>
+  </div>
 </ng-template>

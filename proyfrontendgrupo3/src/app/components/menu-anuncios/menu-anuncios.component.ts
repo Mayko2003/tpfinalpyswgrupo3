@@ -30,6 +30,9 @@ export class MenuAnunciosComponent implements OnInit {
   //valida los recursos que se mostraran en la visata
   contenidos!: Array<SafeResourceUrl>;
 
+  //valida los recursos del filtro de anuncios historicos por roles
+  contenidosHistoricos!: Array<SafeResourceUrl>;
+
   constructor(private anuncioService: AnuncioService,private loginService: LoginService,private router: Router,private sanitizer: DomSanitizer) {
     this.anuncios = new Array<Anuncio>();
     this.fecha = new Date();
@@ -91,12 +94,14 @@ export class MenuAnunciosComponent implements OnInit {
     //uso una fecha para sacar los anuncios vigentes
     this.fechaFiltro = new Date();
 
+    this.contenidosHistoricos = new Array<SafeResourceUrl>();
     this.anuncioService.getAnunciosByRoles(this.rolesFiltrados, this.fecha, this.area._id).subscribe((res) => {
         res.forEach((resAnuncio: Anuncio) => {
           //guardo la fecha para filtrar solo los que ya no tienen vigencia
           this.fecha2 = new Date(resAnuncio.fechaSalidaVigencia);
           if (this.fecha2 < this.fechaFiltro) {
             this.anunciosFiltrados.push(resAnuncio);
+            this.contenidosHistoricos.push(this.sanitizer.bypassSecurityTrustResourceUrl(resAnuncio.contenido))
           }
         });
       });

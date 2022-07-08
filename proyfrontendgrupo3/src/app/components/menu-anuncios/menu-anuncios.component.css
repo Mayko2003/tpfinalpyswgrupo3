@@ -9,4 +9,5 @@
 #carouselAnuncios {
     width: auto;
     max-height: 90vh;
+    overflow: hidden;
 }
