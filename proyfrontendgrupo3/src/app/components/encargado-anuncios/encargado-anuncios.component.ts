@@ -22,36 +22,36 @@ export class EncargadoAnunciosComponent implements OnInit {
   anuncios: Array<Anuncio> = [];
   anuncioFiltro: Array<Anuncio> = [];
   anuncio: Anuncio = new Anuncio();
-  areaId!:string;
+  areaId!: string;
   //variables para realizar el filtro segun el encargado y segun un estado de su eleccion "confeccionado, autorizado, cancelado"
   estado: string = "confeccionado";
-  estado2: string = ''; 
+  estado2: string = '';
   area!: Area;
   roles: Array<Rol> = [];
-  rolesId : Array<string> = [];
-  medioPublicacion:string='';
-  tipoContenido:string='';
-  redactores!:Array<Persona>;
-  redactor:string='';
-  destinatario:string='';
-  texto:string = '';
-  destinatarios!:Array<Rol>;
-  fechaSalida:string = '';
+  rolesId: Array<string> = [];
+  medioPublicacion: string = '';
+  tipoContenido: string = '';
+  redactores!: Array<Persona>;
+  redactor: string = '';
+  destinatario: string = '';
+  texto: string = '';
+  destinatarios!: Array<Rol>;
+  fechaSalida: string = '';
   fechaEntrada: string = '';
 
   //valida los recursos que se mostraran en la visata
   contenidos!: Array<SafeResourceUrl>;
   contenidosFiltro!: Array<SafeResourceUrl>;
 
-  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService:PersonaService, private areaService:AreaService,private router: Router, private sanitizer:DomSanitizer, private qrService: QrService) { }
-  
+  constructor(private anuncioService: AnuncioService, private loginService: LoginService, private personaService: PersonaService, private areaService: AreaService, private router: Router, private sanitizer: DomSanitizer, private qrService: QrService) { }
+
   ngOnInit(): void {
     //validacion de peticion
     this.cargarMisRoles();
-    if (this.roles[0].nombre != "Encargado" && this.roles[0].nombre != "encargado"){
-        this.router.navigate(['/Login'])
+    if (this.roles[0].nombre != "Encargado" && this.roles[0].nombre != "encargado") {
+      this.router.navigate(['/Login'])
     }
-    
+
     //por defecto mostrara en la pagina del encargado los anuncios con el estado confeccionado (listos para publicarse)
     this.cargarAnuncios();
     this.cargarDestinatarios();
@@ -79,7 +79,7 @@ export class EncargadoAnunciosComponent implements OnInit {
     var rolesLogin = this.loginService.rolLogged();
     this.anuncios = new Array<Anuncio>();
     if (id) {
-      this.personaService.getPersonabyID(id).subscribe(res=>{
+      this.personaService.getPersonabyID(id).subscribe(res => {
         this.area = res.area;
         this.areaId = res.area;
         this.contenidos = new Array<SafeResourceUrl>();
@@ -95,51 +95,55 @@ export class EncargadoAnunciosComponent implements OnInit {
   }
 
   //con este procedimiento se cambia el estado de un anuncio para autorizarlo, cancelarlo o volverlo a su estado original
-  actualizarEstadoAnuncio(anuncioModificado: Anuncio,accion:string){
-    var estado
-    anuncioModificado.estados.forEach((element:any)=>{
-      if(element.area==this.areaId){
-        element.estado = accion;
-        if(accion == "autorizado"){
-          anuncioModificado.fechaEntradaVigencia = new Date();
+  actualizarEstadoAnuncio(anuncioModificado: Anuncio, accion: string) {
+    //refrescar anuncio
+    this.anuncioService.getAnuncio(anuncioModificado._id).subscribe(res => {
+      Object.assign(anuncioModificado, res)
+      var estado
+      anuncioModificado.estados.forEach((element: any) => {
+        if (element.area == this.areaId) {
+          element.estado = accion;
+          if (accion == "autorizado") {
+            anuncioModificado.fechaEntradaVigencia = new Date();
+          }
+          if (accion == "editar" && anuncioModificado.estados.length > 1) {
+            var clon = new Anuncio();
+            Object.assign(clon, anuncioModificado);
+            clon._id = undefined as any;
+            clon.codigoQR = ""
+            clon.estados = new Array<any>();
+            clon.estados.push(element);
+
+
+            //remove element from array estados of anuncioModificado
+            estado = element
+
+            //save clon
+            this.anuncioService.addAnuncio(clon).subscribe(res => {
+              //update qr code 
+              var text = window.location.host + '/recursos/' + res.id;
+              clon._id = "" + res.id;
+              this.qrService.generarQr(text, 'url').subscribe((res) => {
+                clon.codigoQR = res.url
+                this.anuncioService.updateAnuncio(clon).subscribe()
+              });
+            })
+          }
         }
-        if(accion == "editar" && anuncioModificado.estados.length > 1){
-          var clon = new Anuncio();
-          Object.assign(clon, anuncioModificado);
-          clon._id = undefined as any;
-          clon.codigoQR = ""
-          clon.estados = new Array<any>();
-          clon.estados.push(element);
+      })
+      //remove estado from estados of anuncioModificado
+      if (estado) anuncioModificado.estados.splice(anuncioModificado.estados.indexOf(estado), 1)
+      this.anuncioService.updateAnuncio(anuncioModificado).subscribe();
 
-          
-
-          //remove element from array estados of anuncioModificado
-          estado = element
-
-          //save clon
-          this.anuncioService.addAnuncio(clon).subscribe(res=>{
-            //update qr code 
-            var text = window.location.host + '/recursos/' + res.id;
-            clon._id = "" + res.id;
-            this.qrService.generarQr(text, 'url').subscribe((res) => {
-              clon.codigoQR = res.url
-              this.anuncioService.updateAnuncio(clon).subscribe()
-            });
-          })
-        }
-      }
+      this.cargarAnuncios();
+      this.limpiarFiltro();
     })
-    //remove estado from estados of anuncioModificado
-    if(estado) anuncioModificado.estados.splice(anuncioModificado.estados.indexOf(estado),1)
-    this.anuncioService.updateAnuncio(anuncioModificado).subscribe();
-    this.cargarAnuncios();
-    this.limpiarFiltro();
   }
 
-  obtenerEstado(anuncio:Anuncio):string{
-    for(let i = 0; i < anuncio.estados.length; i++){
+  obtenerEstado(anuncio: Anuncio): string {
+    for (let i = 0; i < anuncio.estados.length; i++) {
       var area = anuncio.estados[i].area as unknown as string;
-      if(area == this.areaId){
+      if (area == this.areaId) {
         return anuncio.estados[i].estado;
       }
     }
@@ -148,42 +152,42 @@ export class EncargadoAnunciosComponent implements OnInit {
 
   //Búsquedas avanzadas, se podrá realizar por destinatario, fechas, medio de publicación, texto, 
   //tipo de contenido, estado, redactor o combinaciones de todas las anteriores.
-  cargarPersonas(){
+  cargarPersonas() {
     var id = this.loginService.idLogged();
     this.redactores = new Array<Persona>();
-    if(id!=null)
-    this.personaService.getPersonabyID(id).subscribe(res=>{
-      this.personaService.getPersonasbyArea(res.area).subscribe(res=>{
-        res.forEach((element:any) => {
-          this.redactores.push(element);
-        });
+    if (id != null)
+      this.personaService.getPersonabyID(id).subscribe(res => {
+        this.personaService.getPersonasbyArea(res.area).subscribe(res => {
+          res.forEach((element: any) => {
+            this.redactores.push(element);
+          });
+        })
       })
-    })
   }
-  cargarDestinatarios(){
+  cargarDestinatarios() {
     var id = this.loginService.idLogged();
     this.destinatarios = new Array<Rol>();
-    if(id!=null)
-    this.personaService.getPersonabyID(id).subscribe(res=>{
-      this.areaService.getRolesArea(res.area).subscribe(res=>{
-        res.forEach((element:any) => {
-          this.destinatarios.push(element);
-        });
+    if (id != null)
+      this.personaService.getPersonabyID(id).subscribe(res => {
+        this.areaService.getRolesArea(res.area).subscribe(res => {
+          res.forEach((element: any) => {
+            this.destinatarios.push(element);
+          });
+        })
       })
-    })
   }
-  actualizarFiltro(){
+  actualizarFiltro() {
     this.cargarMiArea()
     this.anuncioFiltro = new Array<Anuncio>();
     this.contenidosFiltro = new Array<SafeResourceUrl>();
-    this.anuncioService.getAnunciosFiltro(this.area._id,this.texto,this.fechaSalida,this.fechaEntrada,this.destinatario,this.medioPublicacion,this.redactor,this.estado2,this.tipoContenido).subscribe(res=>{
+    this.anuncioService.getAnunciosFiltro(this.area._id, this.texto, this.fechaSalida, this.fechaEntrada, this.destinatario, this.medioPublicacion, this.redactor, this.estado2, this.tipoContenido).subscribe(res => {
       Object.assign(this.anuncioFiltro, res);
       this.anuncioFiltro.forEach(anuncio => {
         this.contenidosFiltro.push(this.sanitizer.bypassSecurityTrustResourceUrl(anuncio.contenido))
       })
     })
   }
-  limpiarFiltro(){
+  limpiarFiltro() {
     this.estado2 = "";
     this.tipoContenido = "";
     this.medioPublicacion = "";

@@ -2,21 +2,24 @@
     <div class="col-12 d-flex justify-content-center">
         <h5 class="card-title">Recursos de {{anuncio.titulo}}</h5>
     </div>
+    <div *ngIf="anuncio.recursos.length == 0">
+        <h1 class="text-center">No hay recursos para mostrar</h1>
+    </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 g-4">
         <div *ngFor="let recurso of anuncio.recursos" class="col">
-            <div [ngSwitch]="recurso.tipo" class="card">
-                <div *ngSwitchCase="'pdf' || 'html'">
-                    <iframe [src]="recurso.recurso" frameborder="0"></iframe>
+            <div class="card">
+                <div *ngIf="recurso.tipo == 'pdf' || recurso.tipo == 'html'">
+                    <iframe [src]="sanitizar(recurso.recurso)" frameborder="0"></iframe>
                 </div>
-                <div *ngSwitchCase="'png' || 'jpg' || 'jpeg' || 'gif'">
+                <div *ngIf="recurso.tipo == 'jpg' || recurso.tipo == 'png' || recurso.tipo == 'gif' || recurso.tipo == 'jpeg'">
                     <img [src]="recurso.recurso" class="img-fluid">
                 </div>
-                <div *ngSwitchCase="'avi'||'mp4'||'webm'" class=" ratio ratio-16x9">
-                    <iframe allowfullscreen controls frameborder="0" scrolling="no" [src]="recurso.recurso"></iframe>
-                    <video allowfullscreen controls frameborder="0" scrolling="no" [src]="recurso.recurso"></video>
+                <div *ngIf="recurso.tipo == 'avi' || recurso.tipo == 'webm' || recurso.tipo == 'mp4'" class=" ratio ratio-16x9">
+                    <video allowfullscreen loop controls [controlsList]="'nodownload'" frameborder="0" scrolling="no">
+                        <source [type]="'video/'+recurso.tipo" [src]="sanitizar(recurso.recurso)">
+                    </video>
                 </div>
             </div>
         </div>
     </div>
 </div>
-

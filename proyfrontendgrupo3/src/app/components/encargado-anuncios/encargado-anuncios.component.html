@@ -36,6 +36,10 @@
                 <button *ngIf="obtenerEstado(anuncio)=='confeccionado'" class="btn btn-warning" type="button" (click)="actualizarEstadoAnuncio(anuncio,'editar')">Solicitar Revision</button>
                 
                 <h5 class="card-title">{{anuncio.titulo}}</h5>
+                <!-- Fecha Entrada -->
+                <p class="card-text" *ngIf="anuncio.fechaEntradaVigencia">Fecha Entrada: {{anuncio.fechaEntradaVigencia|date}}</p>
+                <!-- Fecha Salida -->
+                <p class="card-text">Fecha Salida: {{anuncio.fechaSalidaVigencia|date}}</p>
                 <!-- Redactor -->
                 <p class="card-text">Redactor: {{anuncio.redactor.nombre |titlecase}} {{anuncio.redactor.apellido | titlecase}}</p>
                 <!-- Destinatarios -->
@@ -47,10 +51,10 @@
                     <i class="bi me-2" [ngClass]="'bi-'+medio"></i>{{medio | titlecase}}
                 </span>
                 <!-- Button Modal -->
-                <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" data-bs-target="#modalRecursos">Recursos <i class="bi bi-archive"></i></button>
+                <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" [attr.data-bs-target]="'#modalRecursos'+anuncio._id">Recursos <i class="bi bi-archive"></i></button>
             </div>
             <!-- Modal QR -->
-            <div class="modal fade" id="modalRecursos" tabindex="-1" aria-labelledby="modalRecursosLabel" aria-hidden="true">
+            <div class="modal fade" id="modalRecursos{{anuncio._id}}" tabindex="-1" aria-labelledby="modalRecursosLabel" aria-hidden="true">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -108,9 +112,9 @@
                 <li class="p-0 m-0">
                     <div class="dropdown-item form-floating m-0 p-0">
                         <select class="form-select" id="floatingSelect" aria-label="Floating label select example" [(ngModel)]="medioPublicacion" name="medio" (change)="actualizarFiltro()">
-                            <option value="FaceBook">Facebook</option>
-                            <option value="Instagram">Instagram</option>
-                            <option value="Twitter">Twitter</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="twitter">Twitter</option>
                         </select>
                         <label for="floatingSelect">Medio de publicacion</label>
                     </div>
@@ -175,6 +179,10 @@
                 <i class="bi ms-2" [ngClass]="{'bi-check-circle-fill text-success':obtenerEstado(anuncio)=='autorizado','bi-x-circle-fill text-danger':obtenerEstado(anuncio)=='cancelado','bi-info-circle-fill text-warning':obtenerEstado(anuncio)=='confeccionado'}"></i>
             </li>
             <h5 class="card-title">{{anuncio.titulo}}</h5>
+            <!-- Fecha Entrada -->
+            <p class="card-text" *ngIf="anuncio.fechaEntradaVigencia">Fecha Entrada: {{anuncio.fechaEntradaVigencia|date}}</p>
+            <!-- Fecha Salida -->
+            <p class="card-text">Fecha Salida: {{anuncio.fechaSalidaVigencia|date}}</p>
             <!-- Redactor -->
             <p class="card-text">Redactor: {{anuncio.redactor.nombre |titlecase}} {{anuncio.redactor.apellido | titlecase}}</p>
             <!-- Destinatarios -->
@@ -188,10 +196,10 @@
                 <i class="bi me-2" [ngClass]="'bi-'+medio"></i>{{medio}}
             </span>
             <!-- Button Modal -->
-            <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" data-bs-target="#modalRecursos">Recursos <i class="bi bi-archive"></i></button>
+            <button type="button" class="w-100 btn btn-info mt-3" data-bs-toggle="modal" [attr.data-bs-target]="'#modalRecursos2'+anuncio._id">Recursos <i class="bi bi-archive"></i></button>
         </div>
         <!-- Modal QR -->
-        <div class="modal fade" id="modalRecursos" tabindex="-1" aria-labelledby="modalRecursosLabel" aria-hidden="true">
+        <div class="modal fade" id="modalRecursos2{{anuncio._id}}" tabindex="-1" aria-labelledby="modalRecursosLabel" aria-hidden="true">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">

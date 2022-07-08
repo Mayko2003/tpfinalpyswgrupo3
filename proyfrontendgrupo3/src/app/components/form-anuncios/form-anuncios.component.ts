@@ -335,11 +335,13 @@ export class FormAnunciosComponent implements OnInit {
     //recursos
     input = document.getElementById('recurso') as HTMLInputElement;
     container = new DataTransfer();
+    var cont = 1
     this.anuncio.recursos.forEach((recurso: Recurso) => {
       const base64 = recurso.recurso;
       const blob = this.dataURItoBlob(base64);
-      const file = new File([blob], 'recurso.'+recurso.tipo, { type: this.getMimeType(base64) });
+      const file = new File([blob], 'recurso'+cont+'.'+recurso.tipo, { type: this.getMimeType(base64) });
       container.items.add(file);
+      cont += 1
     })
     input.files = container.files;
   }
