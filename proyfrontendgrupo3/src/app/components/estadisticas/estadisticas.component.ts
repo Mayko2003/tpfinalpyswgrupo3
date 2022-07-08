@@ -42,7 +42,8 @@ export class EstadisticasComponent implements OnInit {
   ngOnInit(): void {
     //validacion de peticion
     this.cargarMisRoles();
-    if (this.roles[0].nombre != "autoridad") {
+    console.log(this.roles[0].nombre)
+    if (this.roles[0].nombre != "Autoridad") {
       this.router.navigate(['/Login'])
     }
 
