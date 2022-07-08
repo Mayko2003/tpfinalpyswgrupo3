@@ -51,6 +51,14 @@ export class FormAnunciosComponent implements OnInit {
   //valida los recursos que se mostraran en la visata
   contenidos!: Array<SafeResourceUrl>;
 
+  //variable para la fecha salida
+  fechaSalida:string = '';
+
+  //variable para editar archivo
+  archivo:string = "";
+  extArchivo:string = "";
+  prevModal:string = "";
+
   constructor(private anuncioService: AnuncioService, private loginService: LoginService, private areaService: AreaService, private qrService: QrService, private router: Router, private activatedRoute: ActivatedRoute, private emailService: EmailService, private sanitizer: DomSanitizer) {
     this.anuncio = new Anuncio();
     this.anuncio.recursos = new Array<Recurso>();
@@ -83,6 +91,11 @@ export class FormAnunciosComponent implements OnInit {
   cargarMisRoles() {
     var rolesLogin = this.loginService.rolLogged();
     Object.assign(this.roles, rolesLogin);
+  }
+
+  cerrarForm(){
+    this.estados = new Array<Estado>();
+    this.estados = this.anuncio.estados
   }
 
   //-----------------------METODOS PARA GUARDAR/EDITAR MIS ANUNCIOS---------------------
@@ -189,6 +202,7 @@ export class FormAnunciosComponent implements OnInit {
   //elimina un rol de los destinatarios del anuncio
   quitarRol(pos: number) {
     this.anuncio.destinatarios.splice(pos, 1);
+    this.estados.splice(pos, 1);
   }
 
   //metodo para cargar medios
@@ -201,12 +215,14 @@ export class FormAnunciosComponent implements OnInit {
   }
 
   guardarAnuncio() {
-
+    //agregamos los estados al anuncio 
+    this.estados.forEach((element: any) => { 
+      if(!element.estado) element.estado = "editar" 
+    })
+    this.anuncio.estados = this.estados;
+    //creamos la fecha de salida
+    this.anuncio.fechaSalidaVigencia = new Date(this.fechaSalida);
     if (this.anuncio._id == null || this.anuncio._id == "") {
-      //agregamos los estados al anuncio 
-      this.estados.forEach((element: any) => { element.estado = "editar" })
-      this.anuncio.estados = this.estados
-
       //agragamos el redactor al anuncio 
       var id = this.loginService.idLogged()
       if (id != null) this.anuncio.redactor._id = id
@@ -222,17 +238,19 @@ export class FormAnunciosComponent implements OnInit {
           this.actualizarAnuncio();
           this.anuncio = new Anuncio();
         });
+        this.clearForm();
         this.mostrarMisAnuncios()
       });
-
     } else {
       this.actualizarAnuncio();
-    }
-    this.clearForm();
+    } 
   }
 
   actualizarAnuncio() {
-    this.anuncioService.updateAnuncio(this.anuncio).subscribe((res) => { });
+    this.anuncioService.updateAnuncio(this.anuncio).subscribe((res) => {
+      this.clearForm();
+      this.mostrarMisAnuncios();
+    });
     this.anuncio = new Anuncio();
   }
 
@@ -267,6 +285,10 @@ export class FormAnunciosComponent implements OnInit {
       recursos.value = '';
       this.recurso = new Recurso();
     }
+  }
+
+  sanitizar(url: string) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   //------------------------------METODOS PAR CARGAR MIS ANUNCIOS----------------------------
@@ -349,8 +371,35 @@ export class FormAnunciosComponent implements OnInit {
   editarAnuncio(anuncio: Anuncio) {
     this.modoCrear = false
     this.modoEditar = true
+    this.fechaSalida = new Date(anuncio.fechaSalidaVigencia).toISOString().substring(0, 10);
     Object.assign(this.anuncio, anuncio)
     this.upload = true
+    this.estados = this.anuncio.estados
     this.setFiles()
+  }
+
+  eliminarRecurso(recurso:Recurso, index:number){
+    this.anuncio.recursos.splice(index,1)
+    //remove file from html input
+    var input = document.getElementById('recurso') as HTMLInputElement;
+    var container = new DataTransfer();
+    var cont = 1
+    this.anuncio.recursos.forEach((rc: Recurso) => {
+      if(rc != recurso){
+        const base64 = rc.recurso;
+        const blob = this.dataURItoBlob(base64);
+        const file = new File([blob], 'recurso'+cont+'.'+rc.tipo, { type: this.getMimeType(base64) });
+        container.items.add(file);
+        cont += 1
+      }
+    })
+    input.files = container.files;
+  }
+  eliminarContenido(){
+    this.anuncio.contenido = ""
+    this.upload = false
+    //remove file from html input
+    var input = document.getElementById('contenido') as HTMLInputElement;
+    input.value = ""
   }
 }

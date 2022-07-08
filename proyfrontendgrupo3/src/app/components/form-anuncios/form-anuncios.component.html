@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="formularioAnuncio">Crear un Anuncio</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cerrarForm()"></button>
             </div>
             <div class="modal-body pb-0 m-0">
                 <div [hidden]="!modoCrear && !modoEditar" class="m-0 p-0">
@@ -16,10 +16,11 @@
                         <div class="input-group mb-3">
                             <label class="input-group" for="contenido">Contenido</label>
                             <input name="contenido" type="file" class="form-control" id="contenido" accept=".png,.jpg,.jpeg,.pdf,.gif,.html,.mp4,.avi,.webm" (change)="getFile($event,'contenido')" required>
+                            <button class="btn btn-danger" (click)="eliminarContenido()">Eliminar</button>
                         </div>
                         <div class="input-group mb-3">
                             <label class="input-group" for="fechaSalida">Fecha de Finalizacion:</label>
-                            <input [(ngModel)]="anuncio.fechaSalidaVigencia" type="date" class="form-control" id="fechaSalida" name="fechaSalida" required>
+                            <input [(ngModel)]="fechaSalida" type="date" class="form-control" id="fechaSalida" name="fechaSalida" required>
                         </div>
                         <div class="form-floating mb-3">
                             <select [(ngModel)]="anuncio.tiempoLectura" class="form-select" id="tiempoLectura" name="tiempoLectura" required>
@@ -32,6 +33,7 @@
                         <div class="input-group mb-3">
                             <label class="input-group" for="recurso">Recursos</label>
                             <input name="recurso" type="file" class="form-control" id="recurso" accept=".png, .jpg, .jpeg, .pdf, .gif, .html, .mp4, .avi, .webm" multiple (change)="getFile($event,'recursos')">
+                            <button class="btn btn-info" data-bs-target="#modalArchivos" data-bs-toggle="modal">Gestionar</button>
                         </div>
                         <div class="form-floating">
                             <select [(ngModel)]="area._id" (change)="cargarRolesArea(area._id)" class="form-control" name="areaAnuncio" id="areaAnuncio">
@@ -65,8 +67,8 @@
             </div>
             <div class="modal-footer">
                 <div class="d-flex justify-content-around w-100">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-                    <button type="submit" class="btn btn-success" (click)="guardarAnuncio()" data-bs-dismiss="modal" aria-label="Close" [disabled]="form.form.invalid || !anuncio.destinatarios.length || !upload">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" class="btn btn-success" (click)="guardarAnuncio()" data-bs-dismiss="modal" aria-label="Close" [disabled]="form.form.invalid || !anuncio.destinatarios || !upload || !anuncio.destinatarios.length">
                         {{modoCrear? 'Crear Anuncio':'Actualizar Anuncio'}}
                     </button>
                 </div>
@@ -111,6 +113,54 @@
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success" (click)="agregarRol(area._id)" data-bs-target="#formAnuncio" data-bs-toggle="modal">Agregar destinatario</button>
                 <button class="btn btn-danger" data-bs-target="#formAnuncio" data-bs-toggle="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal para recursos -->
+<div class="modal fade" id="modalArchivos" aria-hidden="true" tabindex="-1" aria-labelledby="modalArchivosLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalArchivosLabel">Gestionar Recursos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngFor="let recurso of anuncio.recursos; let i = index" class="d-flex justify-content-center my-2">
+                    <p class="my-auto">recurso{{i+1}}.{{recurso.tipo}}</p>
+                    <button class="bi bi-eye btn btn-info ms-2" data-bs-target="#modalArchivo" data-bs-toggle="modal" (click)="archivo=recurso.recurso;extArchivo=recurso.tipo">Ver</button>
+                    <button class="bi bi-x-circle btn btn-danger ms-2" (click)="eliminarRecurso(recurso,i)">Eliminar</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-bs-target="#formAnuncio" data-bs-toggle="modal">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal para un archivo -->
+<div class="modal fade" id="modalArchivo" aria-hidden="true" tabindex="-1" aria-labelledby="modalArchivoLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalArchivoLabel">Ver Archivo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="extArchivo == 'mp4' || extArchivo == 'avi' || extArchivo == 'webm'" class="ratio ratio-16x9">
+                    <video allowfullscreen loop controls [controlsList]="'nodownload'" scrolling="no">
+                        <source [type]="'video/'+extArchivo" [src]="sanitizar(archivo)">
+                    </video>
+                </div>
+                <div *ngIf="extArchivo == 'jpg' || extArchivo == 'jpeg' || extArchivo == 'png'  || extArchivo == 'gif'">
+                    <img [src]="sanitizar(archivo)"  class="w-100 img-fluid">
+                </div>
+                <div *ngIf="extArchivo == 'pdf' || extArchivo == 'html'">
+                    <iframe [src]="sanitizar(archivo)" class="w-100"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-bs-target="#modalArchivos" data-bs-toggle="modal">Volver</button>
             </div>
         </div>
     </div>
@@ -171,7 +221,7 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="anuncioSelected.estados[0].estado=='editar'" class="card-footer d-flex justify-content-around">
+            <div *ngIf="anuncioSelected.estados[0] && anuncioSelected.estados[0].estado=='editar'" class="card-footer d-flex justify-content-around">
                 <button class="btn btn-success" (click)="editarAnuncio(anuncioSelected)" data-bs-toggle="modal" href="#formAnuncio" role="button">Editar</button>
                 <button class="btn btn-primary" (click)="publicarAnuncio(anuncioSelected)">Publicar</button>
             </div>
