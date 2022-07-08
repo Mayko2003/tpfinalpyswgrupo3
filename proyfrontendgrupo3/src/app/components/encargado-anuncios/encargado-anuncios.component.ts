@@ -192,6 +192,7 @@ export class EncargadoAnunciosComponent implements OnInit {
     this.tipoContenido = "";
     this.medioPublicacion = "";
     this.redactor = "";
+    this.destinatario = "";
     this.texto = "";
     this.fechaSalida = "";
     this.fechaEntrada = "";
