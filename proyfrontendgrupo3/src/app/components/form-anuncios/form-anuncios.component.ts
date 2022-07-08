@@ -199,10 +199,42 @@ export class FormAnunciosComponent implements OnInit {
     }
   }
 
+  getAreaRol(rol:Rol):Area|null{
+    var a = null
+    this.areas.forEach(area => {
+      if(area.roles.some(r => r._id == rol._id)) a = area
+    })
+    return a
+  }
+
   //elimina un rol de los destinatarios del anuncio
   quitarRol(pos: number) {
-    this.anuncio.destinatarios.splice(pos, 1);
-    this.estados.splice(pos, 1);
+    //recuperar rola eliminar
+    var rolElimnar = this.anuncio.destinatarios[pos];
+    //recuperar area del rol eliminar
+    var areaEliminar = this.getAreaRol(rolElimnar);
+    if(areaEliminar != null){
+      //eliminar destionatario
+      this.anuncio.destinatarios.splice(pos, 1);
+      var estadoEliminar = null,borrar = true;
+      
+      //buscar si algun otro rol tiene esa area
+      this.anuncio.destinatarios.forEach(rol => {
+        if(this.getAreaRol(rol) == areaEliminar){
+          borrar = false
+        }
+      })
+      if(borrar){
+        //eliminar estado
+        this.estados.forEach(estado => {
+          if (estado.area._id == areaEliminar?._id) {
+            estadoEliminar = estado;
+          }
+        });
+        if(estadoEliminar)this.estados.splice(this.estados.indexOf(estadoEliminar), 1);
+      }
+    }
+
   }
 
   //metodo para cargar medios
