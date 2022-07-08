@@ -9,6 +9,6 @@ Fernandez Torres Fernando 😴 ⭐
 
 Paredes Samuel Elias 😎 🎶
 
-Rodruiguez Luis Eduardo 😐 🌟
+Rodriguez Luis Eduardo 😐 🌟
 
 Tintilay Santiago 😐 👍
