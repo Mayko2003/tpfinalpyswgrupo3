@@ -1,4 +1,4 @@
-# tpfinalpyswgrupo3
+# TP FINAL PYSW 2022
 Programacion y Servicios WEB, TP FINAL, Grupo 3
 
 Integrantes:
@@ -12,3 +12,8 @@ Paredes Samuel Elias 😎 🎶
 Rodriguez Luis Eduardo 😐 🌟
 
 Tintilay Santiago 😐 👍
+
+# Tecnologias Utilizadas
+Angular
+Express js
+Mongodb
