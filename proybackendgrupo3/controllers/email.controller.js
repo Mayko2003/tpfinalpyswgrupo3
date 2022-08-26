@@ -10,7 +10,7 @@ emailController.sendEmail = async(req, res) => {
             service: 'gmail',
             auth: {
                 user: 'quequeres12@gmail.com',
-                pass: 'mhlvfytwxogouyxe'
+                pass: ''
             }
         });
 
