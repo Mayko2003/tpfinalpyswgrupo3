@@ -1,0 +1,25 @@
+FROM node:18.9.0 as build-step
+
+RUN mkdir -p /app
+
+WORKDIR /app
+
+
+COPY package.json /app
+
+#RUN npm cache clean --force
+
+#RUN npm config set registry registry.npmjs.org
+
+RUN npm install
+
+COPY . /app/
+
+EXPOSE 3000
+
+CMD ["npm","run","dev"]
+
+#FROM nginx
+
+#COPY --from=build-step /app/dist/proyfrontendgrupo3 /usr/share/nginx/html/
+

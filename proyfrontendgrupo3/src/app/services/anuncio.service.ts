@@ -4,13 +4,13 @@ import { Observable } from 'rxjs';
 import { Anuncio } from '../models/anuncio';
 import { Area } from '../models/area';
 import { AreaRol } from '../models/area-rol';
-
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AnuncioService {
 
-  urlBase: string = 'http://localhost:3000/api/anuncios'
+  urlBase: string = `${environment.backendUrl}/api/anuncios`
   constructor(private _http: HttpClient) { }
 
   //servicio para agregar una Anuncio
@@ -99,7 +99,7 @@ export class AnuncioService {
     }
     return this._http.get(this.urlBase+"/area/"+area_id, httpOptions)
   }
-  
+
   public getAnunciosFiltro(area: string,titulo:string,fecha1:string,fecha2:string,destinatarios:string,medio:string,redactor:string,estado:string,tipoContenido:string):Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({

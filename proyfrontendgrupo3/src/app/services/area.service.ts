@@ -2,12 +2,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Area } from '../models/area';
-
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class AreaService {
-  urlBase: string = 'http://localhost:3000/api/areas';
+  urlBase: string = `${environment.backendUrl}/api/areas`;
   constructor(private _http: HttpClient) {}
 
   //servicio para agregar una area

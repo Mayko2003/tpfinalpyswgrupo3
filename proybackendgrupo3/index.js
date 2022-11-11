@@ -7,7 +7,10 @@ const cors = require('cors') // middleware para permitir peticiones desde otro d
 const app = express()
 
 // middlewares
-app.use(cors({ origin: 'http://localhost:4200' })) // para que angular pueda acceder a la api
+//allow cors to all origins
+app.use(cors({ origin: '*'}))
+
+
 app.use(express.json({ limit: '50mb' })) // para que el servidor entienda los datos en formato json
 app.use(express.urlencoded({ extended: true })) // para que el servidor entienda los datos en formato urlencoded
 

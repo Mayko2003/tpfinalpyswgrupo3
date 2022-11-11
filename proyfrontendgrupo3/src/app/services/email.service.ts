@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class EmailService {
 
-  private urlBase = 'http://localhost:3000/api/emails';
+  private urlBase = `${environment.backendUrl}api/emails`;
   constructor(private http: HttpClient) { }
 
   send(email:string, text:string):Observable<any>{

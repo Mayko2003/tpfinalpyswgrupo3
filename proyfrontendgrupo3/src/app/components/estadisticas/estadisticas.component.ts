@@ -3,7 +3,7 @@ import { Anuncio } from 'src/app/models/anuncio';
 import { Area } from 'src/app/models/area';
 import { AnuncioService } from 'src/app/services/anuncio.service';
 import { AreaService } from 'src/app/services/area.service';
-import Chart from 'chart.js/auto';
+import { Chart } from 'chart.js';
 import { LoginService } from 'src/app/services/login.service';
 import { Rol } from 'src/app/models/rol';
 import { Router } from '@angular/router';
@@ -200,7 +200,7 @@ export class EstadisticasComponent implements OnInit {
           this.pieChart1.destroy()
         this.pieChart1 = this.crearChart('pieChart1', this.datosPieChart1, 'pie')
 
-        
+
         //crear grafico torta 2
         if (this.pieChart2)
           this.pieChart2.destroy()

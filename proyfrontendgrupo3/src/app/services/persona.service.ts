@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Persona } from '../models/persona';
-
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 
 export class PersonaService {
 
-  urlBase: string = 'http://localhost:3000/api/personas'
+  urlBase: string = `${environment.backendUrl}/api/personas`
   constructor(private _http: HttpClient) { }
 
   //servicio para agregar una persona

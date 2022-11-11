@@ -2,12 +2,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PersonaService } from './persona.service';
-
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  urlBase: string = 'http://localhost:3000/api';
+  urlBase: string = `${environment.backendUrl}/api`
   constructor(private _http: HttpClient, private personaService: PersonaService) { }
 
   //servicio para autenticar una persona en el login

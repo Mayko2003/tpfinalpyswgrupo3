@@ -1,0 +1,32 @@
+version: '3'
+services:
+    database:
+        image: mongo
+        container_name: pysw-db
+        restart: always
+        networks:
+            - tpfinal
+    frontend:
+        image: pysw-frontend
+        container_name: pysw-frontend
+        restart: always
+        ports:
+            - 4200:4200
+        networks:
+            - tpfinal
+    backend:
+        image: pysw-backend
+        container_name: pysw-backend
+        restart: always
+        ports:
+            - 3000:3000
+        depends_on:
+            - database
+        networks:
+            - tpfinal
+networks:
+    tpfinal:
+        external: true
+
+
+
