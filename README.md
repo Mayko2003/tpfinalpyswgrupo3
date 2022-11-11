@@ -49,9 +49,9 @@ Mongodb
    
 4. Crear contenedores con docker compose
 
-  Deberas situarte en la raiz del repositorio donde se encuentra el archivo docker-compose.yml y luego levartarlo:
+   Deberas situarte en la raiz del repositorio donde se encuentra el archivo docker-compose.yml y luego levartarlo:
   
-  ```
-  docker compose up
-  ```
-  Una vez hecho esto podras probar la aplicacion en lolcahost:4200 si es que utilizaste dicho puerto, sino utiliza modifica el url.
+   ```
+   docker compose up
+   ```
+   Una vez hecho esto podras probar la aplicacion en lolcahost:4200 si es que utilizaste dicho puerto, sino utiliza modifica el url.
